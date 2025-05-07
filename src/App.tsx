@@ -1,8 +1,7 @@
-https://github.com/CampusCribs/CampusCribsFrontend/blob/main/src/App.tsximport { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Route, Routes } from "react-router";
 import Layout from "./components/layout/Layout";
-import IndexPage from "./pages/index/IndexPage";
-import CompanyPage from "./pages/company/CompanyPage";
-import AccountPage from "./pages/account/AccountPage";
+
+import CribsPage from "./pages/cribs/CribsPage";
 
 function App() {
   return (
@@ -11,9 +10,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
-            <Route path="/" element={<IndexPage />} />
-            <Route path="/account" element={<AccountPage />} />
-            <Route path="/company" element={<CompanyPage />} />
+            <Route path="/" element={<CribsPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

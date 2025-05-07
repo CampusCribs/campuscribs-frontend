@@ -1,46 +1,34 @@
-import { CubeIcon, PersonIcon } from "@radix-ui/react-icons";
-import { Button } from "../ui/button";
+import { CircleUserRound, Search } from "lucide-react";
 import { useNavigate } from "react-router";
+import HeaderSearch from "./HeaderSearch";
+import { useState } from "react";
 
-const Header = () => {
+const Header = (profiledata: { userName: string }) => {
   const navigate = useNavigate();
-
+  const [open, setOpen] = useState(false);
   return (
-    <div className="flex items-center justify-between border-b border-border px-4 py-2">
-      <div className="flex flex-row items-center gap-2">
-        <Button
-          variant="link"
-          size="sm"
-          onClick={() => {
-            navigate("/");
-          }}
+    <div className="flex justify-between items-center p-4">
+      <div className="flex items-center gap-2">
+        <div
+          className="text-2xl font-bold cursor-pointer"
+          onClick={() => navigate("/")}
         >
-          <CubeIcon />
-          <div className="p-4 text-sm font-bold">Your Company</div>
-        </Button>
+          Campus Cribs
+        </div>
       </div>
-      <div className="flex flex-row items-center gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            navigate("/account");
-          }}
+
+      <div className="flex items-center gap-2">
+        <div
+          className="cursor-pointer"
+          onClick={() => navigate(`/profile/${profiledata.userName}`)}
         >
-          <PersonIcon />
-          <span>Account</span>
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            navigate("/company");
-          }}
-        >
-          <CubeIcon />
-          <span>Company</span>
-        </Button>
+          <CircleUserRound />
+        </div>
+        <div className="cursor-pointer" onClick={() => setOpen(!open)}>
+          <Search />
+        </div>
       </div>
+      <HeaderSearch open={open} close={() => setOpen(!open)} />
     </div>
   );
 };
