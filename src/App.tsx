@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+https://github.com/CampusCribs/CampusCribsFrontend/blob/main/src/App.tsximport { BrowserRouter, Route, Routes } from "react-router";
 import Layout from "./components/layout/Layout";
 import IndexPage from "./pages/index/IndexPage";
 import CompanyPage from "./pages/company/CompanyPage";
@@ -6,7 +6,7 @@ import AccountPage from "./pages/account/AccountPage";
 
 function App() {
   return (
-    // Default font is Times New Roman
+    // Default font is Roboto Mono
     <div className="font-['Roboto_Mono']">
       <BrowserRouter>
         <Routes>
