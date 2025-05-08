@@ -1,28 +1,12 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Dot, ListFilter, MapPin } from "lucide-react";
-import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import TagSelector from "./TagSelector";
 import { useInView } from "react-intersection-observer";
 
-import {
-  preferenceTags,
-  leaseTags,
-  amenitiesTags,
-  roomTags,
-  propertyTags,
-} from "@/constants/constants";
+import TagCarousel from "./TagCarousel";
 
-const _tag = {
-  tags: [
-    ...preferenceTags,
-    ...leaseTags,
-    ...amenitiesTags,
-    ...roomTags,
-    ...propertyTags,
-  ],
-};
 const CribsPage = () => {
   //variables to store the selected tags and the state of the tag selector and find the intersection of the tags
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -45,55 +29,44 @@ const CribsPage = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-row justify-between gap-2 w-full  items-center  ">
-        <div
-          className="flex flex-row justify-start gap-1 
-      py-2 px-4 h-12 overflow-x-scroll no-scrollbar"
-        >
-          {/* reimplement tags as dragable carosel */}
-          {_tag.tags.map((tag) => (
-            <Badge
-              key={tag}
-              onClick={() => handleTagClick(tag)}
-              className="cursor-pointer text-nowrap rounded-full px-4 overflow-hidden"
-              variant={selectedTags.includes(tag) ? "default" : "outline"}
-            >
-              {tag}
-            </Badge>
-          ))}
-        </div>
-        <Badge
-          key={1}
-          onClick={() => setOpenTag(!openTag)}
-          className="cursor-pointer text-nowrap px-4 rounded-full"
-          variant="outline"
-        >
-          <ListFilter />
-        </Badge>
-      </div>
-      <div className="flex flex-col">
-        <div className="flex flex-row justify-between gap-2 w-full p-2 h-12">
-          <div className="text-xl font-black">Today's Picks</div>
-          <div className="flex flex-row gap-2 items-center text-blue-400">
-            <div>
-              <MapPin width={16} height={16} />
-            </div>
-            <div className="text-lg font-bold">Cincinnati</div>
+      <div className="flex flex-col w-full  ">
+        <div className="flex flex-row justify-between gap-2 w-full p-2 h-12 overflow-hidden items-center">
+          <TagCarousel
+            tags={selectedTags}
+            setTags={(tag) => handleTagClick(tag)}
+          />
+
+          <div
+            className="flex flex-row rounded-full bg-white shadow-md p-2 gap-2 items-center justify-center border-neutral-200 border"
+            onClick={() => setOpenTag(!openTag)}
+          >
+            <ListFilter />
           </div>
         </div>
-        <div className="">{/* render the status here */}</div>
-        <div />
-        {/*ref={ref}*/}
+        <div className="flex flex-col">
+          <div className="flex flex-row justify-between gap-2 w-full p-2 h-12">
+            <div className="text-xl font-black">Today's Picks</div>
+            <div className="flex flex-row gap-2 items-center text-blue-400">
+              <div>
+                <MapPin width={16} height={16} />
+              </div>
+              <div className="text-lg font-bold">Cincinnati</div>
+            </div>
+          </div>
+          <div className="">{/* render the status here */}</div>
+          <div />
+          {/*ref={ref}*/}
+        </div>
+        <TagSelector
+          tags={selectedTags}
+          open={openTag}
+          closeTag={() => setOpenTag(!openTag)}
+          clearTags={() => setSelectedTags([])}
+          setTags={(tag: string) => {
+            handleTagClick(tag);
+          }}
+        />
       </div>
-      <TagSelector
-        tags={selectedTags}
-        open={openTag}
-        closeTag={() => setOpenTag(!openTag)}
-        clearTags={() => setSelectedTags([])}
-        setTags={(tag: string) => {
-          handleTagClick(tag);
-        }}
-      />
     </div>
   );
 };
