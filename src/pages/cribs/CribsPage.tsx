@@ -12,7 +12,7 @@ import {
   amenitiesTags,
   roomTags,
   propertyTags,
-} from "../../lib/constants";
+} from "@/constants/constants";
 
 const _tag = {
   tags: [
@@ -29,18 +29,6 @@ const CribsPage = () => {
   const [openTag, setOpenTag] = useState(false);
   const { ref, inView } = useInView();
 
-  //useInfiniteQuery to fetch the data from the server
-  const { status, data, error, isFetchingNextPage, fetchNextPage } =
-    useInfiniteQuery({
-      queryKey: ["searchtags", { selectedTags }],
-
-      queryFn: ({ pageParam }) =>
-        fetchFilterdPosts({ pageParam, selectedTags }),
-      staleTime: 4000,
-      initialPageParam: 0,
-      getNextPageParam: (lastPage) => lastPage.nextPage,
-    });
-  //Handle Tag click event to set the tags in the array
   const handleTagClick = (tag: string) => {
     setSelectedTags((prevTags) =>
       prevTags.includes(tag)
@@ -48,29 +36,26 @@ const CribsPage = () => {
         : [...prevTags, tag]
     );
   };
-  //democode url my-json-server.typicode.com/farahcaa/MockData/posts
-  useEffect(() => {
-    if (inView) {
-      fetchNextPage();
-    }
-  }, [inView, fetchNextPage]);
 
   useEffect(() => {
-    console.log("status: ", status);
-  }, [status]);
+    if (inView) {
+      // call the generated function
+    }
+  }, [inView]);
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-row justify-between gap-2 w-full  items-center  ">
         <div
-          className="flex flex-row justify-start gap-2 
-      py-2 px-4 h-12 overflow-x-scroll scrollbar-hide  "
+          className="flex flex-row justify-start gap-1 
+      py-2 px-4 h-12 overflow-x-scroll no-scrollbar"
         >
+          {/* reimplement tags as dragable carosel */}
           {_tag.tags.map((tag) => (
             <Badge
               key={tag}
               onClick={() => handleTagClick(tag)}
-              className="cursor-pointer text-nowrap"
+              className="cursor-pointer text-nowrap rounded-full px-4 overflow-hidden"
               variant={selectedTags.includes(tag) ? "default" : "outline"}
             >
               {tag}
@@ -80,7 +65,7 @@ const CribsPage = () => {
         <Badge
           key={1}
           onClick={() => setOpenTag(!openTag)}
-          className="cursor-pointer text-nowrap px-4m-2"
+          className="cursor-pointer text-nowrap px-4 rounded-full"
           variant="outline"
         >
           <ListFilter />
@@ -96,25 +81,9 @@ const CribsPage = () => {
             <div className="text-lg font-bold">Cincinnati</div>
           </div>
         </div>
-        <div className="">
-          {status === "pending" && <div>Loading...</div>}
-          {status === "error" && <div>Error: {error.message}</div>}
-          {status === "success" &&
-            data.pages.map((page, id) => (
-              <div key={id} className="grid grid-cols-2 gap-2">
-                {page.data.map((residence) => (
-                  <ResidenceCard
-                    imageUrl={residence.imageUrl}
-                    id={residence.id}
-                    price={residence.price}
-                    location={residence.location}
-                  />
-                ))}
-              </div>
-            ))}
-        </div>
-        <div ref={ref} />
-        {isFetchingNextPage ? "render a loading spinner" : null}
+        <div className="">{/* render the status here */}</div>
+        <div />
+        {/*ref={ref}*/}
       </div>
       <TagSelector
         tags={selectedTags}

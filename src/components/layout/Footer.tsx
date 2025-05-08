@@ -10,12 +10,13 @@ import { AnimatePresence } from "motion/react";
 import { useState } from "react";
 import * as motion from "motion/react-client";
 import { useNavigate } from "react-router";
+import HatHouse from "../ui/HouseHat";
 
 const Footer = (data: { userName: string }) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const pages = [
-    { title: "Browse", icon: <Home />, link: "/" },
+    { title: "Cribs", icon: <HatHouse />, link: "/" },
     { title: "Post", icon: <CirclePlus />, link: "/post" },
     {
       title: "Profile",

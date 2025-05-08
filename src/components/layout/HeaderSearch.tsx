@@ -1,5 +1,5 @@
 import { Send } from "lucide-react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router";
 
 type Props = {
@@ -8,7 +8,11 @@ type Props = {
 };
 const HeaderSearch = (props: Props) => {
   //need to go throw and fix this
+  const [searchTerm, setSearchTerm] = useState("");
 
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    //fetch data with generated function
+  };
   return (
     <>
       <div
@@ -22,8 +26,9 @@ const HeaderSearch = (props: Props) => {
           <div className="w-full px-3">
             <input
               type="text"
+              onChange={handleSearch}
+              onFocus={() => setSearchTerm("")}
               value={searchTerm}
-              onChange={handleSearchTerm}
               placeholder="Search for posts"
               className="border rounded-lg p-3  bg-white text-black my-3 w-full shadow-sm"
             />
@@ -32,26 +37,7 @@ const HeaderSearch = (props: Props) => {
             <Send size={32} className="cursor-pointer" />
           </div>
         </div>
-        <div>
-          {status === "pending" && (
-            <div className="flex justify-center items-center h-[50vh]">
-              Loading...
-            </div>
-          )}
-          {status === "error" && (
-            <div className="flex justify-center items-center ">
-              Error: {error.message}
-            </div>
-          )}
-          {status === "success" &&
-            data.userData.map((item) => (
-              <SearchResult
-                key={item.id}
-                userName={item.userName}
-                close={props.close}
-              />
-            ))}
-        </div>
+        <div>{/* render in all the status for users */}</div>
         <div className="flex flex-row-reverse p-4">
           <div
             className="bg-neutral-200 font-light rounded-xl py-1 px-2 cursor-pointer"
