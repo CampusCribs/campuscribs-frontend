@@ -3,11 +3,12 @@ import { pluginOas } from "@kubb/plugin-oas";
 import { pluginTs } from "@kubb/plugin-ts";
 import { pluginReactQuery } from "@kubb/plugin-react-query";
 
+// path to the repo open api spec https://raw.githubusercontent.com/CampusCribs/campus-cribs-openapi/refs/heads/main/openapi.yaml
 export default defineConfig({
   name: "campus-cribs-openapi",
   root: "./",
   input: {
-    path: "https://raw.githubusercontent.com/CampusCribs/campus-cribs-openapi/refs/heads/main/openapi.yaml",
+    path: "./openapi.yaml",
   },
   output: {
     path: "./src/gen",

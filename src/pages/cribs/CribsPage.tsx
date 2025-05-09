@@ -6,6 +6,7 @@ import TagSelector from "./TagSelector";
 import { useInView } from "react-intersection-observer";
 
 import TagCarousel from "./TagCarousel";
+import { useNavigate } from "react-router";
 
 const CribsPage = () => {
   //variables to store the selected tags and the state of the tag selector and find the intersection of the tags
@@ -72,12 +73,12 @@ const CribsPage = () => {
 };
 
 const ResidenceCard = ({
-  imageUrl,
+  thumbnail,
   id,
   price,
   location,
 }: {
-  imageUrl: string;
+  thumbnail: string;
   id: number;
   price: number;
   location: string;
@@ -91,7 +92,7 @@ const ResidenceCard = ({
       key={id}
     >
       <CardContent className="p-0 m-0 w-full border-none ">
-        <img src={imageUrl} alt="Residence" className="object-cover" />
+        <img src={thumbnail} alt="Residence" className="object-cover" />
       </CardContent>
       <CardFooter className="p-0 m-0 w-full px-4 py-2">
         <div className="flex flex-row justify-between">
