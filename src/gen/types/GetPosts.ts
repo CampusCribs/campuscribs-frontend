@@ -20,7 +20,7 @@ export type GetPostsQueryParams = {
    * @description to request with required page size
    * @type number | undefined
    */
-  offset?: number
+  page?: number
 }
 
 /**

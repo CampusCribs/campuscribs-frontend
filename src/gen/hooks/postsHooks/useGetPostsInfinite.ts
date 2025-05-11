@@ -9,18 +9,18 @@ import type { InfiniteData, QueryKey, QueryClient, InfiniteQueryObserverOptions,
 import type { GetPostsQueryResponse, GetPostsQueryParams } from '../../types/GetPosts.ts'
 import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query'
 
-export const getPostsInfiniteQueryKey = (params: GetPostsQueryParams) => [{ url: '/posts' }, ...(params ? [params] : [])] as const
+export const getPostsInfiniteQueryKey = (params: GetPostsQueryParams) => [{ url: '/post' }, ...(params ? [params] : [])] as const
 
 export type GetPostsInfiniteQueryKey = ReturnType<typeof getPostsInfiniteQueryKey>
 
 /**
  * @summary Get all posts information
- * {@link /posts}
+ * {@link /post}
  */
 export async function getPostsInfinite(params: GetPostsQueryParams, config: Partial<RequestConfig> & { client?: typeof client } = {}) {
   const { client: request = client, ...requestConfig } = config
 
-  const res = await request<GetPostsQueryResponse, ResponseErrorConfig<Error>, unknown>({ method: 'GET', url: `/posts`, params, ...requestConfig })
+  const res = await request<GetPostsQueryResponse, ResponseErrorConfig<Error>, unknown>({ method: 'GET', url: `/post`, params, ...requestConfig })
   return res
 }
 
@@ -51,7 +51,7 @@ export function getPostsInfiniteQueryOptions(params: GetPostsQueryParams, config
 
 /**
  * @summary Get all posts information
- * {@link /posts}
+ * {@link /post}
  */
 export function useGetPostsInfinite<
   TData = InfiniteData<ResponseConfig<GetPostsQueryResponse>>,

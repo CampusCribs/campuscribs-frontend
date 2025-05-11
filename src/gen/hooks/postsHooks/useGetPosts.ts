@@ -9,18 +9,18 @@ import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from
 import type { GetPostsQueryResponse, GetPostsQueryParams } from '../../types/GetPosts.ts'
 import { queryOptions, useQuery } from '@tanstack/react-query'
 
-export const getPostsQueryKey = (params: GetPostsQueryParams) => [{ url: '/posts' }, ...(params ? [params] : [])] as const
+export const getPostsQueryKey = (params: GetPostsQueryParams) => [{ url: '/post' }, ...(params ? [params] : [])] as const
 
 export type GetPostsQueryKey = ReturnType<typeof getPostsQueryKey>
 
 /**
  * @summary Get all posts information
- * {@link /posts}
+ * {@link /post}
  */
 export async function getPosts(params: GetPostsQueryParams, config: Partial<RequestConfig> & { client?: typeof client } = {}) {
   const { client: request = client, ...requestConfig } = config
 
-  const res = await request<GetPostsQueryResponse, ResponseErrorConfig<Error>, unknown>({ method: 'GET', url: `/posts`, params, ...requestConfig })
+  const res = await request<GetPostsQueryResponse, ResponseErrorConfig<Error>, unknown>({ method: 'GET', url: `/post`, params, ...requestConfig })
   return res
 }
 
@@ -38,7 +38,7 @@ export function getPostsQueryOptions(params: GetPostsQueryParams, config: Partia
 
 /**
  * @summary Get all posts information
- * {@link /posts}
+ * {@link /post}
  */
 export function useGetPosts<
   TData = ResponseConfig<GetPostsQueryResponse>,

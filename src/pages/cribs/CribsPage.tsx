@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Dot, ListFilter, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -7,6 +6,7 @@ import { useInView } from "react-intersection-observer";
 
 import TagCarousel from "./TagCarousel";
 import { useNavigate } from "react-router";
+import { useGetPostsInfinite } from "@/gen";
 
 const CribsPage = () => {
   //variables to store the selected tags and the state of the tag selector and find the intersection of the tags
@@ -14,6 +14,11 @@ const CribsPage = () => {
   const [openTag, setOpenTag] = useState(false);
   const { ref, inView } = useInView();
 
+  const { data, error, isLoading } = useGetPostsInfinite({
+    page: 0,
+    limit: 5,
+    tags: selectedTags,
+  });
   const handleTagClick = (tag: string) => {
     setSelectedTags((prevTags) =>
       prevTags.includes(tag)
@@ -54,7 +59,22 @@ const CribsPage = () => {
               <div className="text-lg font-bold">Cincinnati</div>
             </div>
           </div>
-          <div className="">{/* render the status here */}</div>
+          <div className="grid grid-cols-2 gap-1 w-full p-2">
+            {isLoading && <p>loading...</p>}
+            {error && <p>error occured</p>}
+            {data &&
+              data.pages.map((item) =>
+                item.data.map((residence) => (
+                  <ResidenceCard
+                    key={residence.id}
+                    thumbnail={"https://picsum.photos/id/600/600/600"}
+                    id={residence.id}
+                    price={residence.price}
+                    location="CUF"
+                  />
+                ))
+              )}
+          </div>
           <div />
           {/*ref={ref}*/}
         </div>
@@ -79,12 +99,11 @@ const ResidenceCard = ({
   location,
 }: {
   thumbnail: string;
-  id: number;
+  id: string;
   price: number;
   location: string;
 }) => {
   const navigate = useNavigate();
-  id = 1234;
   return (
     <Card
       className="rounded-none shadow-none m-0 w-full border-none cursor-pointer p-1"

@@ -6,9 +6,9 @@
 export type Post = {
   /**
    * @description The unique identifier for the post
-   * @type string
+   * @type string | undefined
    */
-  postid: string
+  id?: string
   /**
    * @description The URL of the thumbnail image
    * @type string
@@ -19,9 +19,4 @@ export type Post = {
    * @type number, float
    */
   price: number
-  /**
-   * @description The location of the post
-   * @type string | undefined
-   */
-  location?: string
 }

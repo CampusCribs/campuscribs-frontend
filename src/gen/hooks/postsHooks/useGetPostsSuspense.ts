@@ -9,18 +9,18 @@ import type { QueryKey, QueryClient, UseSuspenseQueryOptions, UseSuspenseQueryRe
 import type { GetPostsQueryResponse, GetPostsQueryParams } from '../../types/GetPosts.ts'
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 
-export const getPostsSuspenseQueryKey = (params: GetPostsQueryParams) => [{ url: '/posts' }, ...(params ? [params] : [])] as const
+export const getPostsSuspenseQueryKey = (params: GetPostsQueryParams) => [{ url: '/post' }, ...(params ? [params] : [])] as const
 
 export type GetPostsSuspenseQueryKey = ReturnType<typeof getPostsSuspenseQueryKey>
 
 /**
  * @summary Get all posts information
- * {@link /posts}
+ * {@link /post}
  */
 export async function getPostsSuspense(params: GetPostsQueryParams, config: Partial<RequestConfig> & { client?: typeof client } = {}) {
   const { client: request = client, ...requestConfig } = config
 
-  const res = await request<GetPostsQueryResponse, ResponseErrorConfig<Error>, unknown>({ method: 'GET', url: `/posts`, params, ...requestConfig })
+  const res = await request<GetPostsQueryResponse, ResponseErrorConfig<Error>, unknown>({ method: 'GET', url: `/post`, params, ...requestConfig })
   return res
 }
 
@@ -38,7 +38,7 @@ export function getPostsSuspenseQueryOptions(params: GetPostsQueryParams, config
 
 /**
  * @summary Get all posts information
- * {@link /posts}
+ * {@link /post}
  */
 export function useGetPostsSuspense<TData = ResponseConfig<GetPostsQueryResponse>, TQueryKey extends QueryKey = GetPostsSuspenseQueryKey>(
   params: GetPostsQueryParams,
