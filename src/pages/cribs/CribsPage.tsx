@@ -67,7 +67,7 @@ const CribsPage = () => {
                 item.data.map((residence) => (
                   <ResidenceCard
                     key={residence.id}
-                    thumbnail={"https://picsum.photos/id/600/600/600"}
+                    thumbnail={`${import.meta.env.VITE_MINIO_ENDPOINT}/GrayBrickHouse-social-share.jpg`}
                     id={residence.id}
                     price={residence.price}
                     location="CUF"
