@@ -32,6 +32,11 @@ export type ResponseConfig<TData = unknown> = {
 
 export const axiosInstance = axios.create({
   baseURL: "http://localhost:8081",
+  paramsSerializer: {
+    serialize: (params) => {
+      return new URLSearchParams(params).toString();
+    },
+  },
 });
 
 export type ResponseErrorConfig<TError = unknown> = {

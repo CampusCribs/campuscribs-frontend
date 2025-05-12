@@ -19,6 +19,7 @@ const CribsPage = () => {
     limit: 5,
     tags: selectedTags,
   });
+
   const handleTagClick = (tag: string) => {
     setSelectedTags((prevTags) =>
       prevTags.includes(tag)
