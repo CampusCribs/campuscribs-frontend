@@ -1,3 +1,4 @@
+import { Post, User, useSearchPosts } from "@/gen";
 import { Send } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router";
@@ -9,7 +10,11 @@ type Props = {
 const HeaderSearch = (props: Props) => {
   //need to go throw and fix this
   const [searchTerm, setSearchTerm] = useState("");
-
+  const { data, error, isLoading, refetch } = useSearchPosts({
+    limit: 3,
+    searchTerm: searchTerm,
+  });
+  console.log(data?.data);
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     //fetch data with generated function
   };
@@ -26,8 +31,8 @@ const HeaderSearch = (props: Props) => {
           <div className="w-full px-3">
             <input
               type="text"
-              onChange={handleSearch}
-              onFocus={() => setSearchTerm("")}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => refetch()}
               value={searchTerm}
               placeholder="Search for posts"
               className="border rounded-lg p-3  bg-white text-black my-3 w-full shadow-sm"
@@ -37,7 +42,40 @@ const HeaderSearch = (props: Props) => {
             <Send size={32} className="cursor-pointer" />
           </div>
         </div>
-        <div>{/* render in all the status for users */}</div>
+        <div>
+          {isLoading && <p>loading...</p>}
+          {error && <p>error occured</p>}
+          {data?.data.users?.length > 0 && (
+            <div>
+              <div className="px-3 font-light">Users</div>
+              {data?.data?.users?.map((user) => (
+                <SearchResult
+                  key={user.id}
+                  id={user.id || ""}
+                  text={user.username || ""}
+                  thumbnail={user.thumbnail || ""}
+                  close={props.close}
+                />
+              ))}
+            </div>
+          )}
+
+          {data?.data.posts?.length > 0 && (
+            <div>
+              {" "}
+              <div className="px-3 font-light">Cribs</div>
+              {data?.data?.posts?.map((post) => (
+                <SearchResult
+                  key={post.id}
+                  id={post.id || ""}
+                  thumbnail={post.thumbnail || ""}
+                  close={props.close}
+                  text={post.title || ""}
+                />
+              ))}
+            </div>
+          )}
+        </div>
         <div className="flex flex-row-reverse p-4">
           <div
             className="bg-neutral-200 font-light rounded-xl py-1 px-2 cursor-pointer"
@@ -57,17 +95,32 @@ const HeaderSearch = (props: Props) => {
   );
 };
 
-const SearchResult = (props: { userName: string; close: () => void }) => {
+const SearchResult = (props: {
+  id: string;
+  text: string;
+  thumbnail: string;
+  close: () => void;
+}) => {
   const navigate = useNavigate();
   return (
     <div
-      className="flex flex-row p-3 px-10 m-1  rounded-xl border cursor-pointer "
+      className="flex flex-row p-3 px-5 m-1  rounded-xl border cursor-pointer "
       onClick={() => {
         props.close();
-        navigate(`/profile/${props.userName}`);
+        navigate(`/profile/${props.id}`);
       }}
     >
-      <div className="">@{props.userName}</div>
+      <div className="flex items-center justify-center ">
+        <img
+          src={
+            import.meta.env.VITE_MINIO_ENDPOINT +
+            "/GrayBrickHouse-social-share.jpg"
+          }
+          alt="user"
+          className="rounded-full w-10 h-10 mr-3 shadow-lg"
+        />
+      </div>
+      <div className=" flex items-center text-lg">@{props.text}</div>
     </div>
   );
 };

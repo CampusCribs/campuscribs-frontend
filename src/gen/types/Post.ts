@@ -6,9 +6,9 @@
 export type Post = {
   /**
    * @description The unique identifier for the post
-   * @type string | undefined
+   * @type string
    */
-  id?: string
+  id: string
   /**
    * @description The URL of the thumbnail image
    * @type string

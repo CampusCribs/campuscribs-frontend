@@ -1,0 +1,1 @@
+{"type":"object","properties":{"id":{"type":"string","description":"The unique identifier for the user"},"username":{"type":"string","description":"The username of the user"},"thumbnail":{"type":"string","format":"email","description":"Thumbnail of the user"}},"x-readme-ref-name":"User"}

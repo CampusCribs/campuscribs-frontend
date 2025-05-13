@@ -115,20 +115,15 @@ const ResidenceCard = ({
         <img src={thumbnail} alt="Residence" className="object-cover" />
       </CardContent>
       <CardFooter className="p-0 m-0 w-full px-4 py-2">
-        <div className="flex flex-row justify-between">
-          <div className="flex gap-0">
-            <div className="flex gap-1">
-              <div className="text-md font-bold">$1,100</div>
-              <div className="text-md font-bold text-gray-500 line-through">
-                ${price}
-              </div>
-            </div>
-            <div className="flex justify-center items-center">
-              <Dot width={24} height={24} />
-            </div>
-            <div className="flex gap-2 w-full">
-              <div className="text-md font-bold">{location}</div>
-            </div>
+        <div className="flex justify-between  w-full ">
+          <div className="flex ">
+            <div className="text-md font-bold">${price}</div>
+          </div>
+          <div className="flex justify-center  items-center">
+            <Dot width={24} height={24} />
+          </div>
+          <div className="flex w-full ">
+            <div className="text-md font-bold">{location}</div>
           </div>
         </div>
       </CardFooter>
