@@ -28,11 +28,19 @@ const TagSelector = (props: Props) => {
         <div className=" w-[95%] rounded-xl shadow-2xl bg-white ">
           <div className="flex justify-between p-4">
             <div className="text-2xl font-semibold">Select tags</div>
-            <div
-              className="text-lg font-light cursor-pointer"
-              onClick={props.clearTags}
-            >
-              Clear
+            <div className="flex">
+              <div
+                className="bg-neutral-200 font-light rounded-xl py-1 px-2 cursor-pointer mx-5"
+                onClick={props.closeTag}
+              >
+                Close
+              </div>
+              <div
+                className="text-lg font-light cursor-pointer"
+                onClick={props.clearTags}
+              >
+                Clear
+              </div>
             </div>
           </div>
           <div>
@@ -102,14 +110,6 @@ const TagSelector = (props: Props) => {
                   </Badge>
                 ))}
               </div>
-            </div>
-          </div>
-          <div className="flex flex-row-reverse p-4">
-            <div
-              className="bg-neutral-200 font-light rounded-xl py-1 px-2 cursor-pointer"
-              onClick={props.closeTag}
-            >
-              Close
             </div>
           </div>
         </div>
