@@ -4,7 +4,7 @@ import Footer from "./Footer";
 
 const Layout = () => {
   const profiledata = {
-    userName: "johnnyrrockets",
+    userName: "username1",
   };
   return (
     <div className="w-full flex justify-center">

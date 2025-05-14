@@ -3,6 +3,8 @@
  * Do not edit manually.
  */
 
+import type { UserPost } from './UserPost.ts'
+
 export type User = {
   /**
    * @description The unique identifier for the user
@@ -15,8 +17,38 @@ export type User = {
    */
   username?: string
   /**
+   * @description The email of the user
+   * @type string | undefined
+   */
+  email?: string
+  /**
+   * @description The phone number of the user
+   * @type string | undefined
+   */
+  phone?: string
+  /**
+   * @description The first name of the user
+   * @type string | undefined
+   */
+  firstName?: string
+  /**
+   * @description The last name of the user
+   * @type string | undefined
+   */
+  lastName?: string
+  /**
+   * @description The bio of the user
+   * @type string | undefined
+   */
+  bio?: string
+  /**
    * @description Thumbnail of the user
-   * @type string | undefined, email
+   * @type string | undefined
    */
   thumbnail?: string
+  /**
+   * @description The post of the user
+   * @type object | undefined
+   */
+  post?: UserPost
 }

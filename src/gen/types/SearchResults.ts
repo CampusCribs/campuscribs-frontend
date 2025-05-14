@@ -4,7 +4,7 @@
  */
 
 import type { Post } from './Post.ts'
-import type { User } from './User.ts'
+import type { SearchUser } from './SearchUser.ts'
 
 export type SearchResults = {
   /**
@@ -14,5 +14,5 @@ export type SearchResults = {
   /**
    * @type array | undefined
    */
-  users?: User[]
+  users?: SearchUser[]
 }

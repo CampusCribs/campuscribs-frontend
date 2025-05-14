@@ -14,7 +14,7 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<CribsPage />} />
             <Route path="/cribs/:cribId" element={<IndividualCrib />} />
-            <Route path="/profile/:profileId" element={<ProfilePage />} />
+            <Route path="/profile/:username" element={<ProfilePage />} />
           </Route>
         </Routes>
       </BrowserRouter>
