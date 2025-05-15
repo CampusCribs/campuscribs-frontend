@@ -1,11 +1,4 @@
-import {
-  CirclePlus,
-  CircleUserRound,
-  Home,
-  Info,
-  LogIn,
-  Menu,
-} from "lucide-react";
+import { CirclePlus, CircleUserRound, Info, LogIn, Menu } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
 import * as motion from "motion/react-client";

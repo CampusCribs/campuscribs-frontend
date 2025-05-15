@@ -1,11 +1,4 @@
-import { Badge } from "@/components/ui/badge";
-import {
-  amenitiesTags,
-  leaseTags,
-  preferenceTags,
-  propertyTags,
-  roomTags,
-} from "@/constants/constants";
+// import { Badge } from "@/components/ui/badge";
 
 type Props = {
   tags: string[];
@@ -44,7 +37,7 @@ const TagSelector = (props: Props) => {
             </div>
           </div>
           <div>
-            <div className="flex flex-wrap p-4">
+            {/* <div className="flex flex-wrap p-4">
               <div className="w-1/2 my-2">
                 <div className="text-lg font-semibold">Lease Types</div>
                 {leaseTags.map((tag) => (
@@ -110,7 +103,7 @@ const TagSelector = (props: Props) => {
                   </Badge>
                 ))}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

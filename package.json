@@ -6,7 +6,7 @@
   "author": "yakovliam",
   "scripts": {
     "generate": "rm -rf src/gen/ ; kubb generate",
-    "dev": "bunx --bun vite",
+    "dev": "yarn run generate ; bunx --bun vite",
     "build": "bunx --bun vite build",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",

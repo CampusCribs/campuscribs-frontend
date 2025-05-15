@@ -1,21 +1,9 @@
 import useEmblaCarousel from "embla-carousel-react";
-import {
-  preferenceTags,
-  leaseTags,
-  amenitiesTags,
-  roomTags,
-  propertyTags,
-} from "@/constants/constants";
 import { Badge } from "@/components/ui/badge";
 
 const _tag = {
-  tags: [
-    ...preferenceTags,
-    ...leaseTags,
-    ...amenitiesTags,
-    ...roomTags,
-    ...propertyTags,
-  ],
+  // TODO implement dynamic fetching of categories and tags from the backend
+  tags: [],
 };
 type Props = {
   tags: string[];

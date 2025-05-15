@@ -12,6 +12,7 @@ const CribsPage = () => {
   //variables to store the selected tags and the state of the tag selector and find the intersection of the tags
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [openTag, setOpenTag] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { ref, inView } = useInView();
 
   const { data, error, isLoading } = useGetPostsInfinite({
@@ -69,8 +70,8 @@ const CribsPage = () => {
                   <ResidenceCard
                     key={residence.id}
                     thumbnail={`${import.meta.env.VITE_MINIO_ENDPOINT}/GrayBrickHouse-social-share.jpg`}
-                    id={residence.id}
-                    price={residence.price}
+                    id={residence.id || ""}
+                    price={residence.price || 0}
                     location="CUF"
                   />
                 ))

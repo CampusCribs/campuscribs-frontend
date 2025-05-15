@@ -1,4 +1,4 @@
-import { Post, User, useSearchPosts } from "@/gen";
+import { useSearch } from "@/gen";
 import { Send } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router";
@@ -7,17 +7,17 @@ type Props = {
   open: boolean;
   close: () => void;
 };
+
 const HeaderSearch = (props: Props) => {
-  //need to go throw and fix this
-  const [searchTerm, setSearchTerm] = useState("");
-  const { data, error, isLoading, refetch } = useSearchPosts({
-    limit: 3,
-    searchTerm: searchTerm,
-  });
-  console.log(data?.data);
+  const [query, setQuery] = useState<string>("");
+  const { mutate, error, isError, isPending, data } = useSearch();
+
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    //fetch data with generated function
+    setQuery(e.target.value);
+
+    mutate({ data: { query: e.target.value } });
   };
+
   return (
     <>
       <div
@@ -31,10 +31,9 @@ const HeaderSearch = (props: Props) => {
           <div className="w-full px-3">
             <input
               type="text"
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onFocus={() => refetch()}
-              value={searchTerm}
-              placeholder="Search for posts"
+              onChange={(e) => handleSearch(e)}
+              value={query}
+              placeholder="Search for anything"
               className="border rounded-lg p-3  bg-white text-black my-3 w-full shadow-sm"
             />
           </div>
@@ -43,9 +42,9 @@ const HeaderSearch = (props: Props) => {
           </div>
         </div>
         <div>
-          {isLoading && <p>loading...</p>}
-          {error && <p>error occured</p>}
-          {data?.data.users?.length > 0 && (
+          {isPending && <p>loading...</p>}
+          {isError && <p>error: {error.message}</p>}
+          {(data?.data?.users?.length || 0) > 0 && (
             <div>
               <div className="px-3 font-light">Users</div>
               {data?.data?.users?.map((user) => (
@@ -60,7 +59,7 @@ const HeaderSearch = (props: Props) => {
             </div>
           )}
 
-          {data?.data.posts?.length > 0 && (
+          {(data?.data.posts?.length || 0) > 0 && (
             <div>
               {" "}
               <div className="px-3 font-light">Cribs</div>
