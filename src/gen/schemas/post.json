@@ -1,1 +1,0 @@
-{"type":"object","required":["id","thumbnail","price"],"properties":{"id":{"type":"string","description":"The unique identifier for the post"},"thumbnail":{"type":"string","description":"The URL of the thumbnail image"},"price":{"type":"number","format":"float","description":"The price of the post"}},"x-readme-ref-name":"Post"}

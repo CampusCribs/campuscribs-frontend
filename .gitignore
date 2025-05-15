@@ -24,3 +24,9 @@ dist-ssr
 *.sw?
 openapi.yaml
 .env
+.*.env
+.env.*
+
+# Kubb generated sources
+src/gen/*
+src/gen
