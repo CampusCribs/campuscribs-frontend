@@ -25,7 +25,7 @@ const TagSelector = (props: Props) => {
             : "hidden"
         }`}
       >
-        <div className=" w-[95%] rounded-xl shadow-2xl bg-white ">
+        <div className="w-[95%] rounded-xl shadow-2xl bg-white">
           <div className="flex justify-between p-4">
             <div className="text-2xl font-semibold">Select tags</div>
             <div className="flex">

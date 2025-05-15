@@ -1,4 +1,5 @@
 import { useGetUser } from "@/gen";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 
 const ProfilePage = () => {
@@ -8,7 +9,11 @@ const ProfilePage = () => {
   const { data, error, isLoading } = useGetUser({
     username: username || "",
   });
-  console.log("data", data);
+
+  useEffect(() => {
+    console.debug(data);
+  }, [data]);
+
   return (
     <div className="flex flex-col w-full">
       <div className="flex p-3 w-full">

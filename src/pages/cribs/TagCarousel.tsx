@@ -22,7 +22,7 @@ type Props = {
   setTags: (tag: string) => void;
 };
 const Carousel = (props: Props) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
+  const [emblaRef] = useEmblaCarousel({
     duration: 2000, // Duration of the transition in milliseconds
     loop: false,
     dragFree: true, // Allows smooth movement without snapping
@@ -30,7 +30,7 @@ const Carousel = (props: Props) => {
   });
 
   return (
-    <div className="overflow-hidden " ref={emblaRef}>
+    <div className="overflow-hidden" ref={emblaRef}>
       <div className="flex gap-2">
         {_tag.tags.map((tag) => (
           <Badge
