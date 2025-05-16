@@ -3,6 +3,7 @@ import Layout from "@/components/layout/Layout";
 
 import CribsPage from "@/pages/cribs/CribsPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
+import IndividualCrib from "./pages/individualCrib/IndividualCrib";
 
 function App() {
   return (
@@ -12,8 +13,8 @@ function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<CribsPage />} />
-            {/* <Route path="/cribs/:cribId" element={<CribsdIndividual />} /> */}
-            <Route path="/profile/:username" element={<ProfilePage />} />
+            <Route path="/cribs/:cribId" element={<IndividualCrib />} />
+            {/* <Route path="/profile/:username" element={<ProfilePage />} /> */}
           </Route>
         </Routes>
       </BrowserRouter>
