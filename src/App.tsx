@@ -2,7 +2,11 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import Layout from "@/components/layout/Layout";
 
 import CribsPage from "@/pages/cribs/CribsPage";
-import ProfilePage from "@/pages/profile/ProfilePage";
+import ProfileUsernamePage from "@/pages/profile/username/ProfileUsernamePage";
+import ProtectedRoute from "@/components/route/ProtectedRoute";
+import ReverseProtectedRoute from "./components/route/ReverseProtectedRoute";
+import LoginPage from "./pages/login/LoginPage";
+import ProfilePage from "./pages/profile/ProfilePage";
 
 function App() {
   return (
@@ -13,7 +17,18 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<CribsPage />} />
             {/* <Route path="/cribs/:cribId" element={<CribsdIndividual />} /> */}
-            <Route path="/profile/:username" element={<ProfilePage />} />
+            <Route
+              path="/profile/:username"
+              element={<ProfileUsernamePage />}
+            />
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="/profile" element={<ProfilePage />} />
+            </Route>
+
+            <Route element={<ReverseProtectedRoute />}>
+              <Route path="/login" element={<LoginPage />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

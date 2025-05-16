@@ -2,8 +2,8 @@ import { CircleUserRound, Search } from "lucide-react";
 import { useNavigate } from "react-router";
 import HeaderSearch from "./HeaderSearch";
 import { useState } from "react";
-//TODO: when user is logged in get id and navigate to the users profile page
-const Header = (profiledata: { userName: string }) => {
+
+const Header = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   return (
@@ -18,10 +18,7 @@ const Header = (profiledata: { userName: string }) => {
       </div>
 
       <div className="flex items-center gap-2">
-        <div
-          className="cursor-pointer"
-          onClick={() => navigate(`/profile/${profiledata.userName}`)}
-        >
+        <div className="cursor-pointer" onClick={() => navigate("/profile")}>
           <CircleUserRound />
         </div>
         <div className="cursor-pointer" onClick={() => setOpen(!open)}>
