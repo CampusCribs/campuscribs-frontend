@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import Layout from "@/components/layout/Layout";
 
 import CribsPage from "@/pages/cribs/CribsPage";
-import ProfilePage from "@/pages/profile/ProfilePage";
+// import ProfilePage from "@/pages/profile/ProfilePage";
 import IndividualCrib from "./pages/individualCrib/IndividualCrib";
 
 function App() {

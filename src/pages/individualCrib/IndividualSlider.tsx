@@ -64,10 +64,7 @@ const IndividualSlider = (props: { images: string[] }) => {
         onDragEnd={onDragEnd}
         className="flex cursor-grab items-center active:cursor-grabbing"
       >
-        <Images
-          imgIndex={imgIndex}
-          images={import.meta.env.MINIO_BACKEND_props.images}
-        />
+        <Images imgIndex={imgIndex} images={props.images} />
       </motion.div>
 
       <Dots imgIndex={imgIndex} setImgIndex={setImgIndex} />
