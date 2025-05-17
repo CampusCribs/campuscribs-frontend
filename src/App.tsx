@@ -4,9 +4,10 @@ import Layout from "@/components/layout/Layout";
 import CribsPage from "@/pages/cribs/CribsPage";
 import ProfileUsernamePage from "@/pages/profile/username/ProfileUsernamePage";
 import ProtectedRoute from "@/components/route/ProtectedRoute";
-import ReverseProtectedRoute from "./components/route/ReverseProtectedRoute";
-import LoginPage from "./pages/login/LoginPage";
-import ProfilePage from "./pages/profile/ProfilePage";
+import ReverseProtectedRoute from "@/components/route/ReverseProtectedRoute";
+import LoginPage from "@/pages/login/LoginPage";
+import ProfilePage from "@/pages/profile/ProfilePage";
+import Post from "@/pages/profile/post/Post";
 
 function App() {
   return (
@@ -23,7 +24,10 @@ function App() {
             />
 
             <Route element={<ProtectedRoute />}>
-              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile" element={<ProfilePage />}>
+                <Route path=":username" element={<ProfileUsernamePage />} />
+              </Route>
+              <Route path="/profile/post" element={<Post />} />
             </Route>
 
             <Route element={<ReverseProtectedRoute />}>

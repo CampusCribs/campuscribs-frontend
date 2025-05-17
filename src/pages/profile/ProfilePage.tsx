@@ -1,8 +1,11 @@
+import { Button } from "@/components/ui/button";
 import useEasyAuth from "@/hooks/use-easy-auth";
+import { CirclePlus } from "lucide-react";
+import { useNavigate } from "react-router";
 
 const ProfilePage = () => {
   const { user } = useEasyAuth();
-
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col w-full">
       <div className="flex p-3 w-full">
@@ -32,6 +35,13 @@ const ProfilePage = () => {
           <div>{data && data.data.phone}</div>
         </div>
       </div> */}
+      <div className="w-full">
+        <div className="w-full  h-full flex justify-center items-center mt-10">
+          <Button onClick={() => navigate("post")} className="cursor-pointer">
+            <CirclePlus /> Create a new post!
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
