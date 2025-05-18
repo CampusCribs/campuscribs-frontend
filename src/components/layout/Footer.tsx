@@ -5,7 +5,7 @@ import * as motion from "motion/react-client";
 import { useNavigate } from "react-router";
 import HatHouse from "../ui/HouseHat";
 
-const Footer = (data: { userName: string }) => {
+const Footer = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const pages = [
@@ -14,7 +14,7 @@ const Footer = (data: { userName: string }) => {
     {
       title: "Profile",
       icon: <CircleUserRound />,
-      link: "/profile/" + data.userName,
+      link: "/profile",
     },
     // { title: "Settings", icon: <Settings />, link: "/settings" },
     { title: "Support", icon: <Info />, link: "/support" },

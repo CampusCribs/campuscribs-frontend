@@ -6,7 +6,7 @@ import { useInView } from "react-intersection-observer";
 
 import TagCarousel from "./TagCarousel";
 import { useNavigate } from "react-router";
-import { useGetPostsInfinite } from "@/gen";
+// import { useGetPostsInfinite } from "@/gen";
 
 const CribsPage = () => {
   //variables to store the selected tags and the state of the tag selector and find the intersection of the tags
@@ -15,11 +15,11 @@ const CribsPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { ref, inView } = useInView();
 
-  const { data, error, isLoading } = useGetPostsInfinite({
-    page: 0,
-    limit: 5,
-    tags: selectedTags,
-  });
+  // const { data, error, isLoading } = useGetPostsInfinite({
+  //   page: 0,
+  //   limit: 5,
+  //   tags: selectedTags,
+  // });
 
   const handleTagClick = (tag: string) => {
     setSelectedTags((prevTags) =>
@@ -62,7 +62,7 @@ const CribsPage = () => {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-1 w-full p-2">
-            {isLoading && <p>loading...</p>}
+            {/* {isLoading && <p>loading...</p>}
             {error && <p>error occured</p>}
             {data &&
               data.pages.map((item) =>
@@ -75,7 +75,7 @@ const CribsPage = () => {
                     location="CUF"
                   />
                 ))
-              )}
+              )} */}
           </div>
           <div />
           {/*ref={ref}*/}

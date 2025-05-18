@@ -4,9 +4,15 @@ import useLogin from "@/hooks/use-login";
 const LoginPage = () => {
   const { login } = useLogin();
   return (
-    <div className="flex flex-col w-full">
-      <Button onClick={login} variant={"default"}>
+    <div
+      className="w-full h-full
+    flex flex-col justify-center gap-4
+    px-16">
+      <Button size={"lg"} onClick={login} variant={"default"}>
         Login
+      </Button>
+      <Button size={"lg"} onClick={login} variant={"secondary"}>
+        Create Account
       </Button>
     </div>
   );

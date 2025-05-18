@@ -1,14 +1,23 @@
+import { useGetUsersMe, User } from "@/gen";
+import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
 import useEasyAuth from "@/hooks/use-easy-auth";
 
 const ProfilePage = () => {
   const { user } = useEasyAuth();
+
+  const config = useAuthenticatedClientConfig();
+  const { data, isLoading, isError, error } = useGetUsersMe({ ...config });
 
   return (
     <div className="flex flex-col w-full">
       <div className="flex p-3 w-full">
         <div className="flex rounded-full w-24 h-24 overflow-hidden">
           <img
-            src={`${import.meta.env.VITE_MINIO_ENDPOINT}/GrayBrickHouse-social-share.jpg`}
+            src={resolveProfileImageUrl(
+              data?.data,
+              user?.profile.given_name,
+              user?.profile.family_name
+            )}
             alt="Profile"
             className="object-cover"
           />
@@ -17,12 +26,21 @@ const ProfilePage = () => {
           <div className="text-lg font-medium px-4">
             {user?.profile.given_name} {user?.profile.family_name}
           </div>
-          <div className="px-5 font-light text-md">@{user?.profile.email}</div>
+          <div className="px-5 font-light text-md">@{data?.data.username}</div>
           <div className="text-wrap flex text-sm w-full  px-5">
             <button className="mt-2 cursor-pointer w-full border p-2 bg-neutral-700 text-white shadow-lg rounded-xl">
               edit profile
             </button>
           </div>
+        </div>
+      </div>
+      <div>
+        {isError && <div>{error?.message}</div>}
+        {isLoading && <div>Loading...</div>}
+        <div className="p-5">{data?.data.bio ?? "No bio."}</div>
+        <div className="px-5 pb-5">
+          <div>Email: {data?.data.email ?? "N/A"}</div>
+          <div>Phone: {data?.data.phone ?? "N/A"}</div>
         </div>
       </div>
       {/* <div>
@@ -34,6 +52,18 @@ const ProfilePage = () => {
       </div> */}
     </div>
   );
+};
+
+const resolveProfileImageUrl = (
+  user?: User,
+  firstName?: string,
+  lastName?: string
+) => {
+  if (!user || !user.thumbnailMediaId)
+    return `https://ui-avatars.com/api/?name=${firstName}+${lastName}`;
+
+  // TODO: implement
+  return user.thumbnailMediaId;
 };
 
 export default ProfilePage;

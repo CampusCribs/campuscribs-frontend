@@ -4,34 +4,34 @@ import Layout from "@/components/layout/Layout";
 import CribsPage from "@/pages/cribs/CribsPage";
 import ProfileUsernamePage from "@/pages/profile/username/ProfileUsernamePage";
 import ProtectedRoute from "@/components/route/ProtectedRoute";
-import ReverseProtectedRoute from "./components/route/ReverseProtectedRoute";
-import LoginPage from "./pages/login/LoginPage";
-import ProfilePage from "./pages/profile/ProfilePage";
+import ReverseProtectedRoute from "@/components/route/ReverseProtectedRoute";
+import LoginPage from "@/pages/login/LoginPage";
+import ProfilePage from "@/pages/profile/ProfilePage";
 
 function App() {
   return (
     // Default font is Roboto Mono
     <div className="font-['Roboto_Mono']">
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<CribsPage />} />
-            {/* <Route path="/cribs/:cribId" element={<CribsdIndividual />} /> */}
-            <Route
-              path="/profile/:username"
-              element={<ProfileUsernamePage />}
-            />
+        <BrowserRouter>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<CribsPage />} />
+              {/* <Route path="/cribs/:cribId" element={<CribsdIndividual />} /> */}
+              <Route
+                path="/profile/:username"
+                element={<ProfileUsernamePage />}
+              />
 
-            <Route element={<ProtectedRoute />}>
-              <Route path="/profile" element={<ProfilePage />} />
-            </Route>
+              <Route element={<ProtectedRoute />}>
+                <Route path="/profile" element={<ProfilePage />} />
+              </Route>
 
-            <Route element={<ReverseProtectedRoute />}>
-              <Route path="/login" element={<LoginPage />} />
+              <Route element={<ReverseProtectedRoute />}>
+                <Route path="/login" element={<LoginPage />} />
+              </Route>
             </Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
     </div>
   );
 }

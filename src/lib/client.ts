@@ -2,6 +2,8 @@ import axios from "axios";
 
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
+const VITE_BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
+
 /**
  * Subset of AxiosRequestConfig
  */
@@ -31,7 +33,7 @@ export type ResponseConfig<TData = unknown> = {
 };
 
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:8081",
+  baseURL: VITE_BACKEND_BASE_URL,
   paramsSerializer: {
     serialize: (params) => {
       return new URLSearchParams(params).toString();
