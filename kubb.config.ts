@@ -8,7 +8,7 @@ export default defineConfig({
   name: "campus-cribs-openapi",
   root: "./",
   input: {
-    path: "https://raw.githubusercontent.com/CampusCribs/campus-cribs-openapi/refs/heads/main/openapi.yaml",
+    path: "./openapi.yaml",
   },
   output: {
     path: "./src/gen",
