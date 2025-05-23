@@ -7,6 +7,10 @@ import ProtectedRoute from "@/components/route/ProtectedRoute";
 import ReverseProtectedRoute from "@/components/route/ReverseProtectedRoute";
 import LoginPage from "@/pages/login/LoginPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
+import SupportPage from "./pages/support/SupportPage";
+import ReverseProtectedRoute from "@/components/route/ReverseProtectedRoute";
+import LoginPage from "@/pages/login/LoginPage";
+import ProfilePage from "@/pages/profile/ProfilePage";
 import Post from "@/pages/profile/post/Post";
 
 function App() {
@@ -28,6 +32,7 @@ function App() {
                 <Route path=":username" element={<ProfileUsernamePage />} />
               </Route>
               <Route path="/profile/post" element={<Post />} />
+              <Route path="/support" element={<SupportPage />} />
             </Route>
 
             <Route element={<ReverseProtectedRoute />}>
