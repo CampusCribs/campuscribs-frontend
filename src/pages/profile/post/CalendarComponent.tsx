@@ -18,14 +18,10 @@ import {
 } from "./select";
 
 type props = {
-  begin: boolean;
   value: Date | undefined;
   onChange: (date: Date | undefined) => void;
 };
-const CalendarComponent = ({ begin, value, onChange }: props) => {
-  if (begin) {
-    console.log("Begin Date: ", value);
-  }
+const CalendarComponent = ({ value, onChange }: props) => {
   const handleCalendarChange = (
     _value: string | number,
     _e: React.ChangeEventHandler<HTMLSelectElement>
@@ -58,6 +54,7 @@ const CalendarComponent = ({ begin, value, onChange }: props) => {
         <PopoverContent className="p-0 w-auto" align="start">
           <Calendar
             mode="single"
+            hidden={{ before: new Date() }}
             selected={value}
             onSelect={onChange}
             className="rounded-lg border border-border p-2 bg-background"

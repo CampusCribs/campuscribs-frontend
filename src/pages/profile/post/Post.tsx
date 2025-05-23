@@ -139,7 +139,6 @@ const Post = () => {
               <div>
                 <Label>Begin Date</Label>
                 <CalendarComponent
-                  begin
                   value={field.value}
                   onChange={field.onChange}
                 />
@@ -156,7 +155,6 @@ const Post = () => {
               <div>
                 <Label>End Date</Label>
                 <CalendarComponent
-                  begin={false}
                   value={field.value}
                   onChange={field.onChange}
                 />
