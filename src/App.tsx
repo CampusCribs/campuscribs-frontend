@@ -9,6 +9,7 @@ import LoginPage from "@/pages/login/LoginPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
 import SupportPage from "./pages/support/SupportPage";
 import Post from "@/pages/profile/post/Post";
+import IndividualPage from "./pages/cribs/individual/IndividualPage";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<CribsPage />} />
-            {/* <Route path="/cribs/:cribId" element={<CribsdIndividual />} /> */}
+            <Route path="/cribs/:cribId" element={<IndividualPage />} />
             <Route
               path="/profile/:username"
               element={<ProfileUsernamePage />}

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 
 const ProfilePage = () => {
   const { user } = useEasyAuth();
-
+  const navigate = useNavigate();
   const config = useAuthenticatedClientConfig();
   const { data, isLoading, isError, error } = useGetUsersMe({ ...config });
 

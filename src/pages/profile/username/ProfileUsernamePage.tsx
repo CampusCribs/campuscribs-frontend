@@ -40,11 +40,6 @@ const ProfileUsernamePage = () => {
             {data && data.data.firstName + " " + data.data.lastName}
           </div>
           <div className="px-5 font-light text-md">@{data && username}</div>
-          <div className="text-wrap flex text-sm w-full  px-5">
-            <button className="mt-2 cursor-pointer w-full border p-2 bg-neutral-700 text-white shadow-lg rounded-xl">
-              edit profile
-            </button>
-          </div>
         </div>
       </div>
       <div>

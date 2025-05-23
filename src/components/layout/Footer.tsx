@@ -1,4 +1,11 @@
-import { CirclePlus, CircleUserRound, Info, LogIn, Menu } from "lucide-react";
+import {
+  CirclePlus,
+  CircleUserRound,
+  Info,
+  LogIn,
+  Menu,
+  Settings,
+} from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { useState } from "react";
 import * as motion from "motion/react-client";
@@ -16,7 +23,7 @@ const Footer = () => {
       icon: <CircleUserRound />,
       link: "/profile",
     },
-    // { title: "Settings", icon: <Settings />, link: "/settings" },
+    { title: "Settings", icon: <Settings />, link: "/settings" },
     { title: "Support", icon: <Info />, link: "/support" },
     { title: "LogIn", icon: <LogIn />, link: "/login" },
   ];
