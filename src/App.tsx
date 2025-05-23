@@ -7,31 +7,33 @@ import ProtectedRoute from "@/components/route/ProtectedRoute";
 import ReverseProtectedRoute from "@/components/route/ReverseProtectedRoute";
 import LoginPage from "@/pages/login/LoginPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
+import SupportPage from "./pages/support/SupportPage";
 
 function App() {
   return (
     // Default font is Roboto Mono
     <div className="font-['Roboto_Mono']">
-        <BrowserRouter>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<CribsPage />} />
-              {/* <Route path="/cribs/:cribId" element={<CribsdIndividual />} /> */}
-              <Route
-                path="/profile/:username"
-                element={<ProfileUsernamePage />}
-              />
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<CribsPage />} />
+            {/* <Route path="/cribs/:cribId" element={<CribsdIndividual />} /> */}
+            <Route
+              path="/profile/:username"
+              element={<ProfileUsernamePage />}
+            />
 
-              <Route element={<ProtectedRoute />}>
-                <Route path="/profile" element={<ProfilePage />} />
-              </Route>
-
-              <Route element={<ReverseProtectedRoute />}>
-                <Route path="/login" element={<LoginPage />} />
-              </Route>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/support" element={<SupportPage />} />
             </Route>
-          </Routes>
-        </BrowserRouter>
+
+            <Route element={<ReverseProtectedRoute />}>
+              <Route path="/login" element={<LoginPage />} />
+            </Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
