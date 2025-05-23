@@ -8,9 +8,6 @@ import ReverseProtectedRoute from "@/components/route/ReverseProtectedRoute";
 import LoginPage from "@/pages/login/LoginPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
 import SupportPage from "./pages/support/SupportPage";
-import ReverseProtectedRoute from "@/components/route/ReverseProtectedRoute";
-import LoginPage from "@/pages/login/LoginPage";
-import ProfilePage from "@/pages/profile/ProfilePage";
 import Post from "@/pages/profile/post/Post";
 
 function App() {
