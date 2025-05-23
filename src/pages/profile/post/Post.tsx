@@ -131,19 +131,19 @@ const Post = () => {
             {...register("tags")}
           />
         </div>
-        <div className="grid w-full items-center justify-center gap-y-4">
+        <div className="flex flex-col w-full items-center justify-center gap-y-4">
           <Controller
             name="beginDate"
             control={control}
             render={({ field }) => (
-              <>
+              <div>
                 <Label>Begin Date</Label>
                 <CalendarComponent
                   begin
                   value={field.value}
                   onChange={field.onChange}
                 />
-              </>
+              </div>
             )}
           />
           {errors.beginDate && (
@@ -153,20 +153,21 @@ const Post = () => {
             name="endDate"
             control={control}
             render={({ field }) => (
-              <>
+              <div>
                 <Label>End Date</Label>
                 <CalendarComponent
                   begin={false}
                   value={field.value}
                   onChange={field.onChange}
                 />
-              </>
+              </div>
             )}
           />
           {errors.endDate && (
             <p className="text-sm text-red-500">{errors.endDate.message}</p>
           )}
         </div>
+
         <div className="p-5">
           <div className="border border-black rounded-2xl p-3 gap-1 flex flex-wrap">
             {fakeTags.map((tag) => (
