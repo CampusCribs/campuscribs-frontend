@@ -10,6 +10,7 @@ import ProfilePage from "@/pages/profile/ProfilePage";
 import SupportPage from "./pages/support/SupportPage";
 import Post from "@/pages/profile/post/Post";
 import IndividualPage from "./pages/cribs/individual/IndividualPage";
+import SettingsPage from "./pages/settings/SettingsPage";
 
 function App() {
   return (
@@ -24,13 +25,13 @@ function App() {
               path="/profile/:username"
               element={<ProfileUsernamePage />}
             />
-
+            <Route path="/support" element={<SupportPage />} />
             <Route element={<ProtectedRoute />}>
+              <Route path="/settings" element={<SettingsPage />} />
               <Route path="/profile" element={<ProfilePage />}>
                 <Route path=":username" element={<ProfileUsernamePage />} />
               </Route>
               <Route path="/profile/post" element={<Post />} />
-              <Route path="/support" element={<SupportPage />} />
             </Route>
 
             <Route element={<ReverseProtectedRoute />}>

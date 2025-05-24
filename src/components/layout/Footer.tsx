@@ -74,15 +74,17 @@ const Footer = () => {
                   </div>
                   <div className="cursor-pointer">Profile</div>
                 </div>
-                <div
-                  className="flex flex-row mx-4 my-4  text-left "
-                  onClick={() => navigate("/settings")}
-                >
-                  <div className="mr-2 cursor-pointer">
-                    <Settings />
+                {user?.access_token && (
+                  <div
+                    className="flex flex-row mx-4 my-4  text-left "
+                    onClick={() => navigate("/settings")}
+                  >
+                    <div className="mr-2 cursor-pointer">
+                      <Settings />
+                    </div>
+                    <div className="cursor-pointer">Settings</div>
                   </div>
-                  <div className="cursor-pointer">Settings</div>
-                </div>
+                )}
                 <div
                   className="flex flex-row mx-4 my-4  text-left "
                   onClick={() => navigate("/support")}
