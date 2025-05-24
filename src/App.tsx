@@ -11,6 +11,9 @@ import SupportPage from "./pages/support/SupportPage";
 import Post from "@/pages/profile/post/Post";
 import IndividualPage from "./pages/cribs/individual/IndividualPage";
 import SettingsPage from "./pages/settings/SettingsPage";
+import General from "./pages/settings/general/General";
+import Notifications from "./pages/settings/notifications/Notifications";
+import Account from "./pages/settings/account/Account";
 
 function App() {
   return (
@@ -26,8 +29,15 @@ function App() {
               element={<ProfileUsernamePage />}
             />
             <Route path="/support" element={<SupportPage />} />
+
             <Route element={<ProtectedRoute />}>
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/settings/general" element={<General />} />
+              <Route path="/settings/account" element={<Account />} />
+              <Route
+                path="/settings/notifications"
+                element={<Notifications />}
+              />
               <Route path="/profile" element={<ProfilePage />}>
                 <Route path=":username" element={<ProfileUsernamePage />} />
               </Route>

@@ -2,6 +2,7 @@ import { CircleUserRound, Search } from "lucide-react";
 import { useNavigate } from "react-router";
 import HeaderSearch from "./HeaderSearch";
 import { useState } from "react";
+import HatHouse from "../ui/HouseHat";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Header = () => {
           className="text-2xl font-bold cursor-pointer"
           onClick={() => navigate("/")}
         >
-          Campus Cribs
+          <HatHouse /> Campus Cribs
         </div>
       </div>
 

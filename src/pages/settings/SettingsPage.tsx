@@ -1,23 +1,25 @@
 import { ArrowLeftIcon } from "lucide-react";
-import React from "react";
-
-type Props = {};
+import { useNavigate } from "react-router";
 
 const settings = [
   {
     id: 1,
     name: "Notifications",
+    link: "/settings/notifications",
   },
   {
     id: 2,
     name: "Account",
+    link: "/settings/account",
   },
   {
     id: 3,
     name: "General",
+    link: "/settings/general",
   },
 ];
-const SettingsPage = (props: Props) => {
+const SettingsPage = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <div className="px-3 pt-3">
@@ -32,6 +34,7 @@ const SettingsPage = (props: Props) => {
             className={`px-6 py-3 cursor-pointer text-lg font-medium border-t ${
               idx === settings.length - 1 ? "border-b" : ""
             }`}
+            onClick={() => navigate(setting.link)}
           >
             {setting.name}
           </div>
