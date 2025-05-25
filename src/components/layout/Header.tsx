@@ -2,8 +2,7 @@ import { CircleUserRound, Search } from "lucide-react";
 import { useNavigate } from "react-router";
 import HeaderSearch from "./HeaderSearch";
 import { useState } from "react";
-import HatHouse from "../ui/HouseHat";
-
+import HatHouseBlack from "../ui/HatHouseBlack";
 const Header = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -11,10 +10,13 @@ const Header = () => {
     <div className="flex justify-between items-center p-4">
       <div className="flex items-center gap-2">
         <div
-          className="text-2xl font-bold cursor-pointer"
+          className="flex items-center text-2xl font-bold cursor-pointer"
           onClick={() => navigate("/")}
         >
-          <HatHouse /> Campus Cribs
+          <div className="flex items-center mr-2">
+            <HatHouseBlack />
+          </div>
+          Campus Cribs
         </div>
       </div>
 
