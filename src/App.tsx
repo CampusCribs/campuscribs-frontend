@@ -14,6 +14,7 @@ import SettingsPage from "./pages/settings/SettingsPage";
 import General from "./pages/settings/general/General";
 import Notifications from "./pages/settings/notifications/Notifications";
 import Account from "./pages/settings/account/Account";
+import EditProfile from "./pages/profile/edit/EditProfile";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
                 <Route path=":username" element={<ProfileUsernamePage />} />
               </Route>
               <Route path="/profile/post" element={<Post />} />
+              <Route path="/profile/edit" element={<EditProfile />} />
             </Route>
 
             <Route element={<ReverseProtectedRoute />}>

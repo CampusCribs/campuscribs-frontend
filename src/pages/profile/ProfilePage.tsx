@@ -29,9 +29,14 @@ const ProfilePage = () => {
           <div className="text-lg font-medium px-4">
             {user?.profile.given_name} {user?.profile.family_name}
           </div>
-          <div className="px-5 font-light text-md">@{data?.data.username}</div>
+          <div className="px-5 font-light text-md">
+            @{user?.profile.preferred_username}
+          </div>
           <div className="text-wrap flex text-sm w-full  px-5">
-            <button className="mt-2 cursor-pointer w-full border p-2 bg-neutral-700 text-white shadow-lg rounded-xl">
+            <button
+              className="mt-2 cursor-pointer w-full border p-2 bg-neutral-700 text-white shadow-lg rounded-xl"
+              onClick={() => navigate("edit")}
+            >
               edit profile
             </button>
           </div>
@@ -42,7 +47,7 @@ const ProfilePage = () => {
         {isLoading && <div>Loading...</div>}
         <div className="p-5">{data?.data.bio ?? "No bio."}</div>
         <div className="px-5 pb-5">
-          <div>Email: {data?.data.email ?? "N/A"}</div>
+          <div>Email: {user?.profile.email ?? "N/A"}</div>
           <div>Phone: {data?.data.phone ?? "N/A"}</div>
         </div>
       </div>
