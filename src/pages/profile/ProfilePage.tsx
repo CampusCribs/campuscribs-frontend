@@ -10,7 +10,7 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const config = useAuthenticatedClientConfig();
   const { data, isLoading, isError, error } = useGetUsersMe({ ...config });
-
+  const postDoesntExist = true;
   return (
     <div className="flex flex-col w-full">
       <div className="flex p-3 w-full">
@@ -59,11 +59,14 @@ const ProfilePage = () => {
         </div>
       </div> */}
       <div className="w-full">
-        <div className="w-full  h-full flex justify-center items-center mt-10">
-          <Button onClick={() => navigate("post")} className="cursor-pointer">
-            <CirclePlus /> Create a new post!
-          </Button>
-        </div>
+        {/* TODO: render post button if post doesnt already exist */}
+        {postDoesntExist && (
+          <div className="w-full  h-full flex justify-center items-center mt-10">
+            <Button onClick={() => navigate("post")} className="cursor-pointer">
+              <CirclePlus /> Create a new post!
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { ArrowLeftIcon } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 
 const ProfileUsernamePage = () => {
@@ -27,6 +28,11 @@ const ProfileUsernamePage = () => {
 
   return (
     <div className="flex flex-col w-full">
+      <div className="px-3 pt-3">
+        <div onClick={() => window.history.back()}>
+          <ArrowLeftIcon size={40} />
+        </div>
+      </div>
       <div className="flex p-3 w-full">
         <div className="flex rounded-full w-24 h-24 overflow-hidden">
           <img
