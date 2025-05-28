@@ -1,12 +1,11 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState } from "react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 import { ArrowLeftIcon, X } from "lucide-react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { postSchema, PostSchema } from "@/lib/schema/schema";
+import { userProfileSchema, UserProfileSchema } from "@/lib/schema/schema";
 import { Button } from "@/components/ui/button";
 import { FieldErrors } from "react-hook-form";
 
@@ -14,30 +13,26 @@ const Post = () => {
   const {
     register,
     handleSubmit,
-    control,
+
     formState: { errors },
-  } = useForm<User>({
-    resolver: zodResolver(postSchema),
+  } = useForm<UserProfileSchema>({
+    resolver: zodResolver(userProfileSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      price: 0,
-      roommates: 0,
-      beginDate: new Date(),
-      endDate: new Date(),
-      tags: [],
+      bio: "",
+      phone: "",
     },
   });
 
-  const onSubmit = (data: PostSchema) => {
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const onSubmit = (data: UserProfileSchema) => {
     console.log("Form Data:", data);
-    console.log("Images:", image); // images from useState
+    console.log("Images:", thumbnail); // images from useState
     // Send data + images to API
   };
-  const onError = (errors: FieldErrors<PostSchema>) => {
+  const onError = (errors: FieldErrors<UserProfileSchema>) => {
     console.error("Validation Errors:", errors);
   };
-
+  //change these to update the profile
   return (
     <div>
       <div>
@@ -100,86 +95,38 @@ const Post = () => {
           {errors.roommates && (
             <p className="text-sm text-red-500">{errors.roommates.message}</p>
           )}
-          <input
-            type="hidden"
-            value={JSON.stringify(tags)}
-            {...register("tags")}
-          />
-        </div>
-        <div className="flex flex-col w-full items-center justify-center gap-y-4">
-          <Controller
-            name="beginDate"
-            control={control}
-            render={({ field }) => (
-              <div>
-                <Label>Begin Date</Label>
-                <CalendarComponent
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-              </div>
-            )}
-          />
-          {errors.beginDate && (
-            <p className="text-sm text-red-500">{errors.beginDate.message}</p>
-          )}
-          <Controller
-            name="endDate"
-            control={control}
-            render={({ field }) => (
-              <div>
-                <Label>End Date</Label>
-                <CalendarComponent
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-              </div>
-            )}
-          />
-          {errors.endDate && (
-            <p className="text-sm text-red-500">{errors.endDate.message}</p>
-          )}
         </div>
 
-        <div className="p-5">
-          <div className="border border-black rounded-2xl p-3 gap-1 flex flex-wrap">
-            {fakeTags.map((tag) => (
-              <Badge
-                className={`cursor-pointer rounded-full `}
-                variant={tags.includes(tag) ? "default" : "outline"}
-                key={tag.id}
-                onClick={() => handleTagClick(tag)}
-              >
-                {tag.name}
-              </Badge>
-            ))}
-          </div>
-        </div>
         <div className="w-full">
-          <div className="grid w-full  items-center justify-center gap-1.5 mb-3">
+          <div className="grid w-full items-center justify-center gap-1.5 mb-3">
             <Label htmlFor="images">Images</Label>
-            <Input type="file" id="images" onChange={handleFileUpload} />
+            <Input
+              type="file"
+              id="images"
+              accept="image/*"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0]) {
+                  setThumbnail(e.target.files[0]);
+                }
+              }}
+            />
           </div>
           <div className="p-2 grid grid-cols-2 w-full justify-center items-center  gap-1.5">
-            {images &&
-              Array.from(images).map((image) => (
-                <div className="relative">
-                  <img
-                    key={image.name}
-                    src={URL.createObjectURL(image)}
-                    alt="uploaded image"
-                    className=" w-full aspect-square object-cover border border-black rounded-xl shadow-xl "
-                  />
-                  <div
-                    className="absolute top-1 right-1 cursor-pointer bg-neutral-800 text-white rounded-full px-3 py-1"
-                    onClick={() => {
-                      setImages(images.filter((i) => i.name !== image.name));
-                    }}
-                  >
-                    <X size={32} />
-                  </div>
+            {thumbnail && (
+              <div className="relative">
+                <img
+                  src={thumbnail ? URL.createObjectURL(thumbnail) : ""}
+                  alt="uploaded image"
+                  className=" w-full aspect-square object-cover border border-black rounded-xl shadow-xl "
+                />
+                <div
+                  className="absolute top-1 right-1 cursor-pointer bg-neutral-800 text-white rounded-full px-3 py-1"
+                  onClick={() => setThumbnail(null)}
+                >
+                  <X size={32} />
                 </div>
-              ))}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex w-full justify-center items-center ">
