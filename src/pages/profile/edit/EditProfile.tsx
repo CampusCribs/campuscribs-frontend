@@ -9,7 +9,7 @@ import { userProfileSchema, UserProfileSchema } from "@/lib/schema/schema";
 import { Button } from "@/components/ui/button";
 import { FieldErrors } from "react-hook-form";
 
-const Post = () => {
+const EditProfile = () => {
   const {
     register,
     handleSubmit,
@@ -42,7 +42,7 @@ const Post = () => {
           </div>
         </div>
         <div className="flex w-full justify-center text-xl font-semibold">
-          Add Post
+          Edit Profile
         </div>
       </div>
       <form
@@ -50,56 +50,28 @@ const Post = () => {
         className="flex flex-col items-center justify-center w-full h-full gap-y-4 py-5"
       >
         <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label htmlFor="title">Title</Label>
-          <Input
-            {...register("title")}
-            type="text"
-            id="title"
-            placeholder="Title"
-          />
-          {errors.title && (
-            <p className="text-sm text-red-500">{errors.title.message}</p>
+          <Label htmlFor="bio">Bio</Label>
+          <Textarea {...register("bio")} id="bio" placeholder="bio" />
+          {errors.bio && (
+            <p className="text-sm text-red-500">{errors.bio.message}</p>
           )}
         </div>
         <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label htmlFor="description">Description</Label>
-          <Textarea
-            {...register("description")}
-            id="description"
-            placeholder="Description"
-          />
-          {errors.description && (
-            <p className="text-sm text-red-500">{errors.description.message}</p>
-          )}
-        </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label htmlFor="price">Price</Label>
+          <Label htmlFor="phone">Phone</Label>
           <Input
-            {...register("price", { valueAsNumber: true })}
+            {...register("phone", { valueAsNumber: true })}
             type="number"
             id="price"
             placeholder="Price"
           />
-          {errors.price && (
-            <p className="text-sm text-red-500">{errors.price.message}</p>
-          )}
-        </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label htmlFor="roommates">Roommates</Label>
-          <Input
-            type="number"
-            {...register("roommates", { valueAsNumber: true })}
-            id="roommates"
-            placeholder="Roommates"
-          />
-          {errors.roommates && (
-            <p className="text-sm text-red-500">{errors.roommates.message}</p>
+          {errors.phone && (
+            <p className="text-sm text-red-500">{errors.phone.message}</p>
           )}
         </div>
 
         <div className="w-full">
           <div className="grid w-full items-center justify-center gap-1.5 mb-3">
-            <Label htmlFor="images">Images</Label>
+            <Label htmlFor="images">Profile Thumbnail</Label>
             <Input
               type="file"
               id="images"
@@ -111,9 +83,9 @@ const Post = () => {
               }}
             />
           </div>
-          <div className="p-2 grid grid-cols-2 w-full justify-center items-center  gap-1.5">
+          <div className="p-2 flex w-full justify-center items-center  gap-1.5">
             {thumbnail && (
-              <div className="relative">
+              <div className="relative w-[75%]">
                 <img
                   src={thumbnail ? URL.createObjectURL(thumbnail) : ""}
                   alt="uploaded image"
@@ -141,4 +113,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default EditProfile;
