@@ -9,7 +9,7 @@ const useLogin = (): UseLogin => {
 
   const login = () => {
     authContext.signinRedirect({
-      scope: "untrusted-audience openid email profile",
+      scope: "campuscribs-backend-as-audience openid email profile",
     });
   };
 
