@@ -6,6 +6,7 @@ import { useInView } from "react-intersection-observer";
 
 import TagCarousel from "./TagCarousel";
 import { useNavigate } from "react-router";
+import { useGetCuratedInfinite, useGetTags } from "@/gen";
 // import { useGetPostsInfinite } from "@/gen";
 
 const CribsPage = () => {
@@ -15,11 +16,22 @@ const CribsPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { ref, inView } = useInView();
 
-  // const { data, error, isLoading } = useGetPostsInfinite({
-  //   page: 0,
-  //   limit: 5,
-  //   tags: selectedTags,
-  // });
+  const {
+    data: curated,
+    error: curated_error,
+    isLoading: curated_isLoading,
+  } = useGetCuratedInfinite({
+    page: 1,
+    size: 10,
+    sort: ["createdAt,desc"],
+    tags: selectedTags,
+  });
+
+  const {
+    data: tags,
+    error: tags_error,
+    isLoading: tags_isLoading,
+  } = useGetTags({});
 
   const handleTagClick = (tag: string) => {
     setSelectedTags((prevTags) =>
@@ -42,6 +54,9 @@ const CribsPage = () => {
           <TagCarousel
             tags={selectedTags}
             setTags={(tag) => handleTagClick(tag)}
+            fetched_tags={tags?.data || []}
+            tag_error={tags_error}
+            tag_isLoading={tags}
           />
 
           <div
@@ -62,25 +77,28 @@ const CribsPage = () => {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-1 w-full p-2">
-            {/* {isLoading && <p>loading...</p>}
-            {error && <p>error occured</p>}
-            {data &&
-              data.pages.map((item) =>
-                item.data.map((residence) => (
+            {curated_isLoading && <p>loading...</p>}
+            {curated_error && <p>error occured</p>}
+            {curated &&
+              curated.pages.map((item) =>
+                item.data.content?.map((residence) => (
                   <ResidenceCard
                     key={residence.id}
-                    thumbnail={`${import.meta.env.VITE_MINIO_ENDPOINT}/GrayBrickHouse-social-share.jpg`}
+                    thumbnail={""}
                     id={residence.id || ""}
                     price={residence.price || 0}
                     location="CUF"
                   />
                 ))
-              )} */}
+              )}
           </div>
           <div />
-          {/*ref={ref}*/}
+          <div ref={ref} />
         </div>
         <TagSelector
+          fetched_tags={tags?.data || []}
+          tag_error={tags_error}
+          tag_isLoading={tags_isLoading}
           tags={selectedTags}
           open={openTag}
           closeTag={() => setOpenTag(!openTag)}

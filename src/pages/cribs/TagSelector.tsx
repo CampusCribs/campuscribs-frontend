@@ -1,8 +1,10 @@
-// import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/components/ui/badge";
 
 type Props = {
   tags: string[];
   open: boolean;
+  tags_error?: string;
+  tags_isLoading?: boolean;
   closeTag: () => void;
   clearTags: () => void;
   setTags: (tags: string) => void;
@@ -37,6 +39,21 @@ const TagSelector = (props: Props) => {
             </div>
           </div>
           <div>
+            <div className="flex flex-wrap p-4">
+              <div className="w-1/2 my-2">
+                <div className="text-lg font-semibold">Lease Types</div>
+                {props.tags.map((tag) => (
+                  <Badge
+                    className={`cursor-pointer rounded-full `}
+                    variant={props.tags.includes(tag) ? "default" : "outline"}
+                    key={tag}
+                    onClick={() => props.setTags(tag)}
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
             {/* <div className="flex flex-wrap p-4">
               <div className="w-1/2 my-2">
                 <div className="text-lg font-semibold">Lease Types</div>

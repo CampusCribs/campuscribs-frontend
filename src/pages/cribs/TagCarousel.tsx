@@ -1,12 +1,11 @@
 import useEmblaCarousel from "embla-carousel-react";
 import { Badge } from "@/components/ui/badge";
 
-const _tag = {
-  // TODO implement dynamic fetching of categories and tags from the backend
-  tags: [],
-};
 type Props = {
   tags: string[];
+  fetched_tags: string[];
+  tag_error?: string;
+  tag_isLoading?: boolean;
   setTags: (tag: string) => void;
 };
 const Carousel = (props: Props) => {
@@ -20,7 +19,7 @@ const Carousel = (props: Props) => {
   return (
     <div className="overflow-hidden" ref={emblaRef}>
       <div className="flex gap-2">
-        {_tag.tags.map((tag) => (
+        {props.fetched_tags.map((tag) => (
           <Badge
             key={tag}
             onClick={() => props.setTags(tag)}
