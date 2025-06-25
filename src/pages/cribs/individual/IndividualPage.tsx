@@ -2,29 +2,6 @@ import { ArrowLeftIcon } from "lucide-react";
 import IndividualSlider from "./IndividualSlider";
 import { useNavigate } from "react-router";
 import { useGetPublicCribPostid } from "@/gen";
-const initialState = {
-  user: {
-    id: 1,
-    name: "Johnny Smith",
-    username: "JohnnySmith1432",
-    profileImage: "https://picsum.photos/id/103/600/600",
-  },
-  title: "I need a Roommate!",
-  description:
-    "Hey I need a roomate thats super cool and chill to live with me in my apartment. I have a dog and a cat so you must be pet friendly!",
-  price: 500,
-  roommates: 4,
-  BeginDate: new Date().toISOString(),
-  EndDate: new Date().toISOString(),
-  tags: [
-    "pet friendly",
-    "chill",
-    "cool",
-    "clean freak",
-    "no smoking",
-    "early bird",
-  ],
-};
 
 const IndividualPage = () => {
   const navigate = useNavigate();
