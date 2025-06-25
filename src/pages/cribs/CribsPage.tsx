@@ -6,7 +6,8 @@ import { useInView } from "react-intersection-observer";
 
 import TagCarousel from "./TagCarousel";
 import { useNavigate } from "react-router";
-import { useGetCuratedInfinite, useGetTags } from "@/gen";
+import { useGetPublicCuratedInfinite, useGetPublicTags } from "@/gen";
+
 // import { useGetPostsInfinite } from "@/gen";
 
 const CribsPage = () => {
@@ -20,18 +21,18 @@ const CribsPage = () => {
     data: curated,
     error: curated_error,
     isLoading: curated_isLoading,
-  } = useGetCuratedInfinite({
-    page: 1,
+  } = useGetPublicCuratedInfinite({
+    page: 0,
     size: 10,
     sort: ["createdAt,desc"],
-    tags: selectedTags,
+    tag: selectedTags,
   });
 
   const {
     data: tags,
     error: tags_error,
     isLoading: tags_isLoading,
-  } = useGetTags({});
+  } = useGetPublicTags({});
 
   const handleTagClick = (tag: string) => {
     setSelectedTags((prevTags) =>
@@ -56,7 +57,7 @@ const CribsPage = () => {
             setTags={(tag) => handleTagClick(tag)}
             fetched_tags={tags?.data || []}
             tag_error={tags_error}
-            tag_isLoading={tags}
+            tag_isLoading={tags_isLoading}
           />
 
           <div
@@ -124,6 +125,7 @@ const ResidenceCard = ({
   location: string;
 }) => {
   const navigate = useNavigate();
+  thumbnail = "https://picsum.photos/200/300?random=";
   return (
     <Card
       className="rounded-none shadow-none m-0 w-full border-none cursor-pointer p-1"

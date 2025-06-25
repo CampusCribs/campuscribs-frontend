@@ -16,7 +16,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
-  /tags:
+  /public/tags:
     get:
       tags:
         - Tag
@@ -37,14 +37,14 @@ paths:
                       type: string
                     tagCategoryId:
                       type: string
-  /curated:
+  /public/curated:
     get:
       tags:
         - Curated
       summary: Get curated items
       parameters:
         - in: query
-          name: tags
+          name: tag
           description: Filter by tags
           required: false
           schema:
@@ -120,7 +120,7 @@ paths:
                   empty:
                     type: boolean
 
-  /search:
+  /public/search:
     get:
       summary: Search for posts and users
       parameters:
