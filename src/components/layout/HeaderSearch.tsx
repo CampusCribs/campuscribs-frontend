@@ -1,4 +1,5 @@
 // import { useSearch } from "@/gen";
+import { useGetPublicSearch } from "@/gen";
 import { Send } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router";
@@ -10,13 +11,20 @@ type Props = {
 
 const HeaderSearch = (props: Props) => {
   const [query, setQuery] = useState<string>("");
-  // const { mutate, error, isError, isPending, data } = useSearch();
 
-  // const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-  //   setQuery(e.target.value);
+  const {
+    data: search_result,
+    error: search_error,
+    isLoading: search_isLoading,
+    refetch,
+  } = useGetPublicSearch({
+    query: query,
+  });
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
 
-  //   mutate({ data: { query: e.target.value } });
-  // };
+    refetch();
+  };
 
   return (
     <>
@@ -33,6 +41,7 @@ const HeaderSearch = (props: Props) => {
               type="text"
               // onChange={(e) => handleSearch(e)}
               value={query}
+              onChange={handleSearch}
               placeholder="Search for anything"
               className="border rounded-lg p-3  bg-white text-black my-3 w-full shadow-sm"
             />
@@ -41,29 +50,29 @@ const HeaderSearch = (props: Props) => {
             <Send size={32} className="cursor-pointer" />
           </div>
         </div>
-        {/* <div>
-          {isPending && <p>loading...</p>}
-          {isError && <p>error: {error.message}</p>}
-          {(data?.data?.users?.length || 0) > 0 && (
+        <div>
+          {search_isLoading && <p>loading...</p>}
+          {search_error && <p>error: {search_error.message}</p>}
+          {(search_result?.data?.users?.length || 0) > 0 && (
             <div>
               <div className="px-3 font-light">Users</div>
-              {data?.data?.users?.map((user) => (
+              {search_result?.data?.users?.map((user) => (
                 <SearchResult
-                  key={user.id}
-                  id={user.id || ""}
+                  key={user.thumbnail}
+                  id={user.username || ""}
                   text={user.username || ""}
                   thumbnail={user.thumbnail || ""}
                   close={props.close}
                 />
               ))}
             </div>
-          )} */}
+          )}
 
-          {/* {(data?.data.posts?.length || 0) > 0 && (
+          {(search_result?.data.posts?.length || 0) > 0 && (
             <div>
               {" "}
               <div className="px-3 font-light">Cribs</div>
-              {data?.data?.posts?.map((post) => (
+              {search_result?.data?.posts?.map((post) => (
                 <SearchResult
                   key={post.id}
                   id={post.id || ""}
@@ -74,7 +83,7 @@ const HeaderSearch = (props: Props) => {
               ))}
             </div>
           )}
-        </div> */}
+        </div>
         <div className="flex flex-row-reverse p-4">
           <div
             className="bg-neutral-200 font-light rounded-xl py-1 px-2 cursor-pointer"

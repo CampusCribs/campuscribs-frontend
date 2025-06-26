@@ -201,6 +201,9 @@ paths:
                     items:
                       type: object
                       properties:
+                        id:
+                          type: string
+                          format: uuid
                         title:
                           type: string
                         thumbnail:
