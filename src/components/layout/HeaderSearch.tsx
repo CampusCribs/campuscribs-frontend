@@ -20,6 +20,7 @@ const HeaderSearch = (props: Props) => {
   } = useGetPublicSearch({
     query: query,
   });
+  console.log("search_result", search_result);
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
 
@@ -74,6 +75,7 @@ const HeaderSearch = (props: Props) => {
               <div className="px-3 font-light">Cribs</div>
               {search_result?.data?.posts?.map((post) => (
                 <SearchResult
+                  post={true}
                   key={post.id}
                   id={post.id || ""}
                   thumbnail={post.thumbnail || ""}
@@ -83,6 +85,12 @@ const HeaderSearch = (props: Props) => {
               ))}
             </div>
           )}
+          {search_result?.data.posts?.length === 0 &&
+            search_result?.data.users?.length === 0 && (
+              <div className="px-3 font-light flex items-center justify-center h-20">
+                so empty try searching something else!
+              </div>
+            )}
         </div>
         <div className="flex flex-row-reverse p-4">
           <div
@@ -104,6 +112,7 @@ const HeaderSearch = (props: Props) => {
 };
 
 const SearchResult = (props: {
+  post?: boolean;
   id: string;
   text: string;
   thumbnail: string;
@@ -115,15 +124,13 @@ const SearchResult = (props: {
       className="flex flex-row p-3 px-5 m-1  rounded-xl border cursor-pointer "
       onClick={() => {
         props.close();
-        navigate(`/profile/${props.id}`);
+        if (props.post) navigate(`/cribs/${props.id}`);
+        else navigate(`/profile/${props.id}`);
       }}
     >
       <div className="flex items-center justify-center ">
         <img
-          src={
-            import.meta.env.VITE_MINIO_ENDPOINT +
-            "/GrayBrickHouse-social-share.jpg"
-          }
+          src={"https://picsum.photos/id/104/600/600"}
           alt="user"
           className="rounded-full w-10 h-10 mr-3 shadow-lg"
         />
