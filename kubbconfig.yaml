@@ -177,7 +177,63 @@ paths:
                     type: integer
                   empty:
                     type: boolean
-
+  /public/profile/{username}:
+    get:
+      summary: Get public profile by username
+      operationId: getPublicProfileByUsername
+      tags:
+        - Profile
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The username of the user to retrieve the profile for
+      responses:
+        "200":
+          description: Successful response with combined post and user profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  postProfile:
+                    type: object
+                    properties:
+                      postId:
+                        type: string
+                        format: uuid
+                      description:
+                        type: string
+                      roommates:
+                        type: integer
+                      price:
+                        type: number
+                      title:
+                        type: string
+                      mediaId:
+                        type: string
+                        format: uuid
+                  userProfile:
+                    type: object
+                    properties:
+                      firstName:
+                        type: string
+                      lastName:
+                        type: string
+                      username:
+                        type: string
+                      thumbnailMediaId:
+                        type: string
+                        format: uuid
+                      bio:
+                        type: string
+                      email:
+                        type: string
+                        format: email
+                      phone:
+                        type: string
   /public/search:
     get:
       summary: Search for posts and users
