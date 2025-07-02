@@ -25,6 +25,24 @@ export const postSchema = z.object({
 export type PostSchema = z.infer<typeof postSchema>;
 
 export const userProfileSchema = z.object({
+  firstName: z
+    .string()
+    .min(1, "First name is required")
+    .max(50, "First name must be less than 50 characters"),
+  lastName: z
+    .string()
+    .min(1, "Last name is required")
+    .max(50, "Last name must be less than 50 characters"),
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .max(100, "Email must be less than 100 characters")
+    .trim()
+    .email("Invalid email address"),
+  username: z
+    .string()
+    .min(1, "Username is required")
+    .max(50, "Username must be less than 50 characters"),
   bio: z
     .string()
     .min(1, "Description is required")
@@ -33,7 +51,7 @@ export const userProfileSchema = z.object({
     .string()
     .min(10, "Phone number must be at least 10 characters")
     .max(15, "Phone number must be less than 15 characters")
-    .regex(/^\+?[0-9\s]+$/, "Phone number must be a valid format")
+    .regex(/^\+?[0-9\s\-()]+$/, "Phone number must be a valid format")
     .optional(),
 });
 

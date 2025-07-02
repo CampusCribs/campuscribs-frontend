@@ -10,21 +10,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { postSchema, PostSchema } from "@/lib/schema/schema";
 import { Button } from "@/components/ui/button";
 import { FieldErrors } from "react-hook-form";
+import { useGetPublicTags, TagDTO } from "@/gen";
 
-const fakeTags = [
-  { id: 1, name: "tag1" },
-  { id: 2, name: "tag2" },
-  { id: 3, name: "tag3" },
-  { id: 4, name: "tag4" },
-  { id: 5, name: "tag5" },
-];
-type Tag = {
-  id: number;
-  name: string;
-};
 const Post = () => {
   const [images, setImages] = useState<File[]>([]);
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<TagDTO[]>([]);
+  const {
+    data: tags,
+    error: tags_error,
+    isLoading: tags_isLoading,
+  } = useGetPublicTags({});
   const {
     register,
     handleSubmit,
@@ -51,8 +46,8 @@ const Post = () => {
   const onError = (errors: FieldErrors<PostSchema>) => {
     console.error("Validation Errors:", errors);
   };
-  const handleTagClick = (tag: Tag) => {
-    setTags((prevTags) =>
+  const handleTagClick = (tag: TagDTO) => {
+    setSelectedTags((prevTags) =>
       prevTags.includes(tag)
         ? prevTags.filter((t) => t !== tag)
         : [...prevTags, tag]
@@ -63,6 +58,7 @@ const Post = () => {
       setImages([...images, ...Array.from(e.target.files)]);
     }
   };
+  console.log("Selected Tags:", selectedTags);
   return (
     <div>
       <div>
@@ -167,17 +163,21 @@ const Post = () => {
         </div>
 
         <div className="p-5">
-          <div className="border border-black rounded-2xl p-3 gap-1 flex flex-wrap">
-            {fakeTags.map((tag) => (
-              <Badge
-                className={`cursor-pointer rounded-full `}
-                variant={tags.includes(tag) ? "default" : "outline"}
-                key={tag.id}
-                onClick={() => handleTagClick(tag)}
-              >
-                {tag.name}
-              </Badge>
-            ))}
+          <Label className="text-lg ml-3 font-semibold">Tags</Label>
+          <div className="border border-black rounded-2xl p-3 gap-x-1 gap-y-3 flex flex-wrap">
+            {tags_error && <p className="text-red-500">Error loading tags</p>}
+            {tags_isLoading && <p className="text-gray-500">Loading tags...</p>}
+            {tags &&
+              tags.data.map((tag) => (
+                <Badge
+                  className={`cursor-pointer rounded-full `}
+                  variant={selectedTags.includes(tag) ? "default" : "outline"}
+                  key={tag.id}
+                  onClick={() => handleTagClick(tag)}
+                >
+                  {tag.name}
+                </Badge>
+              ))}
           </div>
         </div>
         <div className="w-full">

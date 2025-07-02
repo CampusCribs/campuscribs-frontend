@@ -1,38 +1,68 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeftIcon, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userProfileSchema, UserProfileSchema } from "@/lib/schema/schema";
 import { Button } from "@/components/ui/button";
 import { FieldErrors } from "react-hook-form";
+import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
+import { useGetUsersMe } from "@/gen";
 
 const EditProfile = () => {
+  const config = useAuthenticatedClientConfig();
+  const {
+    data: userData,
+    isLoading: isLoading_user,
+    isError: isError_user,
+    error: error_user,
+  } = useGetUsersMe({ ...config });
+
   const {
     register,
+    reset,
     handleSubmit,
-
     formState: { errors },
   } = useForm<UserProfileSchema>({
     resolver: zodResolver(userProfileSchema),
     defaultValues: {
-      bio: "",
-      phone: "",
+      bio: userData?.data.bio || "",
+      phone: userData?.data.phone || "",
+      firstName: userData?.data.firstName || "",
+      lastName: userData?.data.lastName || "",
+      username: userData?.data.username || "",
+      email: userData?.data.email || "",
     },
   });
 
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const onSubmit = (data: UserProfileSchema) => {
     console.log("Form Data:", data);
-    console.log("Images:", thumbnail); // images from useState
-    // Send data + images to API
   };
   const onError = (errors: FieldErrors<UserProfileSchema>) => {
     console.error("Validation Errors:", errors);
   };
   //change these to update the profile
+  useEffect(() => {
+    if (userData?.data) {
+      reset({
+        bio: userData.data.bio || "",
+        phone: userData.data.phone || "",
+        firstName: userData.data.firstName || "",
+        lastName: userData.data.lastName || "",
+        username: userData.data.username || "",
+        email: userData.data.email || "",
+      });
+    }
+  }, [userData, reset]);
+  if (isLoading_user) {
+    return <div>Loading...</div>;
+  }
+  if (isError_user) {
+    return <div>Error: {error_user?.message}</div>;
+  }
   return (
     <div>
       <div>
@@ -50,6 +80,46 @@ const EditProfile = () => {
         className="flex flex-col items-center justify-center w-full h-full gap-y-4 py-5"
       >
         <div className="grid w-full max-w-sm items-center gap-1.5">
+          <Label htmlFor="firstName">First Name</Label>
+          <Input
+            {...register("firstName")}
+            id="firstName"
+            placeholder="First Name"
+          />
+          {errors.firstName && (
+            <p className="text-sm text-red-500">{errors.firstName.message}</p>
+          )}
+        </div>
+        <div className="grid w-full max-w-sm items-center gap-1.5">
+          <Label htmlFor="lastName">Last Name</Label>
+          <Input
+            {...register("lastName")}
+            id="lastName"
+            placeholder="Last Name"
+          />
+          {errors.lastName && (
+            <p className="text-sm text-red-500">{errors.lastName.message}</p>
+          )}
+        </div>
+        <div className="grid w-full max-w-sm items-center gap-1.5">
+          <Label htmlFor="username">Username</Label>
+          <Input
+            {...register("username")}
+            id="username"
+            placeholder="Username"
+          />
+          {errors.username && (
+            <p className="text-sm text-red-500">{errors.username.message}</p>
+          )}
+        </div>
+        <div className="grid w-full max-w-sm items-center gap-1.5">
+          <Label htmlFor="email">Email</Label>
+          <Input {...register("email")} id="email" placeholder="Email" />
+          {errors.email && (
+            <p className="text-sm text-red-500">{errors.email.message}</p>
+          )}
+        </div>
+        <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label htmlFor="bio">Bio</Label>
           <Textarea {...register("bio")} id="bio" placeholder="bio" />
           {errors.bio && (
@@ -59,10 +129,10 @@ const EditProfile = () => {
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label htmlFor="phone">Phone</Label>
           <Input
-            {...register("phone", { valueAsNumber: true })}
-            type="number"
-            id="price"
-            placeholder="Price"
+            {...register("phone")}
+            type="tel"
+            id="phone"
+            placeholder="Phone"
           />
           {errors.phone && (
             <p className="text-sm text-red-500">{errors.phone.message}</p>

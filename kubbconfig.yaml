@@ -4,6 +4,7 @@ info:
   title: CampusCribs
   description: CampusCribs API Implementation Specification
 paths:
+  # User auth endpoints
   /users/me:
     get:
       tags:
@@ -16,6 +17,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
+  #HomePage endpoints
+
+  #Fetches all tags
   /public/tags:
     get:
       tags:
@@ -37,64 +41,7 @@ paths:
                       type: string
                     tagCategoryId:
                       type: string
-  /public/crib/{postId}:
-    get:
-      summary: Get a public post by ID
-      tags:
-        - Public Posts
-      parameters:
-        - name: postId
-          in: path
-          required: true
-          description: The ID of the post to retrieve
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: Successful retrieval of the post
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                  firstName:
-                    type: string
-                  lastName:
-                    type: string
-                  username:
-                    type: string
-                  title:
-                    type: string
-                  description:
-                    type: string
-                  price:
-                    type: number
-                  roommates:
-                    type: integer
-                  mediaIds:
-                    type: array
-                    items:
-                      type: string
-                      format: uuid
-                  tags:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                        name:
-                          type: string
-                  termStartDate:
-                    type: string
-                    format: date-time
-                  termEndDate:
-                    type: string
-                    format: date-time
+  #Fetches curated posts for user
   /public/curated:
     get:
       tags:
@@ -111,8 +58,6 @@ paths:
               type: string
           style: form
           explode: true
-
-        # Spring Pageable parameters
         - in: query
           name: page
           description: Page number (0-based)
@@ -177,6 +122,130 @@ paths:
                     type: integer
                   empty:
                     type: boolean
+  #Search endpoint for posts and users
+  /public/search:
+    get:
+      summary: Search for posts and users
+      parameters:
+        - in: query
+          name: query
+          required: true
+          description: Search term
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful search
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                        title:
+                          type: string
+                        thumbnail:
+                          type: string
+                          nullable: true
+                  users:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        username:
+                          type: string
+                        thumbnail:
+                          type: string
+                          nullable: true
+  #Fetch individual post
+  /public/crib/{postId}:
+    get:
+      summary: Get a public post by ID
+      tags:
+        - Public Posts
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          description: The ID of the post to retrieve
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Successful retrieval of the post
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  username:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  price:
+                    type: number
+                  roommates:
+                    type: integer
+                  mediaIds:
+                    type: array
+                    items:
+                      type: string
+                      format: uuid
+                  tags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                  termStartDate:
+                    type: string
+                    format: date-time
+                  termEndDate:
+                    type: string
+                    format: date-time
+  #Edit profile endpoints
+
+  #Fetch presigned URL for media upload
+  /users/me/thumbnail-upload:
+    get:
+      summary: Generate a presigned URL to upload the user's thumbnail image
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Presigned upload URL and media ID generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InitializeMediaUploadDTO"
+        "400":
+          description: Invalid request (e.g. missing or invalid user)
+        "500":
+          description: Server error during URL generation
+
+  #Fetch public profile by username
   /public/profile/{username}:
     get:
       summary: Get public profile by username
@@ -234,48 +303,31 @@ paths:
                         format: email
                       phone:
                         type: string
-  /public/search:
+  #Get postdrafts for current user
+  /posts/drafts:
     get:
-      summary: Search for posts and users
-      parameters:
-        - in: query
-          name: query
-          required: true
-          description: Search term
-          schema:
-            type: string
+      summary: Get the current user's post draft
+      tags:
+        - Drafts
+      security:
+        - bearerAuth: []
       responses:
         "200":
-          description: Successful search
+          description: Successfully retrieved the user's post draft
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  posts:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          format: uuid
-                        title:
-                          type: string
-                        thumbnail:
-                          type: string
-                          nullable: true
-                  users:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        username:
-                          type: string
-                        thumbnail:
-                          type: string
-                          nullable: true
+                $ref: "#/components/schemas/PostDraftDTO"
+        "400":
+          description: Invalid request (e.g., missing user)
+        "404":
+          description: Draft not found
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     UserAnonymous:
       type: object
@@ -334,18 +386,76 @@ components:
           format: email
         phone:
           type: string
-  parameters:
-    limit:
-      description: The limit of a paginated request
-      in: query
-      name: limit
-      required: true
-      schema:
-        type: number
-    page:
-      description: The page of a paginated request
-      in: query
-      name: page
-      required: false
-      schema:
-        type: number
+    PostDraftDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: integer
+        roommates:
+          type: integer
+        media:
+          type: array
+          items:
+            $ref: "#/components/schemas/PostDraftMediaDTO"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/TagDTO"
+        termStartDate:
+          type: string
+          format: date-time
+        termEndDate:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    PostDraftMediaDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        postDraftId:
+          type: string
+          format: uuid
+        isPrimary:
+          type: boolean
+        mediaId:
+          type: string
+          format: uuid
+
+    TagDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+
+    InitializeMediaUploadDTO:
+      type: object
+      properties:
+        uploadUrl:
+          type: string
+          format: uri
+        mediaId:
+          type: string
+          format: uuid
+      required:
+        - uploadUrl
+        - mediaId
