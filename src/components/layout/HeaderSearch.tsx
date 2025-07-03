@@ -20,7 +20,6 @@ const HeaderSearch = (props: Props) => {
   } = useGetPublicSearch({
     query: query,
   });
-  console.log("search_result", search_result);
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
 

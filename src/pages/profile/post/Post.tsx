@@ -40,8 +40,6 @@ const Post = () => {
 
   const onSubmit = (data: PostSchema) => {
     console.log("Form Data:", data);
-    console.log("Images:", images); // images from useState
-    // Send data + images to API
   };
   const onError = (errors: FieldErrors<PostSchema>) => {
     console.error("Validation Errors:", errors);
@@ -58,7 +56,7 @@ const Post = () => {
       setImages([...images, ...Array.from(e.target.files)]);
     }
   };
-  console.log("Selected Tags:", selectedTags);
+
   return (
     <div>
       <div>

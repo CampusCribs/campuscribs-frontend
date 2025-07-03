@@ -9,10 +9,14 @@ import { userProfileSchema, UserProfileSchema } from "@/lib/schema/schema";
 import { Button } from "@/components/ui/button";
 import { FieldErrors } from "react-hook-form";
 import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
-import { useGetUsersMe } from "@/gen";
+import { useGetUsersMe, usePutUsersUpdate } from "@/gen";
+import { useThumbnailUpload } from "@/lib/uploadThumbnail";
+import { useNavigate } from "react-router";
 
 const EditProfile = () => {
   const config = useAuthenticatedClientConfig();
+
+  const navigate = useNavigate();
   const {
     data: userData,
     isLoading: isLoading_user,
@@ -20,10 +24,26 @@ const EditProfile = () => {
     error: error_user,
   } = useGetUsersMe({ ...config });
 
+  const { upload, mediaId } = useThumbnailUpload();
+  const { mutate: updateProfile } = usePutUsersUpdate({
+    ...config,
+    mutation: {
+      onSuccess: (response) => {
+        console.log("✅ Success:", response);
+        alert("Profile updated successfully!");
+        navigate("/profile");
+      },
+      onError: (error) => {
+        console.error(" Error:", error);
+        alert("Something went wrong.");
+      },
+    },
+  });
   const {
     register,
     reset,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<UserProfileSchema>({
     resolver: zodResolver(userProfileSchema),
@@ -34,14 +54,21 @@ const EditProfile = () => {
       lastName: userData?.data.lastName || "",
       username: userData?.data.username || "",
       email: userData?.data.email || "",
+      thumbnailMediaId: userData?.data.thumbnailMediaId || "",
     },
   });
 
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const onSubmit = (data: UserProfileSchema) => {
-    console.log("Form Data:", data);
+    console.log(mediaId);
+    updateProfile({
+      data: {
+        ...data,
+      },
+    });
   };
   const onError = (errors: FieldErrors<UserProfileSchema>) => {
+    console.log(mediaId);
     console.error("Validation Errors:", errors);
   };
   //change these to update the profile
@@ -57,6 +84,7 @@ const EditProfile = () => {
       });
     }
   }, [userData, reset]);
+
   if (isLoading_user) {
     return <div>Loading...</div>;
   }
@@ -134,6 +162,7 @@ const EditProfile = () => {
             id="phone"
             placeholder="Phone"
           />
+
           {errors.phone && (
             <p className="text-sm text-red-500">{errors.phone.message}</p>
           )}
@@ -145,13 +174,40 @@ const EditProfile = () => {
             <Input
               type="file"
               id="images"
-              accept="image/*"
-              onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
-                  setThumbnail(e.target.files[0]);
+              accept="image/jpeg, image/png, image/webp"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
+                const validTypes = ["image/jpeg", "image/png", "image/webp"];
+                if (!validTypes.includes(file.type)) {
+                  alert("Only JPEG, PNG, and WebP images are allowed.");
+                  return;
+                }
+
+                try {
+                  const media = await upload(file);
+                  setThumbnail(file);
+                  setValue("thumbnailMediaId", media); // <- store this in form state
+                  // <- store this for form submit
+                } catch (err) {
+                  console.error("Image upload failed:", err);
+                  alert("Upload failed. Please try again.");
                 }
               }}
             />
+            {mediaId && (
+              <Input
+                type="hidden"
+                value={mediaId}
+                {...register("thumbnailMediaId")}
+              />
+            )}
+            {errors.thumbnailMediaId && (
+              <p className="text-sm text-red-500">
+                {errors.thumbnailMediaId.message}
+              </p>
+            )}
           </div>
           <div className="p-2 flex w-full justify-center items-center  gap-1.5">
             {thumbnail && (

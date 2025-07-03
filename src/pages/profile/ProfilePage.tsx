@@ -1,37 +1,52 @@
 import { Button } from "@/components/ui/button";
-import { useGetUsersMe, User } from "@/gen";
+import { useGetUsersMe } from "@/gen";
 import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
 import useEasyAuth from "@/hooks/use-easy-auth";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, CircleUserRound } from "lucide-react";
 import { useNavigate } from "react-router";
 
 const ProfilePage = () => {
   const { user } = useEasyAuth();
+
   const navigate = useNavigate();
+
   const config = useAuthenticatedClientConfig();
+
   const { data, isLoading, isError, error } = useGetUsersMe({ ...config });
+
+  console.log(data);
   const postDoesntExist = true;
+
   return (
     <div className="flex flex-col w-full">
       <div className="flex p-3 w-full">
         <div className="flex rounded-full w-24 h-24 overflow-hidden">
-          <img
-            src={resolveProfileImageUrl(
-              data?.data,
-              user?.profile.given_name,
-              user?.profile.family_name
-            )}
-            alt="Profile"
-            className="object-cover"
-          />
+          {isLoading && <div>Loading...</div>}
+          {data && !data.data.thumbnailMediaId && (
+            <div className="flex justify-center items-center w-full">
+              {" "}
+              <CircleUserRound size={80} />
+            </div>
+          )}
+          {data && data.data.thumbnailMediaId && (
+            <img
+              src={
+                import.meta.env.VITE_MINIO_ENDPOINT +
+                "/users/" +
+                data.data.id +
+                "/thumbnails/" +
+                data.data.thumbnailMediaId
+              }
+              alt="Profile"
+              className="object-cover"
+            />
+          )}
         </div>
         <div className="flex flex-col w-3/4">
           <div className="text-lg font-medium px-4">
-            {user?.profile.given_name} {user?.profile.family_name}
+            {data?.data.firstName} {data?.data.lastName}
           </div>
-          <div className="px-5 font-light text-md">
-            @{user?.profile.preferred_username}
-          </div>
+          <div className="px-5 font-light text-md">@{data?.data.username}</div>
           <div className="text-wrap flex text-sm w-full  px-5">
             <button
               className="mt-2 cursor-pointer w-full border p-2 bg-neutral-700 text-white shadow-lg rounded-xl"
@@ -47,17 +62,10 @@ const ProfilePage = () => {
         {isLoading && <div>Loading...</div>}
         <div className="p-5">{data?.data.bio ?? "No bio."}</div>
         <div className="px-5 pb-5">
-          <div>Email: {user?.profile.email ?? "N/A"}</div>
+          <div>Email: {data?.data.email ?? "N/A"}</div>
           <div>Phone: {data?.data.phone ?? "N/A"}</div>
         </div>
       </div>
-      {/* <div>
-        <div className="p-5">{data && data.data.bio}</div>
-        <div className="px-5 pb-5">
-          <div>{data && data.data.email}</div>
-          <div>{data && data.data.phone}</div>
-        </div>
-      </div> */}
       <div className="w-full">
         {/* TODO: render post button if post doesnt already exist */}
         {postDoesntExist && (
@@ -70,18 +78,6 @@ const ProfilePage = () => {
       </div>
     </div>
   );
-};
-
-const resolveProfileImageUrl = (
-  user?: User,
-  firstName?: string,
-  lastName?: string
-) => {
-  if (!user || !user.thumbnailMediaId)
-    return `https://ui-avatars.com/api/?name=${firstName}+${lastName}`;
-
-  // TODO: implement
-  return user.thumbnailMediaId;
 };
 
 export default ProfilePage;

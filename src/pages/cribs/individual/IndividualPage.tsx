@@ -7,7 +7,6 @@ const IndividualPage = () => {
   const navigate = useNavigate();
   //fetch images from server and pass them to the slider prop
   const id = window.location.pathname.split("/").pop() || "";
-  console.log("ID:", id);
   const {
     data: post,
     error: post_error,

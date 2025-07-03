@@ -1,6 +1,6 @@
 import useEasyAuth from "./use-easy-auth";
 
-type UseAuthenticatedClientConfig = {
+export type UseAuthenticatedClientConfig = {
   client: {
     headers: {
       Authorization: string;

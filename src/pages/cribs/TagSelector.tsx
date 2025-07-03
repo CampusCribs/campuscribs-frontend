@@ -18,7 +18,6 @@ type Props = {
 };
 
 const TagSelector = (props: Props) => {
-  console.log(props.fetched_tags);
   return (
     <>
       <div

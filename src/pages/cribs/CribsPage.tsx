@@ -8,8 +8,6 @@ import TagCarousel from "./TagCarousel";
 import { useNavigate } from "react-router";
 import { useGetPublicCuratedInfinite, useGetPublicTags } from "@/gen";
 
-// import { useGetPostsInfinite } from "@/gen";
-
 const CribsPage = () => {
   //variables to store the selected tags and the state of the tag selector and find the intersection of the tags
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
