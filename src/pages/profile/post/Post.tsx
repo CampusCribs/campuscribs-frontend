@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CalendarComponent from "./CalendarComponent";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeftIcon, X } from "lucide-react";
@@ -10,19 +10,37 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { postSchema, PostSchema } from "@/lib/schema/schema";
 import { Button } from "@/components/ui/button";
 import { FieldErrors } from "react-hook-form";
-import { useGetPublicTags, TagDTO } from "@/gen";
+import { useGetPublicTags, TagDTO, usePutPostsDrafts } from "@/gen";
+import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
+import { useEnsurePostDraft } from "@/hooks/use-get-post-drafts";
 
 const Post = () => {
+  const config = useAuthenticatedClientConfig();
+
   const [images, setImages] = useState<File[]>([]);
+
   const [selectedTags, setSelectedTags] = useState<TagDTO[]>([]);
+
+  const editDraft = usePutPostsDrafts({
+    ...config,
+  });
+
   const {
     data: tags,
     error: tags_error,
     isLoading: tags_isLoading,
   } = useGetPublicTags({});
+
+  const {
+    postDraft,
+    loading: postDraftLoading,
+    error: postDraftError,
+  } = useEnsurePostDraft();
+
   const {
     register,
     handleSubmit,
+    reset,
     control,
     formState: { errors },
   } = useForm<PostSchema>({
@@ -38,8 +56,19 @@ const Post = () => {
     },
   });
 
-  const onSubmit = (data: PostSchema) => {
-    console.log("Form Data:", data);
+  const onSubmit = (updatedPost: PostSchema) => {
+    console.log("Form Data:", updatedPost);
+    const response = editDraft.mutateAsync({ data: { ...updatedPost } });
+    response
+      .then((res) => {
+        console.log("Post updated successfully:", res);
+        alert("Post updated successfully!");
+        window.history.back();
+      })
+      .catch((error) => {
+        console.error("Error updating post:", error);
+        alert("Failed to update post. Please try again.");
+      });
   };
   const onError = (errors: FieldErrors<PostSchema>) => {
     console.error("Validation Errors:", errors);
@@ -56,7 +85,30 @@ const Post = () => {
       setImages([...images, ...Array.from(e.target.files)]);
     }
   };
+  useEffect(() => {
+    if (postDraft) {
+      reset({
+        title: postDraft.title,
+        description: postDraft.description,
+        price: postDraft.price,
+        roommates: postDraft.roommates,
+        beginDate: postDraft.termStartDate
+          ? new Date(postDraft.termStartDate)
+          : new Date(),
+        endDate: postDraft.termEndDate
+          ? new Date(postDraft.termEndDate)
+          : new Date(),
+        tags: postDraft.tags,
+      });
+    }
+  }, [postDraft?.id, reset]);
 
+  if (postDraftLoading) {
+    return <div>Loading...</div>;
+  }
+  if (postDraftError) {
+    return <div>Error: {postDraftError}</div>;
+  }
   return (
     <div>
       <div>

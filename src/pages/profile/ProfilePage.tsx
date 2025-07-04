@@ -1,13 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { useGetUsersMe } from "@/gen";
 import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
-import useEasyAuth from "@/hooks/use-easy-auth";
 import { CirclePlus, CircleUserRound } from "lucide-react";
 import { useNavigate } from "react-router";
 
 const ProfilePage = () => {
-  const { user } = useEasyAuth();
-
   const navigate = useNavigate();
 
   const config = useAuthenticatedClientConfig();
@@ -60,10 +57,13 @@ const ProfilePage = () => {
       <div>
         {isError && <div>{error?.message}</div>}
         {isLoading && <div>Loading...</div>}
-        <div className="p-5">{data?.data.bio ?? "No bio."}</div>
+        <div className="p-5">
+          {data?.data.bio ??
+            "Please enter a bio to finish setting up your profile!"}
+        </div>
         <div className="px-5 pb-5">
           <div>Email: {data?.data.email ?? "N/A"}</div>
-          <div>Phone: {data?.data.phone ?? "N/A"}</div>
+          <div>Phone: {data?.data.phone ?? "please set your phone number"}</div>
         </div>
       </div>
       <div className="w-full">

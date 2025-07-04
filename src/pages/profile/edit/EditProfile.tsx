@@ -39,6 +39,7 @@ const EditProfile = () => {
       },
     },
   });
+
   const {
     register,
     reset,
@@ -81,6 +82,7 @@ const EditProfile = () => {
         lastName: userData.data.lastName || "",
         username: userData.data.username || "",
         email: userData.data.email || "",
+        thumbnailMediaId: userData.data.thumbnailMediaId || "",
       });
     }
   }, [userData, reset]);
@@ -223,6 +225,21 @@ const EditProfile = () => {
                 >
                   <X size={32} />
                 </div>
+              </div>
+            )}
+            {userData?.data.thumbnailMediaId && !thumbnail && (
+              <div className="relative w-[75%]">
+                <img
+                  src={
+                    import.meta.env.VITE_MINIO_ENDPOINT +
+                    "/users/" +
+                    userData.data.id +
+                    "/thumbnails/" +
+                    userData.data.thumbnailMediaId
+                  }
+                  alt="uploaded image"
+                  className=" w-full aspect-square object-cover border border-black rounded-xl shadow-xl "
+                />
               </div>
             )}
           </div>

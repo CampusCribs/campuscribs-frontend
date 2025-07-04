@@ -19,7 +19,7 @@ export const postSchema = z.object({
     .max(10, "Roommates must be less than 10"),
   beginDate: z.date(),
   endDate: z.date(),
-  tags: z.array(z.object({ id: z.number(), name: z.string() })).optional(),
+  tags: z.array(z.object({ id: z.string(), name: z.string() })).optional(),
 });
 
 export type PostSchema = z.infer<typeof postSchema>;

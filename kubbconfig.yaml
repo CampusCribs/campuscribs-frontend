@@ -307,8 +307,6 @@ paths:
       summary: Update the current user's profile
       tags:
         - Users
-      security:
-        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -331,8 +329,6 @@ paths:
       summary: Get the current user's post draft
       tags:
         - Drafts
-      security:
-        - bearerAuth: []
       responses:
         "200":
           description: Successfully retrieved the user's post draft
@@ -344,6 +340,42 @@ paths:
           description: Invalid request (e.g., missing user)
         "404":
           description: Draft not found
+    post:
+      summary: Create a new post draft for the current user
+      tags:
+        - Drafts
+      responses:
+        "201":
+          description: Draft successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostDraftDTO"
+        "400":
+          description: Invalid request or draft already exists
+        "409":
+          description: Draft already exists
+    put:
+      summary: update post draft for the current user
+      tags:
+        - Drafts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePostDraftDTO" # optional if any fields needed
+      responses:
+        "201":
+          description: Draft successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostDraftDTO"
+        "400":
+          description: Invalid request or draft already exists
+        "409":
+          description: Draft already exists
 components:
   securitySchemes:
     bearerAuth:
@@ -408,6 +440,7 @@ components:
           format: email
         phone:
           type: string
+
     PostDraftDTO:
       type: object
       properties:
@@ -507,3 +540,29 @@ components:
         - username
         - email
         - phone
+
+    CreatePostDraftDTO:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: integer
+        roommates:
+          type: integer
+        media:
+          type: array
+          items:
+            $ref: "#/components/schemas/PostDraftMediaDTO"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/TagDTO"
+        termStartDate:
+          type: string
+          format: date-time
+        termEndDate:
+          type: string
+          format: date-time
