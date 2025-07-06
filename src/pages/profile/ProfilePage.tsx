@@ -11,7 +11,6 @@ const ProfilePage = () => {
 
   const { data, isLoading, isError, error } = useGetUsersMe({ ...config });
 
-  console.log(data);
   const postDoesntExist = true;
 
   return (

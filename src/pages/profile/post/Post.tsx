@@ -55,15 +55,18 @@ const Post = () => {
       tags: [],
     },
   });
-
   const onSubmit = (updatedPost: PostSchema) => {
-    console.log("Form Data:", updatedPost);
-    const response = editDraft.mutateAsync({ data: { ...updatedPost } });
+    const response = editDraft.mutateAsync({
+      data: {
+        ...updatedPost,
+        termStartDate: updatedPost.beginDate.toISOString(),
+        termEndDate: updatedPost.endDate.toISOString(),
+      },
+    });
     response
       .then((res) => {
         console.log("Post updated successfully:", res);
         alert("Post updated successfully!");
-        window.history.back();
       })
       .catch((error) => {
         console.error("Error updating post:", error);
@@ -93,13 +96,19 @@ const Post = () => {
         price: postDraft.price,
         roommates: postDraft.roommates,
         beginDate: postDraft.termStartDate
-          ? new Date(postDraft.termStartDate)
+          ? toUtcMidnight(new Date(postDraft.termStartDate))
           : new Date(),
         endDate: postDraft.termEndDate
-          ? new Date(postDraft.termEndDate)
+          ? toUtcMidnight(new Date(postDraft.termEndDate))
           : new Date(),
         tags: postDraft.tags,
       });
+      console.log(
+        "postdraft start:",
+        postDraft.termStartDate,
+        "postdraft to date start:",
+        toUtcMidnight(new Date(postDraft.termStartDate || ""))
+      );
     }
   }, [postDraft?.id, reset]);
 
@@ -185,7 +194,7 @@ const Post = () => {
               <div>
                 <Label>Begin Date</Label>
                 <CalendarComponent
-                  value={field.value}
+                  value={field.value ?? new Date()}
                   onChange={field.onChange}
                 />
               </div>
@@ -201,7 +210,7 @@ const Post = () => {
               <div>
                 <Label>End Date</Label>
                 <CalendarComponent
-                  value={field.value}
+                  value={field.value ?? new Date()}
                   onChange={field.onChange}
                 />
               </div>
@@ -270,3 +279,9 @@ const Post = () => {
 };
 
 export default Post;
+
+function toUtcMidnight(date: Date): Date {
+  return new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
+  );
+}

@@ -22,6 +22,7 @@ type props = {
   onChange: (date: Date | undefined) => void;
 };
 const CalendarComponent = ({ value, onChange }: props) => {
+  console.log("CalendarComponent value:", value);
   const handleCalendarChange = (
     _value: string | number,
     _e: React.ChangeEventHandler<HTMLSelectElement>
@@ -103,5 +104,11 @@ const CalendarComponent = ({ value, onChange }: props) => {
     </div>
   );
 };
+
+function toUtcMidnight(date: Date): Date {
+  return new Date(
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() + 1)
+  );
+}
 
 export default CalendarComponent;
