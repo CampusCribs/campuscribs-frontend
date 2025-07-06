@@ -82,3 +82,17 @@ export const axiosClient = async <
 };
 
 export default axiosClient;
+
+export function createAuthenticatedClient(token: string) {
+  return function <TData, TError = unknown, TVariables = unknown>(
+    reqConfig: RequestConfig<TVariables>
+  ): Promise<ResponseConfig<TData>> {
+    return axiosClient<TData, TError, TVariables>({
+      ...reqConfig,
+      headers: {
+        ...reqConfig.headers,
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  };
+}

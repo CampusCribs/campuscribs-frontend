@@ -1,43 +1,38 @@
-import { useEffect, useState } from "react";
-import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
-import { PostDraftDTO, useGetPostsDrafts, usePostPostsDrafts } from "@/gen";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { getPostsDrafts, PostDraftDTO, postPostsDrafts } from "@/gen";
+import useEasyAuth from "./use-easy-auth";
+import { createAuthenticatedClient } from "@/lib/create-authenticated-client";
 
 export function useEnsurePostDraft() {
-  const config = useAuthenticatedClientConfig();
-
-  const [finalData, setFinalData] = useState<PostDraftDTO>(); // Replace 'any' with actual PostDraftDTO type
+  const { user } = useEasyAuth();
+  const [finalData, setFinalData] = useState<PostDraftDTO>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const hasFetched = useRef(false);
 
-  const getDraft = useGetPostsDrafts({
-    ...config,
-    query: {
-      enabled: false,
-    },
-  });
+  const client = useMemo(
+    () => createAuthenticatedClient(user?.access_token || ""),
+    [user?.access_token]
+  );
 
-  const createDraft = usePostPostsDrafts({
-    ...config,
-  });
-
-  const ensureDraft = async () => {
+  const ensureDraft = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const { data } = await getDraft.refetch();
-      console.log("Draft data:", data);
-      if (data?.status === 200 && data.data) {
-        setFinalData(data.data);
+      const res = await getPostsDrafts({ client });
+      if (res.status === 200 && res.data) {
+        setFinalData(res.data);
+        console.log("Draft fetched successfully:", res.data);
         return;
       }
     } catch (err: any) {
-      // Assume 404 means draft doesn't exist
-      if (err?.response?.status === 404 || err?.message === "No draft found") {
+      if (err?.response?.status === 404) {
         try {
-          const { data: created } = await createDraft.mutateAsync();
-          console.log("Created new draft:", created);
+          const { data: created } = await postPostsDrafts({ client });
           setFinalData(created);
+          console.log("Draft created successfully:", created);
+          return;
         } catch (createErr: any) {
           setError(createErr.message || "Failed to create draft");
         }
@@ -47,11 +42,14 @@ export function useEnsurePostDraft() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [client]);
 
   useEffect(() => {
-    ensureDraft();
-  }, []);
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      ensureDraft();
+    }
+  }, [ensureDraft]);
 
   return {
     postDraft: finalData,

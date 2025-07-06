@@ -22,7 +22,6 @@ type props = {
   onChange: (date: Date | undefined) => void;
 };
 const CalendarComponent = ({ value, onChange }: props) => {
-  console.log("CalendarComponent value:", value);
   const handleCalendarChange = (
     _value: string | number,
     _e: React.ChangeEventHandler<HTMLSelectElement>
