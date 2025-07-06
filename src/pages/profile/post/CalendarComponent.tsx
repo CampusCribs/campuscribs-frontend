@@ -104,10 +104,4 @@ const CalendarComponent = ({ value, onChange }: props) => {
   );
 };
 
-function toUtcMidnight(date: Date): Date {
-  return new Date(
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate() + 1)
-  );
-}
-
 export default CalendarComponent;

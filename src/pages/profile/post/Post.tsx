@@ -10,10 +10,21 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { postSchema, PostSchema } from "@/lib/schema/schema";
 import { Button } from "@/components/ui/button";
 import { FieldErrors } from "react-hook-form";
-import { useGetPublicTags, TagDTO, usePutPostsDrafts } from "@/gen";
+import { toZonedTime } from "date-fns-tz";
+import {
+  useGetPublicTags,
+  TagDTO,
+  usePutPostsDrafts,
+  GetPublicTags200,
+} from "@/gen";
 import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
 import { useEnsurePostDraft } from "@/hooks/use-get-post-drafts";
 
+type postTag = {
+  id?: string;
+  name?: string;
+  tagCategoryId?: string;
+};
 const Post = () => {
   const config = useAuthenticatedClientConfig();
 
@@ -76,7 +87,7 @@ const Post = () => {
   const onError = (errors: FieldErrors<PostSchema>) => {
     console.error("Validation Errors:", errors);
   };
-  const handleTagClick = (tag: TagDTO) => {
+  const handleTagClick = (tag: postTag) => {
     setSelectedTags((prevTags) =>
       prevTags.includes(tag)
         ? prevTags.filter((t) => t !== tag)
@@ -95,19 +106,15 @@ const Post = () => {
         description: postDraft.description,
         price: postDraft.price,
         roommates: postDraft.roommates,
-        beginDate: postDraft.termStartDate
-          ? toUtcMidnight(new Date(postDraft.termStartDate))
-          : new Date(),
-        endDate: postDraft.termEndDate
-          ? toUtcMidnight(new Date(postDraft.termEndDate))
-          : new Date(),
+        beginDate: toZonedTime(postDraft.termStartDate || "", "UTC"),
+        endDate: toZonedTime(postDraft.termEndDate || "", "UTC"),
         tags: postDraft.tags,
       });
       console.log(
         "postdraft start:",
         postDraft.termStartDate,
         "postdraft to date start:",
-        toUtcMidnight(new Date(postDraft.termStartDate || ""))
+        new Date(postDraft.termStartDate || "").toISOString().split("T")[0]
       );
     }
   }, [postDraft?.id, reset]);
@@ -279,9 +286,3 @@ const Post = () => {
 };
 
 export default Post;
-
-function toUtcMidnight(date: Date): Date {
-  return new Date(
-    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())
-  );
-}
