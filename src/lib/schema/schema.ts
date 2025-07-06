@@ -20,7 +20,15 @@ export const postSchema = z
       .max(10, "Roommates must be less than 10"),
     beginDate: z.date(),
     endDate: z.date(),
-    tags: z.array(z.object({ id: z.string(), name: z.string() })).optional(),
+    tags: z
+      .array(
+        z.object({
+          id: z.string(),
+          name: z.string(),
+          tagCategoryId: z.string(),
+        })
+      )
+      .optional(),
   })
   .refine((data) => new Date(data.beginDate) < new Date(data.endDate), {
     message: "Start date must be before end date",

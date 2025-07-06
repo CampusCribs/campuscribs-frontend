@@ -11,14 +11,10 @@ import { postSchema, PostSchema } from "@/lib/schema/schema";
 import { Button } from "@/components/ui/button";
 import { FieldErrors } from "react-hook-form";
 import { toZonedTime } from "date-fns-tz";
-import {
-  useGetPublicTags,
-  TagDTO,
-  usePutPostsDrafts,
-  GetPublicTags200,
-} from "@/gen";
+import { useGetPublicTags, TagDTO, usePutPostsDrafts } from "@/gen";
 import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
 import { useEnsurePostDraft } from "@/hooks/use-get-post-drafts";
+import { set } from "date-fns";
 
 type postTag = {
   id?: string;
@@ -67,9 +63,20 @@ const Post = () => {
     },
   });
   const onSubmit = (updatedPost: PostSchema) => {
+    console.log("Submitted data", {
+      ...updatedPost,
+      tags: selectedTags.map((tag) => ({
+        id: tag.id,
+        name: tag.name,
+      })),
+    });
     const response = editDraft.mutateAsync({
       data: {
         ...updatedPost,
+        tags: selectedTags.map((tag) => ({
+          id: tag.id,
+          name: tag.name,
+        })),
         termStartDate: updatedPost.beginDate.toISOString(),
         termEndDate: updatedPost.endDate.toISOString(),
       },
@@ -100,7 +107,7 @@ const Post = () => {
     }
   };
   useEffect(() => {
-    if (postDraft) {
+    if (postDraft && tags?.data) {
       reset({
         title: postDraft.title,
         description: postDraft.description,
@@ -110,15 +117,14 @@ const Post = () => {
         endDate: toZonedTime(postDraft.termEndDate || "", "UTC"),
         tags: postDraft.tags,
       });
-      console.log(
-        "postdraft start:",
-        postDraft.termStartDate,
-        "postdraft to date start:",
-        new Date(postDraft.termStartDate || "").toISOString().split("T")[0]
-      );
-    }
-  }, [postDraft?.id, reset]);
 
+      // Ensure selected tags align with the full tag list
+      const matchedTags = tags.data.filter((tag) =>
+        postDraft.tags?.some((t) => t.id === tag.id)
+      );
+      setSelectedTags(matchedTags);
+    }
+  }, [postDraft?.id, tags?.data, reset]);
   if (postDraftLoading) {
     return <div>Loading...</div>;
   }
@@ -237,7 +243,11 @@ const Post = () => {
               tags.data.map((tag) => (
                 <Badge
                   className={`cursor-pointer rounded-full `}
-                  variant={selectedTags.includes(tag) ? "default" : "outline"}
+                  variant={
+                    selectedTags.find((t) => t.id === tag.id)
+                      ? "default"
+                      : "outline"
+                  }
                   key={tag.id}
                   onClick={() => handleTagClick(tag)}
                 >
