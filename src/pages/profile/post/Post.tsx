@@ -11,10 +11,16 @@ import { postSchema, PostSchema } from "@/lib/schema/schema";
 import { Button } from "@/components/ui/button";
 import { FieldErrors } from "react-hook-form";
 import { toZonedTime } from "date-fns-tz";
-import { useGetPublicTags, TagDTO, usePutPostsDrafts } from "@/gen";
+import {
+  useGetPublicTags,
+  TagDTO,
+  usePutPostsDrafts,
+  useDeletePostsDraftsPostdraftidMediaDeleteMediaid,
+  useGetUsersMe,
+} from "@/gen";
 import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
 import { useEnsurePostDraft } from "@/hooks/use-get-post-drafts";
-import { set } from "date-fns";
+import { usePostDraftMediaUpload } from "@/lib/post-media-upload";
 
 type postTag = {
   id?: string;
@@ -24,13 +30,29 @@ type postTag = {
 const Post = () => {
   const config = useAuthenticatedClientConfig();
 
-  const [images, setImages] = useState<File[]>([]);
-
   const [selectedTags, setSelectedTags] = useState<TagDTO[]>([]);
 
   const editDraft = usePutPostsDrafts({
     ...config,
   });
+
+  const { mutateAsync: deleteMedia } =
+    useDeletePostsDraftsPostdraftidMediaDeleteMediaid({
+      ...config,
+    });
+  const {
+    data: user,
+    isLoading,
+    isError,
+    error,
+  } = useGetUsersMe({ ...config });
+
+  const {
+    upload,
+    mediaId,
+    uploading,
+    error: uploadError,
+  } = usePostDraftMediaUpload();
 
   const {
     data: tags,
@@ -42,8 +64,12 @@ const Post = () => {
     postDraft,
     loading: postDraftLoading,
     error: postDraftError,
+    refetch: refetchPostDraft,
   } = useEnsurePostDraft();
 
+  // const { mutateAsync: deleteMedia } = useDeletePostsDraftsPostdraftidMediaDeleteMediaid({
+  //   ...config
+  // });
   const {
     register,
     handleSubmit,
@@ -102,10 +128,19 @@ const Post = () => {
     );
   };
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setImages([...images, ...Array.from(e.target.files)]);
-    }
+    const files = e.target.files;
+    if (!files || !postDraft?.id) return;
+
+    upload(postDraft.id, files[0])
+      .then(() => refetchPostDraft())
+      .catch((err) => {
+        console.error("Error uploading file:", err);
+        alert("Failed to upload image. Please try again.");
+      });
+    // reset the input value to allow re-uploading the same file
+    e.target.value = "";
   };
+
   useEffect(() => {
     if (postDraft && tags?.data) {
       reset({
@@ -259,22 +294,46 @@ const Post = () => {
         <div className="w-full">
           <div className="grid w-full  items-center justify-center gap-1.5 mb-3">
             <Label htmlFor="images">Images</Label>
-            <Input type="file" id="images" onChange={handleFileUpload} />
+            <Input
+              type="file"
+              id="images"
+              onChange={(e) => handleFileUpload(e)}
+              disabled={uploading || postDraftLoading || !postDraft?.id}
+            />
           </div>
           <div className="p-2 grid grid-cols-2 w-full justify-center items-center  gap-1.5">
-            {images &&
-              Array.from(images).map((image) => (
+            {postDraft?.media &&
+              Array.from(postDraft.media).map((image) => (
                 <div className="relative">
                   <img
-                    key={image.name}
-                    src={URL.createObjectURL(image)}
+                    key={image.id}
+                    src={
+                      import.meta.env.VITE_MINIO_ENDPOINT +
+                      "/users/" +
+                      user?.data.id +
+                      "/" +
+                      postDraft.id +
+                      "/" +
+                      image?.mediaId
+                    }
                     alt="uploaded image"
                     className=" w-full aspect-square object-cover border border-black rounded-xl shadow-xl "
                   />
                   <div
                     className="absolute top-1 right-1 cursor-pointer bg-neutral-800 text-white rounded-full px-3 py-1"
                     onClick={() => {
-                      setImages(images.filter((i) => i.name !== image.name));
+                      if (!postDraft?.id) return;
+                      deleteMedia({
+                        postDraftId: postDraft?.id,
+                        mediaId: image.id,
+                      })
+                        .then(() => {
+                          refetchPostDraft();
+                        })
+                        .catch((err) => {
+                          console.error("Error deleting media:", err);
+                          alert("Failed to delete image. Please try again.");
+                        });
                     }}
                   >
                     <X size={32} />

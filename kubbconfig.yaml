@@ -376,6 +376,87 @@ paths:
           description: Invalid request or draft already exists
         "409":
           description: Draft already exists
+  #Get upload URL for post draft media
+  /posts/drafts/{postDraftId}/media:
+    post:
+      summary: Generate pre-signed URL for post draft media upload
+      tags:
+        - Media
+      parameters:
+        - name: postDraftId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Successfully generated upload URL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InitializeMediaUploadDTO"
+        "400":
+          description: Invalid postDraftId or request format
+        "404":
+          description: Post draft not found
+    #Confirm uploaded media
+  /posts/drafts/{postDraftId}/media/{mediaId}:
+    put:
+      summary: Confirm uploaded media for post draft
+      tags:
+        - Media
+      parameters:
+        - name: postDraftId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: mediaId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Successfully confirmed uploaded media
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FinalizeMediaUploadDTO"
+        "400":
+          description: Invalid postDraftId or request format
+        "404":
+          description: Post draft or media not found
+    #delete media from post draft
+  /posts/drafts/{postDraftId}/media/delete/{mediaId}:
+    delete:
+      summary: Delete media from post draft
+      tags:
+        - Media
+      parameters:
+        - name: postDraftId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: mediaId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Media deleted successfully
+        "400":
+          description: Invalid postDraftId or mediaId
+        "404":
+          description: Post draft or media not found
+
 components:
   securitySchemes:
     bearerAuth:
@@ -479,21 +560,6 @@ components:
           type: string
           format: date-time
 
-    PostDraftMediaDTO:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        postDraftId:
-          type: string
-          format: uuid
-        isPrimary:
-          type: boolean
-        mediaId:
-          type: string
-          format: uuid
-
     TagDTO:
       type: object
       properties:
@@ -566,3 +632,31 @@ components:
         termEndDate:
           type: string
           format: date-time
+
+    FinalizeMediaUploadDTO:
+      type: object
+      properties:
+        media:
+          $ref: "#/components/schemas/PostDraftMediaDTO"
+      required:
+        - media
+
+    PostDraftMediaDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        postDraftId:
+          type: string
+          format: uuid
+        isPrimary:
+          type: boolean
+        mediaId:
+          type: string
+          format: uuid
+      required:
+        - id
+        - postDraftId
+        - isPrimary
+        - mediaId
