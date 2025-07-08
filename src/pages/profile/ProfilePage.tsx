@@ -34,7 +34,7 @@ const ProfilePage = () => {
                 data.data.thumbnailMediaId
               }
               alt="Profile"
-              className="object-cover"
+              className="object-cover w-full h-full "
             />
           )}
         </div>
