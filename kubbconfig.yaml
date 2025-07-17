@@ -164,6 +164,9 @@ paths:
                         thumbnail:
                           type: string
                           nullable: true
+                        ThumbnailVerified:
+                          type: boolean
+                          default: false
   #Fetch individual post
   /public/crib/{postId}:
     get:

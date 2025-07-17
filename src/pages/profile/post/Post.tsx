@@ -40,6 +40,7 @@ const Post = () => {
     useDeletePostsDraftsPostdraftidMediaDeleteMediaid({
       ...config,
     });
+
   const {
     data: user,
     isLoading,
@@ -230,7 +231,7 @@ const Post = () => {
           )}
           <input
             type="hidden"
-            value={JSON.stringify(tags)}
+            value={JSON.stringify(selectedTags)}
             {...register("tags")}
           />
         </div>

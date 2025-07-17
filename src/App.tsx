@@ -15,6 +15,9 @@ import General from "./pages/settings/general/General";
 import Notifications from "./pages/settings/notifications/Notifications";
 import Account from "./pages/settings/account/Account";
 import EditProfile from "./pages/profile/edit/EditProfile";
+import AdminDraftCribsPage from "./pages/admin/AdminDraftCribsPage";
+import AdminDraftIndividualCribPage from "./pages/admin/AdminDraftIndividualCribPage";
+import AdminDraftThumbnailPage from "./pages/admin/AdminDraftThumbnailPage";
 
 function App() {
   return (
@@ -44,6 +47,16 @@ function App() {
               </Route>
               <Route path="/profile/post" element={<Post />} />
               <Route path="/profile/edit" element={<EditProfile />} />
+              <Route path="/admin" element={<AdminDraftCribsPage />} />
+              <Route path="/admin/drafts" element={<AdminDraftCribsPage />} />
+              <Route
+                path="/admin/drafts/:draftId"
+                element={<AdminDraftIndividualCribPage />}
+              />
+              <Route
+                path="/admin/thumbnail"
+                element={<AdminDraftThumbnailPage />}
+              />
             </Route>
 
             <Route element={<ReverseProtectedRoute />}>
