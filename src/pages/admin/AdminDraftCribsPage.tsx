@@ -1,25 +1,16 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Dot } from "lucide-react";
-import React from "react";
+
 import { useNavigate } from "react-router";
 
-type Props = {};
-
-const AdminDraftCribsPage = (props: Props) => {
+const AdminDraftCribsPage = () => {
   return (
     <div className="flex flex-col ">
       <div className="flex flex-row-reverse ">
         <div className="p-4 text-blue-500 font-bold">Thumbnails</div>
       </div>
       <div className="grid grid-cols-2 gap-1 place-items-center">
-        <ResidenceCard
-          thumbnail="https://picsum.photos/200/300?random=1"
-          id="1"
-        />
-        <ResidenceCard
-          thumbnail="https://picsum.photos/200/300?random=2"
-          id="2"
-        />
+        <DraftCard thumbnail="https://picsum.photos/200/300?random=1" id="1" />
+        <DraftCard thumbnail="https://picsum.photos/200/300?random=2" id="2" />
       </div>
     </div>
   );
@@ -27,13 +18,7 @@ const AdminDraftCribsPage = (props: Props) => {
 
 export default AdminDraftCribsPage;
 
-const ResidenceCard = ({
-  thumbnail,
-  id,
-}: {
-  thumbnail: string;
-  id: string;
-}) => {
+const DraftCard = ({ thumbnail, id }: { thumbnail: string; id: string }) => {
   const navigate = useNavigate();
   thumbnail = "https://picsum.photos/200/300?random=";
   return (
