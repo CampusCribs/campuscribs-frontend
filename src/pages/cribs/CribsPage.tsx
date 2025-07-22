@@ -77,7 +77,12 @@ const CribsPage = () => {
           </div>
           <div className="grid grid-cols-2 gap-1 w-full p-2">
             {curated_isLoading && <p>loading...</p>}
-            {curated_error && <p>error occured</p>}
+            {curated_error?.response?.status !== 404 && curated_error && (
+              <p>error occured</p>
+            )}
+            {curated_error?.response?.status === 404 && (
+              <p>No curated residences found</p>
+            )}
             {curated &&
               curated.pages.map((item) =>
                 item.data.content?.map((residence) => (
