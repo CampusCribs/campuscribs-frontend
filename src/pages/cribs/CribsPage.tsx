@@ -81,7 +81,7 @@ const CribsPage = () => {
               <p>error occured</p>
             )}
             {curated_error?.response?.status === 404 && (
-              <p>No curated residences found</p>
+              <p>No residences found</p>
             )}
             {curated &&
               curated.pages.map((item) =>
