@@ -14,16 +14,10 @@ const IndividualPage = () => {
     isLoading: post_isLoading,
   } = useGetPublicCribPostid(id);
   console.log(post);
-  const images = [
-    "https://picsum.photos/id/100/600/600",
-    "https://picsum.photos/id/101/600/600",
-    "https://picsum.photos/id/102/600/600",
-    "https://picsum.photos/id/103/600/600",
-    "https://picsum.photos/id/104/600/600",
-  ];
-  // const images = post?.data?.mediaIds
-  //   ? buildImageURLs(post.data.userId, post.data.id, post.data.mediaIds)
-  //   : [];
+
+  const images = post?.data?.mediaIds
+    ? buildImageURLs(post.data.id, post.data.id, post.data.mediaIds)
+    : [];
   return (
     <div className="mb-6">
       <div
