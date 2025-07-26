@@ -189,6 +189,9 @@ paths:
               schema:
                 type: object
                 properties:
+                  userId:
+                    type: string
+                    format: uuid
                   id:
                     type: string
                     format: uuid

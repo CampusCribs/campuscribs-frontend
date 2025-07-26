@@ -1,23 +1,27 @@
 import { useEffect, useState } from "react";
-import { motion, useMotionValue } from "framer-motion";
-
-const imgs = [1, 2, 3, 4, 5];
+import { motion, Transition, useMotionValue } from "framer-motion";
+import { buildImageURLs } from "@/lib/image-resolver";
 
 const ONE_SECOND = 1000;
 const AUTO_DELAY = ONE_SECOND * 10;
 const DRAG_BUFFER = 50;
 
-const SPRING_OPTIONS = {
+const SPRING_OPTIONS: Transition = {
   type: "spring",
   mass: 0.5,
   stiffness: 400,
   damping: 100,
 };
 
-const IndividualSlider = (props: { images: string[] }) => {
+const IndividualSlider = (props: {
+  images: string[];
+  userId?: string;
+  postId: string;
+}) => {
   const [imgIndex, setImgIndex] = useState(0);
-
+  const imgs = buildImageURLs(props.userId || "", props.postId, props.images);
   const dragX = useMotionValue(0);
+  const imglength = props.images.length;
 
   useEffect(() => {
     const intervalRef = setInterval(() => {
@@ -25,16 +29,17 @@ const IndividualSlider = (props: { images: string[] }) => {
 
       if (x === 0) {
         setImgIndex((pv) => {
-          if (pv === imgs.length - 1) {
+          if (pv === imglength - 1) {
             return 0;
           }
+          console.log(pv, imglength);
           return pv + 1;
         });
       }
     }, AUTO_DELAY);
 
     return () => clearInterval(intervalRef);
-  }, []);
+  }, [imglength]);
 
   const onDragEnd = () => {
     const x = dragX.get();
@@ -64,10 +69,10 @@ const IndividualSlider = (props: { images: string[] }) => {
         onDragEnd={onDragEnd}
         className="flex cursor-grab items-center active:cursor-grabbing"
       >
-        <Images imgIndex={imgIndex} images={props.images} />
+        <Images imgIndex={imgIndex} images={imgs} />
       </motion.div>
 
-      <Dots imgIndex={imgIndex} setImgIndex={setImgIndex} />
+      <Dots imgIndex={imgIndex} setImgIndex={setImgIndex} images={imgs} />
     </div>
   );
 };
@@ -75,7 +80,7 @@ const IndividualSlider = (props: { images: string[] }) => {
 const Images = (props: { imgIndex: number; images: string[] }) => {
   return (
     <>
-      {imgs.map((imgSrc, idx) => {
+      {props.images.map((imgSrc, idx) => {
         return (
           <motion.img
             draggable={false}
@@ -94,12 +99,13 @@ const Images = (props: { imgIndex: number; images: string[] }) => {
 };
 
 const Dots = (props: {
+  images: string[];
   imgIndex: number;
   setImgIndex: (idx: number) => void;
 }) => {
   return (
     <div className="mt-4 flex w-full justify-center gap-2">
-      {imgs.map((_, idx) => {
+      {props.images.map((_, idx) => {
         return (
           <button
             key={idx}

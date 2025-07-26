@@ -2,7 +2,6 @@ import { ArrowLeftIcon } from "lucide-react";
 import IndividualSlider from "./IndividualSlider";
 import { useNavigate } from "react-router";
 import { useGetPublicCribPostid } from "@/gen";
-import { buildImageURLs } from "@/lib/image-resolver";
 
 const IndividualPage = () => {
   const navigate = useNavigate();
@@ -13,11 +12,9 @@ const IndividualPage = () => {
     error: post_error,
     isLoading: post_isLoading,
   } = useGetPublicCribPostid(id);
+
   console.log(post);
 
-  const images = post?.data?.mediaIds
-    ? buildImageURLs(post.data.id, post.data.id, post.data.mediaIds)
-    : [];
   return (
     <div className="mb-6">
       <div
@@ -27,7 +24,11 @@ const IndividualPage = () => {
         <ArrowLeftIcon size={40} />
       </div>
       <div>
-        <IndividualSlider images={images} />
+        <IndividualSlider
+          images={post?.data?.mediaIds || []}
+          userId={post?.data?.userId || ""}
+          postId={post?.data?.id || ""}
+        />
       </div>
       {post_isLoading && (
         <div className="flex items-center justify-center w-full">
