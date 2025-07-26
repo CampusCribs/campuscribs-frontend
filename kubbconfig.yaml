@@ -96,6 +96,9 @@ paths:
                     items:
                       type: object
                       properties:
+                        userId:
+                          type: string
+                          format: uuid
                         id:
                           type: string
                         mediaId:
@@ -186,6 +189,12 @@ paths:
               schema:
                 type: object
                 properties:
+                  userThumbnail:
+                    type: string
+                    format: uuid
+                  userId:
+                    type: string
+                    format: uuid
                   id:
                     type: string
                     format: uuid

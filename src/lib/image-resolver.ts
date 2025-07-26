@@ -1,14 +1,32 @@
+export function buildDraftImageURLs(
+  userId: string,
+  postId: string,
+  mediaIds: string[]
+): string[] {
+  const baseUrl = import.meta.env.VITE_MINIO_DRAFTMEDIA_ENDPOINT;
+  return mediaIds.map(
+    (mediaId) => `${baseUrl}/users/${userId}/${postId}/${mediaId}`
+  );
+}
+
 export function buildImageURLs(
   userId: string,
   postId: string,
   mediaIds: string[]
 ): string[] {
-  const baseUrl =
-    import.meta.env.VITE_MEDIA_BASE_URL || "http://localhost:9000";
+  const baseUrl = import.meta.env.VITE_MINIO_POSTMEDIA_ENDPOINT;
   return mediaIds.map(
-    (mediaId) =>
-      `${baseUrl}/campuscribs-media/users/${userId}/${postId}/${mediaId}`
+    (mediaId) => `${baseUrl}/users/${userId}/${postId}/${mediaId}`
   );
+}
+
+export function buildImageURL(
+  userId: string,
+  postId: string,
+  mediaId: string
+): string {
+  const baseUrl = import.meta.env.VITE_MINIO_POSTMEDIA_ENDPOINT;
+  return `${baseUrl}/users/${userId}/${postId}/${mediaId}`;
 }
 
 export function buildThumbnailURLs(
@@ -16,10 +34,14 @@ export function buildThumbnailURLs(
   postId: string,
   mediaIds: string[]
 ): string[] {
-  const baseUrl =
-    import.meta.env.VITE_MEDIA_BASE_URL || "http://localhost:9000";
+  const baseUrl = import.meta.env.VITE_MINIO_THUMBNAILS_ENDPOINT;
   return mediaIds.map(
     (mediaId) =>
-      `${baseUrl}/campuscribs-media/users/${userId}/${postId}/${mediaId}?thumbnail=true`
+      `${baseUrl}/users/${userId}/${postId}/${mediaId}?thumbnail=true`
   );
+}
+
+export function buildThumbnailURL(userId: string, mediaId: string): string {
+  const baseUrl = import.meta.env.VITE_MINIO_THUMBNAILS_ENDPOINT;
+  return `${baseUrl}/users/${userId}/thumbnails/${mediaId}`;
 }
