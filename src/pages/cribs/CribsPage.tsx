@@ -7,6 +7,7 @@ import { useInView } from "react-intersection-observer";
 import TagCarousel from "./TagCarousel";
 import { useNavigate } from "react-router";
 import { useGetPublicCuratedInfinite, useGetPublicTags } from "@/gen";
+import { buildImageURL } from "@/lib/image-resolver";
 
 const CribsPage = () => {
   //variables to store the selected tags and the state of the tag selector and find the intersection of the tags
@@ -45,7 +46,7 @@ const CribsPage = () => {
       // call the generated function
     }
   }, [inView]);
-
+  console.log(curated?.pages);
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col w-full  ">
@@ -88,7 +89,8 @@ const CribsPage = () => {
                 item.data.content?.map((residence) => (
                   <ResidenceCard
                     key={residence.id}
-                    thumbnail={""}
+                    userId={residence.userId || ""}
+                    thumbnail={residence.mediaId || ""}
                     id={residence.id || ""}
                     price={residence.price || 0}
                     location="CUF"
@@ -117,18 +119,20 @@ const CribsPage = () => {
 };
 
 const ResidenceCard = ({
+  userId,
   thumbnail,
   id,
   price,
   location,
 }: {
+  userId: string;
   thumbnail: string;
   id: string;
   price: number;
   location: string;
 }) => {
   const navigate = useNavigate();
-  thumbnail = "https://picsum.photos/200/300?random=";
+  thumbnail = buildImageURL(userId, id, thumbnail);
   return (
     <Card
       className="rounded-none shadow-none m-0 w-full border-none cursor-pointer p-1"

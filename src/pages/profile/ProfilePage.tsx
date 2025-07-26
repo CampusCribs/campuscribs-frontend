@@ -27,7 +27,7 @@ const ProfilePage = () => {
           {data && data.data.thumbnailMediaId && (
             <img
               src={
-                import.meta.env.VITE_MINIO_ENDPOINT +
+                import.meta.env.VITE_MINIO_Thumbnails_ENDPOINT +
                 "/users/" +
                 data.data.id +
                 "/thumbnails/" +

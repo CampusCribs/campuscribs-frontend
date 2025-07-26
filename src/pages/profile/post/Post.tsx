@@ -21,6 +21,7 @@ import {
 import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
 import { useEnsurePostDraft } from "@/hooks/use-get-post-drafts";
 import { usePostDraftMediaUpload } from "@/lib/post-media-upload";
+import { useNavigate } from "react-router";
 
 type postTag = {
   id?: string;
@@ -29,6 +30,8 @@ type postTag = {
 };
 const Post = () => {
   const config = useAuthenticatedClientConfig();
+
+  const navigate = useNavigate();
 
   const [selectedTags, setSelectedTags] = useState<TagDTO[]>([]);
 
@@ -111,6 +114,7 @@ const Post = () => {
       .then((res) => {
         console.log("Post updated successfully:", res);
         alert("Post updated successfully!");
+        navigate("/profile");
       })
       .catch((error) => {
         console.error("Error updating post:", error);
@@ -308,7 +312,7 @@ const Post = () => {
                   <img
                     key={image.id}
                     src={
-                      import.meta.env.VITE_MINIO_ENDPOINT +
+                      import.meta.env.VITE_MINIO_DRAFTMEDIA_ENDPOINT +
                       "/users/" +
                       user?.data.id +
                       "/" +

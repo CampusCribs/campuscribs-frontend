@@ -12,6 +12,7 @@ import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-confi
 import { useGetUsersMe, usePutUsersUpdate } from "@/gen";
 import { useThumbnailUpload } from "@/lib/uploadThumbnail";
 import { useNavigate } from "react-router";
+import { nav } from "motion/react-client";
 
 const EditProfile = () => {
   const config = useAuthenticatedClientConfig();
@@ -61,12 +62,12 @@ const EditProfile = () => {
 
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const onSubmit = (data: UserProfileSchema) => {
-    console.log(mediaId);
     updateProfile({
       data: {
         ...data,
       },
     });
+    navigate("/profile");
   };
   const onError = (errors: FieldErrors<UserProfileSchema>) => {
     console.log(mediaId);
