@@ -12,8 +12,6 @@ import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-confi
 import { useGetUsersMe, usePutUsersUpdate } from "@/gen";
 import { useThumbnailUpload } from "@/lib/uploadThumbnail";
 import { useNavigate } from "react-router";
-import { nav } from "motion/react-client";
-
 const EditProfile = () => {
   const config = useAuthenticatedClientConfig();
 
