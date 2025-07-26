@@ -167,6 +167,9 @@ paths:
                         thumbnail:
                           type: string
                           nullable: true
+                        userId:
+                          type: string
+                          format: uuid
   #Fetch individual post
   /public/crib/{postId}:
     get:
