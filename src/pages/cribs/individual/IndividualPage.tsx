@@ -1,8 +1,8 @@
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, CircleUserRound } from "lucide-react";
 import IndividualSlider from "./IndividualSlider";
 import { useNavigate } from "react-router";
 import { useGetPublicCribPostid } from "@/gen";
-
+import { buildThumbnailURL } from "@/lib/image-resolver";
 const IndividualPage = () => {
   const navigate = useNavigate();
   //fetch images from server and pass them to the slider prop
@@ -15,6 +15,10 @@ const IndividualPage = () => {
 
   console.log(post);
 
+  const thumbnailUrl = buildThumbnailURL(
+    post?.data?.userId || "",
+    post?.data?.userThumbnail || ""
+  );
   return (
     <div className="mb-6">
       <div
@@ -43,18 +47,26 @@ const IndividualPage = () => {
       {post && (
         <>
           <div className="flex ">
-            <div>
-              <img
-                alt="profile"
-                src="https://picsum.photos/id/103/600/600"
-                className="rounded-full h-20 m-5 shadow-2xl border"
-              />
-            </div>
-            <div className="flex flex-col justify-center border-b">
+            {post && !post.data.userThumbnail && (
+              <div className="flex justify-center items-center w-full">
+                <CircleUserRound size={70} />
+              </div>
+            )}
+            {post && post.data.userThumbnail && (
+              <div>
+                <img
+                  alt="profile"
+                  src={thumbnailUrl}
+                  className="rounded-full h-24 m-5 w-24 object-fill shadow-2xl border"
+                />
+              </div>
+            )}
+
+            <div className="flex flex-col justify-center w-full mx-7">
               <div className="font-semibold text-xl">
                 {post.data.firstName + " " + post.data.lastName}{" "}
               </div>
-              <div>@{post.data.username}</div>
+              <div className="border-b pb-2 w-full">@{post.data.username}</div>
             </div>
           </div>
           <div>

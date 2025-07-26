@@ -32,7 +32,6 @@ const IndividualSlider = (props: {
           if (pv === imglength - 1) {
             return 0;
           }
-          console.log(pv, imglength);
           return pv + 1;
         });
       }

@@ -40,3 +40,8 @@ export function buildThumbnailURLs(
       `${baseUrl}/users/${userId}/${postId}/${mediaId}?thumbnail=true`
   );
 }
+
+export function buildThumbnailURL(userId: string, mediaId: string): string {
+  const baseUrl = import.meta.env.VITE_MINIO_THUMBNAILS_ENDPOINT;
+  return `${baseUrl}/users/${userId}/thumbnails/${mediaId}`;
+}

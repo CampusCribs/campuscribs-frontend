@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useGetUsersMe } from "@/gen";
 import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
+import { buildThumbnailURL } from "@/lib/image-resolver";
 import { CirclePlus, CircleUserRound } from "lucide-react";
 import { useNavigate } from "react-router";
 
@@ -13,6 +14,10 @@ const ProfilePage = () => {
 
   const postDoesntExist = true;
 
+  const Thumbnail = buildThumbnailURL(
+    data?.data.id || "",
+    data?.data.thumbnailMediaId || ""
+  );
   return (
     <div className="flex flex-col w-full">
       <div className="flex p-3 w-full">
@@ -26,13 +31,7 @@ const ProfilePage = () => {
           )}
           {data && data.data.thumbnailMediaId && (
             <img
-              src={
-                import.meta.env.VITE_MINIO_Thumbnails_ENDPOINT +
-                "/users/" +
-                data.data.id +
-                "/thumbnails/" +
-                data.data.thumbnailMediaId
-              }
+              src={Thumbnail}
               alt="Profile"
               className="object-cover w-full h-full "
             />
