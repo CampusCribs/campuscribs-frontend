@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { useGetUsersMe } from "@/gen";
+import { useGetPublicProfileByUsername, useGetUsersMe } from "@/gen";
 import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
-import { buildThumbnailURL } from "@/lib/image-resolver";
+import { buildImageURL, buildThumbnailURL } from "@/lib/image-resolver";
 import { CirclePlus, CircleUserRound } from "lucide-react";
 import { useNavigate } from "react-router";
-
+import { GetPublicProfileByUsername200 } from "@/gen";
+import { i } from "motion/react-client";
 const ProfilePage = () => {
   const navigate = useNavigate();
 
@@ -12,8 +13,17 @@ const ProfilePage = () => {
 
   const { data, isLoading, isError, error } = useGetUsersMe({ ...config });
 
-  const postDoesntExist = true;
+  const {
+    data: profile,
+    error: profile_error,
+    isLoading: profile_isLoading,
+  } = useGetPublicProfileByUsername(data?.data.username || "");
 
+  const postThumbnailUrl = buildImageURL(
+    profile?.data?.userProfile?.id || "",
+    profile?.data?.postProfile?.postId || "",
+    profile?.data?.postProfile?.mediaId || ""
+  );
   const Thumbnail = buildThumbnailURL(
     data?.data.id || "",
     data?.data.thumbnailMediaId || ""
@@ -65,14 +75,56 @@ const ProfilePage = () => {
         </div>
       </div>
       <div className="w-full">
-        {/* TODO: render post button if post doesnt already exist */}
-        {postDoesntExist && (
+        {profile?.data.postProfile && <Post profile={profile?.data} />}
+        {!profile?.data.postProfile?.title && (
           <div className="w-full  h-full flex justify-center items-center mt-10">
             <Button onClick={() => navigate("post")} className="cursor-pointer">
               <CirclePlus /> Create a new post!
             </Button>
           </div>
         )}
+      </div>
+    </div>
+  );
+};
+
+const Post = ({ profile }: { profile?: GetPublicProfileByUsername200 }) => {
+  const navigate = useNavigate();
+  const imageUrl = buildImageURL(
+    profile?.userProfile?.id || "",
+    profile?.postProfile?.postId || "",
+    profile?.postProfile?.mediaId || ""
+  );
+  return (
+    <div className=" mx-5 mb-10 rounded-xl border">
+      <div className="relative h-[500px] rounded-xl overflow-hidden bg-neutral-800">
+        {/* Placeholder image for the post */}
+        <img
+          src={imageUrl}
+          alt="post"
+          className=" w-full h-full object-contain"
+        />
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent" />
+      </div>
+      <div className="py-2 px-8 gap-y-2 flex flex-col">
+        <div>{profile && profile.postProfile?.description}</div>
+        <div>roomates: {profile && profile.postProfile?.roommates}</div>
+        <div>price: {profile && profile.postProfile?.price}</div>
+        <div className=" flex flex-row justify-between ">
+          <div className="flex text-wrap w-2/3">
+            description: {profile && profile.postProfile?.description}
+          </div>
+          <div>
+            <button
+              className="text-blue-600 underline cursor-pointer"
+              onClick={() =>
+                navigate(`/cribs/${profile && profile.postProfile?.postId}`)
+              }
+            >
+              View Post
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

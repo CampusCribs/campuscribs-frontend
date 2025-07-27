@@ -23,7 +23,6 @@ export function useEnsurePostDraft() {
       const res = await getPostsDrafts({ client });
       if (res.status === 200 && res.data) {
         setFinalData(res.data);
-        console.log("Draft fetched successfully:", res.data);
         return;
       }
     } catch (err: any) {
@@ -31,7 +30,6 @@ export function useEnsurePostDraft() {
         try {
           const { data: created } = await postPostsDrafts({ client });
           setFinalData(created);
-          console.log("Draft created successfully:", created);
           return;
         } catch (createErr: any) {
           setError(createErr.message || "Failed to create draft");

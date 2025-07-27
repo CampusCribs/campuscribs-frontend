@@ -92,13 +92,6 @@ const Post = () => {
     },
   });
   const onSubmit = (updatedPost: PostSchema) => {
-    console.log("Submitted data", {
-      ...updatedPost,
-      tags: selectedTags.map((tag) => ({
-        id: tag.id,
-        name: tag.name,
-      })),
-    });
     const response = editDraft.mutateAsync({
       data: {
         ...updatedPost,
@@ -112,8 +105,7 @@ const Post = () => {
     });
     response
       .then((res) => {
-        console.log("Post updated successfully:", res);
-        alert("Post updated successfully!");
+        alert(res.status + " Post updated successfully!");
         navigate("/profile");
       })
       .catch((error) => {
@@ -232,10 +224,17 @@ const Post = () => {
           {errors.roommates && (
             <p className="text-sm text-red-500">{errors.roommates.message}</p>
           )}
-          <input
-            type="hidden"
-            value={JSON.stringify(tags)}
-            {...register("tags")}
+          <Controller
+            name="tags"
+            control={control}
+            render={({ field }) => (
+              <input
+                type="hidden"
+                {...field}
+                value={JSON.stringify(selectedTags)} // this is okay *only* if you omit `field.value`
+                onChange={() => {}} // prevent React warning: input is read-only
+              />
+            )}
           />
         </div>
         <div className="flex flex-col w-full items-center justify-center gap-y-4">

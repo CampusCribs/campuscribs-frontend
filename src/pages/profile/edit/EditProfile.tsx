@@ -29,8 +29,7 @@ const EditProfile = () => {
     ...config,
     mutation: {
       onSuccess: (response) => {
-        console.log("✅ Success:", response);
-        alert("Profile updated successfully!");
+        alert(response.status + " Profile updated successfully!");
         navigate("/profile");
       },
       onError: (error) => {
@@ -69,7 +68,6 @@ const EditProfile = () => {
     navigate("/profile");
   };
   const onError = (errors: FieldErrors<UserProfileSchema>) => {
-    console.log(mediaId);
     console.error("Validation Errors:", errors);
   };
   //change these to update the profile

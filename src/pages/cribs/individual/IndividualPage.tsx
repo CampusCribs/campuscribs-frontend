@@ -13,8 +13,6 @@ const IndividualPage = () => {
     isLoading: post_isLoading,
   } = useGetPublicCribPostid(id);
 
-  console.log(post);
-
   const thumbnailUrl = buildThumbnailURL(
     post?.data?.userId || "",
     post?.data?.userThumbnailId || ""

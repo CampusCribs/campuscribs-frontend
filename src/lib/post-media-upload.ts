@@ -25,7 +25,6 @@ export function usePostDraftMediaUpload() {
         throw new Error("Post draft ID is required");
       }
       const { data } = await postPostsDraftsPostdraftidMedia({ postDraftId }); // call the actual endpoint
-      console.log("Upload URL data:", data);
       if (!data) throw new Error("Failed to fetch upload URL");
 
       const { uploadUrl, mediaId } = data;
@@ -36,15 +35,14 @@ export function usePostDraftMediaUpload() {
         },
         body: file,
       });
-      console.log("Upload response:", res);
       if (!res.ok) throw new Error("Upload failed");
 
       const { data: putPostsDraftsPostdraftidMediaData } =
         await putPostsDraftsPostdraftidMedia({ postDraftId, mediaId });
-      console.log(
-        "Media uploaded successfully:",
-        putPostsDraftsPostdraftidMediaData
-      );
+      if (!putPostsDraftsPostdraftidMediaData) {
+        throw new Error("Failed to associate media with post draft");
+      }
+
       setMediaId(mediaId);
       return mediaId;
     } catch (err: any) {

@@ -46,7 +46,6 @@ const CribsPage = () => {
       // call the generated function
     }
   }, [inView]);
-  console.log(curated?.pages);
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col w-full  ">

@@ -26,7 +26,6 @@ const HeaderSearch = (props: Props) => {
 
     refetch();
   };
-  console.log("search_result", search_result);
   return (
     <>
       <div
