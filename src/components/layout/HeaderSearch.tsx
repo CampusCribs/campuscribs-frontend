@@ -59,10 +59,11 @@ const HeaderSearch = (props: Props) => {
               <div className="px-3 font-light">Users</div>
               {search_result?.data?.users?.map((user) => (
                 <SearchUserResult
-                  key={user.thumbnail}
-                  userId={user.username || ""}
+                  thumbnailTrue={!!user.thumbnailMediaId}
+                  key={user.thumbnailMediaId}
+                  userId={user.userId || ""}
                   username={user.username || ""}
-                  thumbnail={user.thumbnail || ""}
+                  thumbnail={user.thumbnailMediaId || ""}
                   close={props.close}
                 />
               ))}
@@ -75,7 +76,7 @@ const HeaderSearch = (props: Props) => {
               <div className="px-3 font-light">Cribs</div>
               {search_result?.data?.posts?.map((post) => (
                 <SearchResult
-                  post={true}
+                  userId={post.userId || ""}
                   key={post.id}
                   id={post.id || ""}
                   thumbnail={post.thumbnail || ""}
@@ -112,25 +113,26 @@ const HeaderSearch = (props: Props) => {
 };
 
 const SearchResult = ({
-  post,
+  userId,
   id,
   text,
   thumbnail,
   close,
 }: {
-  post?: boolean;
+  userId: string;
   id: string;
   text: string;
   thumbnail: string;
   close: () => void;
+  post?: boolean;
 }) => {
   const navigate = useNavigate();
 
-  const url = buildImageURL(id, thumbnail);
+  const url = buildImageURL(userId, id, thumbnail);
 
   return (
     <div
-      className="flex flex-row p-3 px-5 m-1  rounded-xl border cursor-pointer "
+      className="flex flex-row p-3 px-5 m-1 border cursor-pointer "
       onClick={() => {
         close();
         navigate(`/cribs/${id}`);
@@ -138,9 +140,9 @@ const SearchResult = ({
     >
       <div className="flex items-center justify-center ">
         <img
-          src={"https://picsum.photos/id/104/600/600"}
+          src={url}
           alt="user"
-          className="rounded-full w-10 h-10 mr-3 shadow-lg"
+          className="rounded-xl w-10 h-10 mr-3 shadow-lg"
         />
       </div>
       <div className=" flex items-center text-lg">{text}</div>
@@ -148,11 +150,13 @@ const SearchResult = ({
   );
 };
 const SearchUserResult = ({
+  thumbnailTrue,
   userId,
   username,
   thumbnail,
   close,
 }: {
+  thumbnailTrue: boolean;
   userId: string;
   username: string;
   thumbnail: string;
@@ -161,6 +165,7 @@ const SearchUserResult = ({
   const navigate = useNavigate();
 
   const url = buildThumbnailURL(userId, thumbnail);
+
   return (
     <div
       className="flex flex-row p-3 px-5 m-1  rounded-xl border cursor-pointer "
@@ -170,14 +175,14 @@ const SearchUserResult = ({
       }}
     >
       <div className="flex items-center justify-center ">
-        {thumbnail && (
+        {thumbnailTrue && (
           <img
             src={url}
             alt="user"
             className="rounded-full w-10 h-10 mr-3 shadow-lg"
           />
         )}
-        {!thumbnail && (
+        {!thumbnailTrue && (
           <div className="mr-3 rounded-full shadow-lg">
             <CircleUserRound size={40} />
           </div>
