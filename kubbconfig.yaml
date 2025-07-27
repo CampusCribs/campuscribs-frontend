@@ -316,6 +316,9 @@ paths:
                         format: email
                       phone:
                         type: string
+                      id:
+                        type: string
+                        format: uuid
   #Put to update user profile
   /users/update:
     put:
