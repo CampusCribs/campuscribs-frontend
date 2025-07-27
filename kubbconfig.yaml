@@ -149,6 +149,9 @@ paths:
                     items:
                       type: object
                       properties:
+                        userId:
+                          type: string
+                          format: uuid
                         id:
                           type: string
                           format: uuid
@@ -164,9 +167,12 @@ paths:
                       properties:
                         username:
                           type: string
-                        thumbnail:
+                        thumbnailMediaId:
                           type: string
                           nullable: true
+                        userId:
+                          type: string
+                          format: uuid
   #Fetch individual post
   /public/crib/{postId}:
     get:
@@ -189,7 +195,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  userThumbnail:
+                  userThumbnailId:
                     type: string
                     format: uuid
                   userId:
@@ -310,6 +316,9 @@ paths:
                         format: email
                       phone:
                         type: string
+                      id:
+                        type: string
+                        format: uuid
   #Put to update user profile
   /users/update:
     put:

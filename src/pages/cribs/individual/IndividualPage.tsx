@@ -17,7 +17,7 @@ const IndividualPage = () => {
 
   const thumbnailUrl = buildThumbnailURL(
     post?.data?.userId || "",
-    post?.data?.userThumbnail || ""
+    post?.data?.userThumbnailId || ""
   );
   return (
     <div className="mb-6">
@@ -47,12 +47,12 @@ const IndividualPage = () => {
       {post && (
         <>
           <div className="flex ">
-            {post && !post.data.userThumbnail && (
-              <div className="flex justify-center items-center w-full">
+            {post && !post.data.userThumbnailId && (
+              <div className="flex justify-center items-center ml-5">
                 <CircleUserRound size={70} />
               </div>
             )}
-            {post && post.data.userThumbnail && (
+            {post && post.data.userThumbnailId && (
               <div>
                 <img
                   alt="profile"

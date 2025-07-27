@@ -1,5 +1,6 @@
 import { useGetPublicProfileByUsername } from "@/gen";
-import { ArrowLeftIcon } from "lucide-react";
+import { buildImageURL, buildThumbnailURL } from "@/lib/image-resolver";
+import { ArrowLeftIcon, CircleUserRound } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 
 const ProfileUsernamePage = () => {
@@ -11,6 +12,16 @@ const ProfileUsernamePage = () => {
     isLoading: profile_isLoading,
   } = useGetPublicProfileByUsername(username || "");
 
+  const thumbnailUrl = buildThumbnailURL(
+    profile?.data?.userProfile?.id || "",
+    profile?.data?.userProfile?.thumbnailMediaId || ""
+  );
+  const postThumbnailUrl = buildImageURL(
+    profile?.data?.userProfile?.id || "",
+    profile?.data?.postProfile?.postId || "",
+    profile?.data?.postProfile?.mediaId || ""
+  );
+  console.log("profile", profile);
   return (
     <div className="flex flex-col w-full">
       <div className="px-3 pt-3">
@@ -20,11 +31,14 @@ const ProfileUsernamePage = () => {
       </div>
       <div className="flex p-3 w-full">
         <div className="flex rounded-full w-24 h-24 overflow-hidden">
-          <img
-            src={"https://picsum.photos/id/103/600/600"}
-            alt="Profile"
-            className="object-cover"
-          />
+          {thumbnailUrl && (
+            <img src={thumbnailUrl} alt="Profile" className="object-cover" />
+          )}
+          {!thumbnailUrl && (
+            <div className="flex justify-center items-center w-full">
+              <CircleUserRound size={80} />
+            </div>
+          )}
         </div>
         <div className="flex flex-col w-3/4">
           <div className="text-lg font-medium px-4">
@@ -63,7 +77,7 @@ const ProfileUsernamePage = () => {
             <div className="relative h-[500px] rounded-xl overflow-hidden bg-neutral-800">
               {/* Placeholder image for the post */}
               <img
-                src={"https://picsum.photos/id/103/600/600"}
+                src={postThumbnailUrl}
                 alt="post"
                 className=" w-full h-full object-contain"
               />

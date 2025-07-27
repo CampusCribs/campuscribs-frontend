@@ -1,6 +1,7 @@
 // import { useSearch } from "@/gen";
 import { useGetPublicSearch } from "@/gen";
-import { Send } from "lucide-react";
+import { buildImageURL, buildThumbnailURL } from "@/lib/image-resolver";
+import { CircleUserRound, Send } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -25,7 +26,7 @@ const HeaderSearch = (props: Props) => {
 
     refetch();
   };
-
+  console.log("search_result", search_result);
   return (
     <>
       <div
@@ -57,11 +58,12 @@ const HeaderSearch = (props: Props) => {
             <div>
               <div className="px-3 font-light">Users</div>
               {search_result?.data?.users?.map((user) => (
-                <SearchResult
-                  key={user.thumbnail}
-                  id={user.username || ""}
-                  text={user.username || ""}
-                  thumbnail={user.thumbnail || ""}
+                <SearchUserResult
+                  thumbnailTrue={!!user.thumbnailMediaId}
+                  key={user.thumbnailMediaId}
+                  userId={user.userId || ""}
+                  username={user.username || ""}
+                  thumbnail={user.thumbnailMediaId || ""}
                   close={props.close}
                 />
               ))}
@@ -74,7 +76,7 @@ const HeaderSearch = (props: Props) => {
               <div className="px-3 font-light">Cribs</div>
               {search_result?.data?.posts?.map((post) => (
                 <SearchResult
-                  post={true}
+                  userId={post.userId || ""}
                   key={post.id}
                   id={post.id || ""}
                   thumbnail={post.thumbnail || ""}
@@ -110,31 +112,83 @@ const HeaderSearch = (props: Props) => {
   );
 };
 
-const SearchResult = (props: {
-  post?: boolean;
+const SearchResult = ({
+  userId,
+  id,
+  text,
+  thumbnail,
+  close,
+}: {
+  userId: string;
   id: string;
   text: string;
   thumbnail: string;
   close: () => void;
+  post?: boolean;
 }) => {
   const navigate = useNavigate();
+
+  const url = buildImageURL(userId, id, thumbnail);
+
   return (
     <div
-      className="flex flex-row p-3 px-5 m-1  rounded-xl border cursor-pointer "
+      className="flex flex-row p-3 px-5 m-1 border cursor-pointer "
       onClick={() => {
-        props.close();
-        if (props.post) navigate(`/cribs/${props.id}`);
-        else navigate(`/profile/${props.id}`);
+        close();
+        navigate(`/cribs/${id}`);
       }}
     >
       <div className="flex items-center justify-center ">
         <img
-          src={"https://picsum.photos/id/104/600/600"}
+          src={url}
           alt="user"
-          className="rounded-full w-10 h-10 mr-3 shadow-lg"
+          className="rounded-xl w-10 h-10 mr-3 shadow-lg"
         />
       </div>
-      <div className=" flex items-center text-lg">@{props.text}</div>
+      <div className=" flex items-center text-lg">{text}</div>
+    </div>
+  );
+};
+const SearchUserResult = ({
+  thumbnailTrue,
+  userId,
+  username,
+  thumbnail,
+  close,
+}: {
+  thumbnailTrue: boolean;
+  userId: string;
+  username: string;
+  thumbnail: string;
+  close: () => void;
+}) => {
+  const navigate = useNavigate();
+
+  const url = buildThumbnailURL(userId, thumbnail);
+
+  return (
+    <div
+      className="flex flex-row p-3 px-5 m-1  rounded-xl border cursor-pointer "
+      onClick={() => {
+        close();
+        navigate(`/profile/${username}`);
+      }}
+    >
+      <div className="flex items-center justify-center ">
+        {thumbnailTrue && (
+          <img
+            src={url}
+            alt="user"
+            className="rounded-full w-10 h-10 mr-3 shadow-lg"
+          />
+        )}
+        {!thumbnailTrue && (
+          <div className="mr-3 rounded-full shadow-lg">
+            <CircleUserRound size={40} />
+          </div>
+        )}
+      </div>
+      <div className=" flex items-center text-lg">@{username}</div>
     </div>
   );
 };

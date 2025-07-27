@@ -12,6 +12,7 @@ import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-confi
 import { useGetUsersMe, usePutUsersUpdate } from "@/gen";
 import { useThumbnailUpload } from "@/lib/uploadThumbnail";
 import { useNavigate } from "react-router";
+import { buildThumbnailURL } from "@/lib/image-resolver";
 const EditProfile = () => {
   const config = useAuthenticatedClientConfig();
 
@@ -92,6 +93,11 @@ const EditProfile = () => {
   if (isError_user) {
     return <div>Error: {error_user?.message}</div>;
   }
+
+  const thumbnailUrl = buildThumbnailURL(
+    userData?.data.id || "",
+    userData?.data.thumbnailMediaId || ""
+  );
   return (
     <div>
       <div>
@@ -229,13 +235,7 @@ const EditProfile = () => {
             {userData?.data.thumbnailMediaId && !thumbnail && (
               <div className="relative w-[75%]">
                 <img
-                  src={
-                    import.meta.env.VITE_MINIO_ENDPOINT +
-                    "/users/" +
-                    userData.data.id +
-                    "/thumbnails/" +
-                    userData.data.thumbnailMediaId
-                  }
+                  src={thumbnailUrl}
                   alt="uploaded image"
                   className=" w-full aspect-square object-cover border border-black rounded-xl shadow-xl "
                 />
