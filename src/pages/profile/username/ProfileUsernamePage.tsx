@@ -1,6 +1,6 @@
 import { useGetPublicProfileByUsername } from "@/gen";
 import { buildImageURL, buildThumbnailURL } from "@/lib/image-resolver";
-import { ArrowLeftIcon, CircleUserRound } from "lucide-react";
+import { ArrowLeftIcon, ArrowRight, CircleUserRound } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 
 const ProfileUsernamePage = () => {
@@ -82,29 +82,27 @@ const ProfileUsernamePage = () => {
               />
               <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent" />
             </div>
-            <div className="py-2 px-8 gap-y-2 flex flex-col">
-              <div>{profile && profile.data.postProfile?.description}</div>
-              <div>
-                roomates: {profile && profile.data.postProfile?.roommates}
-              </div>
-              <div>price: {profile && profile.data.postProfile?.price}</div>
-              <div className=" flex flex-row justify-between ">
-                <div className="flex text-wrap w-2/3">
-                  description:{" "}
-                  {profile && profile.data.postProfile?.description}
-                </div>
+            <div className=" gap-y-2 flex justify-between border">
+              <div className=" px-8 gap-y-2 my-3 flex flex-col  ">
+                <div>{profile && profile.data.postProfile?.description}</div>
                 <div>
-                  <button
-                    className="text-blue-600 underline cursor-pointer"
-                    onClick={() =>
-                      navigate(
-                        `/cribs/${profile && profile.data.postProfile?.postId}`
-                      )
-                    }
-                  >
-                    View Post
-                  </button>
+                  roomates: {profile && profile.data.postProfile?.roommates}
                 </div>
+                <div>price: {profile && profile.data.postProfile?.price}</div>
+                <div className=" flex flex-row justify-between ">
+                  <div className="flex text-wrap w-2/3">
+                    description:{" "}
+                    {profile && profile.data.postProfile?.description}
+                  </div>
+                </div>
+              </div>
+              <div
+                className="flex border w-1/6 bg-black justify-center items-center cursor-pointer"
+                onClick={() =>
+                  navigate(`/cribs/${profile.data.postProfile?.postId}`)
+                }
+              >
+                <ArrowRight color="white" size={40} />
               </div>
             </div>
           </div>

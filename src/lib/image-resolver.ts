@@ -29,6 +29,15 @@ export function buildImageURL(
   return `${baseUrl}/users/${userId}/${postId}/${mediaId}`;
 }
 
+export function buildDraftImageURL(
+  userId: string,
+  postId: string,
+  mediaId: string
+): string {
+  const baseUrl = import.meta.env.VITE_MINIO_DRAFTMEDIA_ENDPOINT;
+  return `${baseUrl}/users/${userId}/${postId}/${mediaId}`;
+}
+
 export function buildThumbnailURLs(
   userId: string,
   postId: string,

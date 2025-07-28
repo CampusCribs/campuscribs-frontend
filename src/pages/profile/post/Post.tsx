@@ -28,6 +28,7 @@ type postTag = {
   name?: string;
   tagCategoryId?: string;
 };
+
 const Post = () => {
   const config = useAuthenticatedClientConfig();
 
@@ -78,6 +79,7 @@ const Post = () => {
     handleSubmit,
     reset,
     control,
+    setValue,
     formState: { errors },
   } = useForm<PostSchema>({
     resolver: zodResolver(postSchema),
@@ -105,8 +107,9 @@ const Post = () => {
     });
     response
       .then((res) => {
+        console.log("✅ Success:", res);
         alert(res.status + " Post updated successfully!");
-        navigate("/profile");
+        // navigate("/profile");
       })
       .catch((error) => {
         console.error("Error updating post:", error);
@@ -156,6 +159,10 @@ const Post = () => {
       setSelectedTags(matchedTags);
     }
   }, [postDraft?.id, tags?.data, reset]);
+
+  useEffect(() => {
+    setValue("tags", selectedTags, { shouldValidate: true });
+  }, [selectedTags, setValue]);
   if (postDraftLoading) {
     return <div>Loading...</div>;
   }

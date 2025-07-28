@@ -1,8 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { useGetPublicProfileByUsername, useGetUsersMe } from "@/gen";
+import {
+  GetUsersProfile200,
+  useGetPublicProfileByUsername,
+  useGetUsersMe,
+  useGetUsersProfile,
+} from "@/gen";
 import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
-import { buildImageURL, buildThumbnailURL } from "@/lib/image-resolver";
-import { CirclePlus, CircleUserRound } from "lucide-react";
+import {
+  buildDraftImageURL,
+  buildImageURL,
+  buildThumbnailURL,
+} from "@/lib/image-resolver";
+import { ArrowRight, CirclePlus, CircleUserRound } from "lucide-react";
 import { useNavigate } from "react-router";
 import { GetPublicProfileByUsername200 } from "@/gen";
 import { i } from "motion/react-client";
@@ -19,15 +28,15 @@ const ProfilePage = () => {
     isLoading: profile_isLoading,
   } = useGetPublicProfileByUsername(data?.data.username || "");
 
-  const postThumbnailUrl = buildImageURL(
-    profile?.data?.userProfile?.id || "",
-    profile?.data?.postProfile?.postId || "",
-    profile?.data?.postProfile?.mediaId || ""
-  );
+  const { data: profile_draft, isLoading: profile_draftLoading } =
+    useGetUsersProfile({ ...config });
+
   const Thumbnail = buildThumbnailURL(
     data?.data.id || "",
     data?.data.thumbnailMediaId || ""
   );
+  const profileData = profile?.data || profile_draft?.data;
+  console.log("profileData", profileData);
   return (
     <div className="flex flex-col w-full">
       <div className="flex p-3 w-full">
@@ -75,8 +84,8 @@ const ProfilePage = () => {
         </div>
       </div>
       <div className="w-full">
-        {profile?.data.postProfile && <Post profile={profile?.data} />}
-        {!profile?.data.postProfile?.title && (
+        {profileData?.postProfile && <Post profile={profileData} />}
+        {!profileData?.postProfile?.title && (
           <div className="w-full  h-full flex justify-center items-center mt-10">
             <Button onClick={() => navigate("post")} className="cursor-pointer">
               <CirclePlus /> Create a new post!
@@ -88,15 +97,22 @@ const ProfilePage = () => {
   );
 };
 
-const Post = ({ profile }: { profile?: GetPublicProfileByUsername200 }) => {
+const Post = ({ profile }: { profile?: GetUsersProfile200 }) => {
   const navigate = useNavigate();
-  const imageUrl = buildImageURL(
-    profile?.userProfile?.id || "",
-    profile?.postProfile?.postId || "",
-    profile?.postProfile?.mediaId || ""
-  );
+  const imageUrl = profile?.postProfile?.post
+    ? buildImageURL(
+        profile.userProfile?.id || "",
+        profile?.postProfile?.postId || "",
+        profile?.postProfile?.mediaId || ""
+      )
+    : buildDraftImageURL(
+        profile?.userProfile?.id || "",
+        profile?.postProfile?.postId || "",
+        profile?.postProfile?.mediaId || ""
+      );
+
   return (
-    <div className=" mx-5 mb-10 rounded-xl border">
+    <div className=" mx-5 mb-10 rounded-xl ">
       <div className="relative h-[500px] rounded-xl overflow-hidden bg-neutral-800">
         {/* Placeholder image for the post */}
         <img
@@ -106,24 +122,22 @@ const Post = ({ profile }: { profile?: GetPublicProfileByUsername200 }) => {
         />
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent" />
       </div>
-      <div className="py-2 px-8 gap-y-2 flex flex-col">
-        <div>{profile && profile.postProfile?.description}</div>
-        <div>roomates: {profile && profile.postProfile?.roommates}</div>
-        <div>price: {profile && profile.postProfile?.price}</div>
-        <div className=" flex flex-row justify-between ">
-          <div className="flex text-wrap w-2/3">
-            description: {profile && profile.postProfile?.description}
+      <div className=" gap-y-2 flex justify-between border">
+        <div className=" px-8 gap-y-2 my-3 flex flex-col  ">
+          <div>{profile && profile.postProfile?.description}</div>
+          <div>roomates: {profile && profile.postProfile?.roommates}</div>
+          <div>price: {profile && profile.postProfile?.price}</div>
+          <div className=" flex flex-row justify-between ">
+            <div className="flex text-wrap w-2/3">
+              description: {profile && profile.postProfile?.description}
+            </div>
           </div>
-          <div>
-            <button
-              className="text-blue-600 underline cursor-pointer"
-              onClick={() =>
-                navigate(`/cribs/${profile && profile.postProfile?.postId}`)
-              }
-            >
-              View Post
-            </button>
-          </div>
+        </div>
+        <div
+          className="flex border w-1/6 bg-black justify-center items-center cursor-pointer"
+          onClick={() => navigate(`/cribs/${profile?.postProfile?.postId}`)}
+        >
+          <ArrowRight color="white" size={40} />
         </div>
       </div>
     </div>
