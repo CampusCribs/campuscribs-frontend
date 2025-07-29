@@ -11,6 +11,7 @@ import {
   buildImageURL,
   buildThumbnailURL,
 } from "@/lib/image-resolver";
+import { set } from "date-fns";
 import { de, is } from "date-fns/locale";
 import { ArrowRight, CirclePlus, CircleUserRound, X } from "lucide-react";
 import { useState } from "react";
@@ -106,7 +107,7 @@ const Post = ({
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
   const config = useAuthenticatedClientConfig();
-  const { mutate: deletePost } = useDeletePosts({
+  const { mutateAsync: deletePost } = useDeletePosts({
     ...config, // ✅ this attaches the Authorization header correctly
   });
   console.log(isPost, "isPost");
@@ -124,12 +125,16 @@ const Post = ({
 
   const handleConfirmDelete = async () => {
     try {
-      await deletePost();
+      await deletePost().then(() => {
+        setIsDeleting(false);
+        alert("Post deleted successfully");
+        window.location.reload();
+      });
     } catch (error) {
       console.error("Error deleting post:", error);
+      setIsDeleting(false);
+      alert("Failed to delete post");
     }
-    setIsDeleting(false);
-    window.location.reload();
   };
   return (
     <div className=" mx-5 mb-10 rounded-xl border-1 border-black ">
@@ -150,6 +155,7 @@ const Post = ({
       </div>
       {!isPost && (
         <div className="flex justify-end p-3">
+          <div>Please wait for post to be verified </div>
           <Button className="cursor-pointer" onClick={() => navigate("post")}>
             Edit Post
           </Button>

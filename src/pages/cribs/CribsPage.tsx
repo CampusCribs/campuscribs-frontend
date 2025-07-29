@@ -15,6 +15,12 @@ const CribsPage = () => {
   const [openTag, setOpenTag] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { ref, inView } = useInView();
+  const [openWelcome, setOpenWelcome] = useState<boolean>(false);
+
+  useEffect(() => {
+    const firstVisit = localStorage.getItem("firstVisit");
+    setOpenWelcome(firstVisit === null);
+  }, []);
 
   const {
     data: curated,
@@ -113,6 +119,7 @@ const CribsPage = () => {
           }}
         />
       </div>
+      {openWelcome && <Welcome setOpenWelcome={setOpenWelcome} />}
     </div>
   );
 };
@@ -158,4 +165,35 @@ const ResidenceCard = ({
   );
 };
 
+const Welcome = ({
+  setOpenWelcome,
+}: {
+  setOpenWelcome: (open: boolean) => void;
+}) => {
+  const navigate = useNavigate();
+  return (
+    <>
+      <div className="fixed inset-0 opacity-50 bg-black flex items-center justify-center z-50" />
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className=" bg-white z-50 py-20 p-6 rounded-lg shadow-lg text-center mx-10">
+          <h2 className="text-2xl font-bold mb-4">Welcome to Campus Cribs!</h2>
+          <p className="mb-4">Explore the best residences in Cincinnati.</p>
+          <p className="mb-6">
+            This application is in beta, so please be patient with us as we work
+            to improve it.
+          </p>
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600 transition-colors"
+            onClick={() => {
+              localStorage.setItem("firstVisit", "false");
+              setOpenWelcome(false);
+            }}
+          >
+            Start Exploring
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};
 export default CribsPage;
