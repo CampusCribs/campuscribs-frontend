@@ -479,6 +479,7 @@ paths:
       summary: Get public profile by username
       tags:
         - Profile
+
       responses:
         "200":
           description: Successful response with combined post and user profile
@@ -529,6 +530,18 @@ paths:
                       id:
                         type: string
                         format: uuid
+  /posts:
+    delete:
+      tags:
+        - Posts
+      summary: Delete a post
+      responses:
+        "204":
+          description: Post deleted successfully
+        "400":
+          description: Bad request
+        "404":
+          description: Post not found
 components:
   securitySchemes:
     bearerAuth:

@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import {
+  deletePosts,
   GetUsersProfile200,
+  useDeletePosts,
   useGetPublicProfileByUsername,
   useGetUsersMe,
   useGetUsersProfile,
@@ -11,6 +13,7 @@ import {
   buildImageURL,
   buildThumbnailURL,
 } from "@/lib/image-resolver";
+import { de, is } from "date-fns/locale";
 import { ArrowRight, CirclePlus, CircleUserRound, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
@@ -36,7 +39,8 @@ const ProfilePage = () => {
     data?.data.thumbnailMediaId || ""
   );
   const profileData = profile?.data || profile_draft?.data;
-  const isPost = profile_draft?.data.postProfile?.post || false;
+  const isPost = profile?.data; // ✅ if profile returned data, it's published
+  const isDraft = !profile_draft?.data.postProfile?.post;
   console.log("profileData", profileData);
   return (
     <div className="flex flex-col w-full">
@@ -85,7 +89,7 @@ const ProfilePage = () => {
       </div>
       <div className="w-full">
         {profileData?.postProfile && (
-          <Post profile={profileData} isPost={isPost} />
+          <Post profile={profileData} isPost={isPost} isDraft={isDraft} />
         )}
         {!profileData?.postProfile?.title && (
           <div className="w-full  h-full flex justify-center items-center mt-10">
@@ -102,13 +106,20 @@ const ProfilePage = () => {
 const Post = ({
   profile,
   isPost,
+  isDraft,
 }: {
   profile?: GetUsersProfile200;
   isPost: boolean;
+  isDraft: boolean;
 }) => {
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
-  const imageUrl = !isPost
+  const config = useAuthenticatedClientConfig();
+  const { mutateAsync: deletePost } = useDeletePosts({
+    ...config, // ✅ this attaches the Authorization header correctly
+  });
+  console.log(isPost, "isPost");
+  const imageUrl = isDraft
     ? buildImageURL(
         profile?.userProfile?.id || "",
         profile?.postProfile?.postId || "",
@@ -120,7 +131,19 @@ const Post = ({
         profile?.postProfile?.mediaId || ""
       );
 
-  const handleConfirmDelete = async () => {};
+  const handleConfirmDelete = () => {
+    deletePost()
+      .then(() => {
+        setIsDeleting(false); // ✅ reload page after successful delete
+      })
+      .catch((error) => {
+        console.error("Error deleting post:", error);
+      })
+      .finally(() => {
+        window.location.reload(); // ✅ close the modal regardless of outcome
+      });
+  };
+  console.log(isDraft, "isDraft");
   return (
     <div className=" mx-5 mb-10 rounded-xl border-1 border-black ">
       <div className="relative h-[500px] rounded-xl overflow-hidden bg-neutral-800">
@@ -138,7 +161,7 @@ const Post = ({
           <X size={50} />
         </div>
       </div>
-      {isPost && (
+      {isDraft && (
         <div className="flex justify-end p-3">
           <Button className="cursor-pointer" onClick={() => navigate("post")}>
             Edit Post
@@ -171,7 +194,7 @@ const Post = ({
         </>
       )}
 
-      {!isPost && (
+      {isPost && (
         <div className=" gap-y-2 flex justify-between ">
           <div className=" px-8 gap-y-2 my-3 flex flex-col  ">
             <div>{profile && profile.postProfile?.description}</div>
