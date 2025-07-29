@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
-  deletePosts,
   GetUsersProfile200,
   useDeletePosts,
-  useGetPublicProfileByUsername,
   useGetUsersMe,
   useGetUsersProfile,
 } from "@/gen";
@@ -25,12 +23,6 @@ const ProfilePage = () => {
 
   const { data, isLoading, isError, error } = useGetUsersMe({ ...config });
 
-  const {
-    data: profile,
-    error: profile_error,
-    isLoading: profile_isLoading,
-  } = useGetPublicProfileByUsername(data?.data.username || "");
-
   const { data: profile_draft, isLoading: profile_draftLoading } =
     useGetUsersProfile({ ...config });
 
@@ -38,10 +30,8 @@ const ProfilePage = () => {
     data?.data.id || "",
     data?.data.thumbnailMediaId || ""
   );
-  const profileData = profile?.data || profile_draft?.data;
-  const isPost = profile?.data; // ✅ if profile returned data, it's published
-  const isDraft = !profile_draft?.data.postProfile?.post;
-  console.log("profileData", profileData);
+
+  console.log("profileData", data, profile_draft);
   return (
     <div className="flex flex-col w-full">
       <div className="flex p-3 w-full">
@@ -88,10 +78,13 @@ const ProfilePage = () => {
         </div>
       </div>
       <div className="w-full">
-        {profileData?.postProfile && (
-          <Post profile={profileData} isPost={isPost} isDraft={isDraft} />
+        {profile_draft?.data?.postProfile && (
+          <Post
+            profile={profile_draft.data}
+            isPost={profile_draft.data.postProfile.post}
+          />
         )}
-        {!profileData?.postProfile?.title && (
+        {!profile_draft?.data?.postProfile?.title && (
           <div className="w-full  h-full flex justify-center items-center mt-10">
             <Button onClick={() => navigate("post")} className="cursor-pointer">
               <CirclePlus /> Create a new post!
@@ -106,20 +99,18 @@ const ProfilePage = () => {
 const Post = ({
   profile,
   isPost,
-  isDraft,
 }: {
   profile?: GetUsersProfile200;
   isPost: boolean;
-  isDraft: boolean;
 }) => {
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
   const config = useAuthenticatedClientConfig();
-  const { mutateAsync: deletePost } = useDeletePosts({
+  const { mutate: deletePost } = useDeletePosts({
     ...config, // ✅ this attaches the Authorization header correctly
   });
   console.log(isPost, "isPost");
-  const imageUrl = isDraft
+  const imageUrl = isPost
     ? buildImageURL(
         profile?.userProfile?.id || "",
         profile?.postProfile?.postId || "",
@@ -131,19 +122,15 @@ const Post = ({
         profile?.postProfile?.mediaId || ""
       );
 
-  const handleConfirmDelete = () => {
-    deletePost()
-      .then(() => {
-        setIsDeleting(false); // ✅ reload page after successful delete
-      })
-      .catch((error) => {
-        console.error("Error deleting post:", error);
-      })
-      .finally(() => {
-        window.location.reload(); // ✅ close the modal regardless of outcome
-      });
+  const handleConfirmDelete = async () => {
+    try {
+      await deletePost();
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+    setIsDeleting(false);
+    window.location.reload();
   };
-  console.log(isDraft, "isDraft");
   return (
     <div className=" mx-5 mb-10 rounded-xl border-1 border-black ">
       <div className="relative h-[500px] rounded-xl overflow-hidden bg-neutral-800">
@@ -161,7 +148,7 @@ const Post = ({
           <X size={50} />
         </div>
       </div>
-      {isDraft && (
+      {!isPost && (
         <div className="flex justify-end p-3">
           <Button className="cursor-pointer" onClick={() => navigate("post")}>
             Edit Post
@@ -197,7 +184,9 @@ const Post = ({
       {isPost && (
         <div className=" gap-y-2 flex justify-between ">
           <div className=" px-8 gap-y-2 my-3 flex flex-col  ">
-            <div>{profile && profile.postProfile?.description}</div>
+            <div>
+              description: {profile && profile.postProfile?.description}
+            </div>
             <div>roomates: {profile && profile.postProfile?.roommates}</div>
             <div>price: {profile && profile.postProfile?.price}</div>
             <div className=" flex flex-row justify-between ">
@@ -206,11 +195,10 @@ const Post = ({
               </div>
             </div>
           </div>
-          {isPost && <div> hello worwld</div>}
           <div
             className="flex border w-1/6 bg-black justify-center items-center cursor-pointer"
             onClick={() => {
-              if (!isPost) {
+              if (isPost) {
                 navigate(`/cribs/${profile?.postProfile?.postId}`);
               }
             }}

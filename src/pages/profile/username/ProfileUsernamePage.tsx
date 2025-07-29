@@ -12,15 +12,19 @@ const ProfileUsernamePage = () => {
     isLoading: profile_isLoading,
   } = useGetPublicProfileByUsername(username || "");
 
-  const thumbnailUrl = buildThumbnailURL(
-    profile?.data?.userProfile?.id || "",
-    profile?.data?.userProfile?.thumbnailMediaId || ""
-  );
+  const thumbnailUrl =
+    profile?.data.userProfile?.thumbnailMediaId != null
+      ? buildThumbnailURL(
+          profile?.data?.userProfile?.id || "",
+          profile?.data?.userProfile?.thumbnailMediaId || ""
+        )
+      : null;
   const postThumbnailUrl = buildImageURL(
     profile?.data?.userProfile?.id || "",
     profile?.data?.postProfile?.postId || "",
     profile?.data?.postProfile?.mediaId || ""
   );
+  console.log("profile", profile);
   return (
     <div className="flex flex-col w-full">
       <div className="px-3 pt-3">
@@ -30,10 +34,12 @@ const ProfileUsernamePage = () => {
       </div>
       <div className="flex p-3 w-full">
         <div className="flex rounded-full w-24 h-24 overflow-hidden">
-          {thumbnailUrl && (
-            <img src={thumbnailUrl} alt="Profile" className="object-cover" />
+          {thumbnailUrl != null && (
+            <div className="w-full h-full">
+              <img src={thumbnailUrl} alt="Profile" className="object-cover" />
+            </div>
           )}
-          {!thumbnailUrl && (
+          {thumbnailUrl == null && (
             <div className="flex justify-center items-center w-full">
               <CircleUserRound size={80} />
             </div>
