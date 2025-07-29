@@ -14,7 +14,7 @@ import {
 import { ArrowRight, CirclePlus, CircleUserRound } from "lucide-react";
 import { useNavigate } from "react-router";
 import { GetPublicProfileByUsername200 } from "@/gen";
-import { i } from "motion/react-client";
+
 const ProfilePage = () => {
   const navigate = useNavigate();
 
@@ -42,6 +42,18 @@ const ProfilePage = () => {
       <div className="flex p-3 w-full">
         <div className="flex rounded-full w-24 h-24 overflow-hidden">
           {isLoading && <div>Loading...</div>}
+          {profileData && !profileData.data.thumbnailMediaId && (
+            <div className="flex justify-center items-center w-full">
+              <CircleUserRound size={80} />
+            </div>
+          )}
+          {profileData && profileData.postProfile.mediaId && (
+            <img
+              src={Thumbnail}
+              alt="Profile"
+              className="object-cover w-full h-full "
+            />
+          )}
           {data && !data.data.thumbnailMediaId && (
             <div className="flex justify-center items-center w-full">
               {" "}
