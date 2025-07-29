@@ -11,9 +11,9 @@ import {
   buildImageURL,
   buildThumbnailURL,
 } from "@/lib/image-resolver";
-import { ArrowRight, CirclePlus, CircleUserRound } from "lucide-react";
+import { ArrowRight, CirclePlus, CircleUserRound, X } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-import { GetPublicProfileByUsername200 } from "@/gen";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -36,27 +36,15 @@ const ProfilePage = () => {
     data?.data.thumbnailMediaId || ""
   );
   const profileData = profile?.data || profile_draft?.data;
+  const isPost = profile_draft?.data.postProfile?.post || false;
   console.log("profileData", profileData);
   return (
     <div className="flex flex-col w-full">
       <div className="flex p-3 w-full">
         <div className="flex rounded-full w-24 h-24 overflow-hidden">
           {isLoading && <div>Loading...</div>}
-          {profileData && !profileData.data.thumbnailMediaId && (
-            <div className="flex justify-center items-center w-full">
-              <CircleUserRound size={80} />
-            </div>
-          )}
-          {profileData && profileData.postProfile.mediaId && (
-            <img
-              src={Thumbnail}
-              alt="Profile"
-              className="object-cover w-full h-full "
-            />
-          )}
           {data && !data.data.thumbnailMediaId && (
             <div className="flex justify-center items-center w-full">
-              {" "}
               <CircleUserRound size={80} />
             </div>
           )}
@@ -96,7 +84,9 @@ const ProfilePage = () => {
         </div>
       </div>
       <div className="w-full">
-        {profileData?.postProfile && <Post profile={profileData} />}
+        {profileData?.postProfile && (
+          <Post profile={profileData} isPost={isPost} />
+        )}
         {!profileData?.postProfile?.title && (
           <div className="w-full  h-full flex justify-center items-center mt-10">
             <Button onClick={() => navigate("post")} className="cursor-pointer">
@@ -109,11 +99,18 @@ const ProfilePage = () => {
   );
 };
 
-const Post = ({ profile }: { profile?: GetUsersProfile200 }) => {
+const Post = ({
+  profile,
+  isPost,
+}: {
+  profile?: GetUsersProfile200;
+  isPost: boolean;
+}) => {
   const navigate = useNavigate();
-  const imageUrl = profile?.postProfile?.post
+  const [isDeleting, setIsDeleting] = useState(false);
+  const imageUrl = !isPost
     ? buildImageURL(
-        profile.userProfile?.id || "",
+        profile?.userProfile?.id || "",
         profile?.postProfile?.postId || "",
         profile?.postProfile?.mediaId || ""
       )
@@ -123,8 +120,9 @@ const Post = ({ profile }: { profile?: GetUsersProfile200 }) => {
         profile?.postProfile?.mediaId || ""
       );
 
+  const handleConfirmDelete = async () => {};
   return (
-    <div className=" mx-5 mb-10 rounded-xl ">
+    <div className=" mx-5 mb-10 rounded-xl border-1 border-black ">
       <div className="relative h-[500px] rounded-xl overflow-hidden bg-neutral-800">
         {/* Placeholder image for the post */}
         <img
@@ -133,25 +131,71 @@ const Post = ({ profile }: { profile?: GetUsersProfile200 }) => {
           className=" w-full h-full object-contain"
         />
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent" />
+        <div
+          className="absolute top-0 right-0 p-4 text-white"
+          onClick={() => setIsDeleting(true)}
+        >
+          <X size={50} />
+        </div>
       </div>
-      <div className=" gap-y-2 flex justify-between border">
-        <div className=" px-8 gap-y-2 my-3 flex flex-col  ">
-          <div>{profile && profile.postProfile?.description}</div>
-          <div>roomates: {profile && profile.postProfile?.roommates}</div>
-          <div>price: {profile && profile.postProfile?.price}</div>
-          <div className=" flex flex-row justify-between ">
-            <div className="flex text-wrap w-2/3">
-              description: {profile && profile.postProfile?.description}
+      {isPost && (
+        <div className="flex justify-end p-3">
+          <Button className="cursor-pointer" onClick={() => navigate("post")}>
+            Edit Post
+          </Button>
+        </div>
+      )}
+      {isDeleting && (
+        <>
+          <div className="fixed inset-0 bg-black opacity-50 z-50 flex items-center justify-center" />
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-xl w-80 text-center space-y-4">
+              <h2 className="text-lg font-semibold">Delete Post</h2>
+              <p>Are you sure you want to delete this post?</p>
+              <div className="flex justify-between mt-4">
+                <button
+                  onClick={() => setIsDeleting(false)} // cancel
+                  className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirmDelete} // your delete logic
+                  className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
+        </>
+      )}
+
+      {!isPost && (
+        <div className=" gap-y-2 flex justify-between ">
+          <div className=" px-8 gap-y-2 my-3 flex flex-col  ">
+            <div>{profile && profile.postProfile?.description}</div>
+            <div>roomates: {profile && profile.postProfile?.roommates}</div>
+            <div>price: {profile && profile.postProfile?.price}</div>
+            <div className=" flex flex-row justify-between ">
+              <div className="flex text-wrap w-2/3">
+                description: {profile && profile.postProfile?.description}
+              </div>
+            </div>
+          </div>
+          {isPost && <div> hello worwld</div>}
+          <div
+            className="flex border w-1/6 bg-black justify-center items-center cursor-pointer"
+            onClick={() => {
+              if (!isPost) {
+                navigate(`/cribs/${profile?.postProfile?.postId}`);
+              }
+            }}
+          >
+            <ArrowRight color="white" size={40} />
+          </div>
         </div>
-        <div
-          className="flex border w-1/6 bg-black justify-center items-center cursor-pointer"
-          onClick={() => navigate(`/cribs/${profile?.postProfile?.postId}`)}
-        >
-          <ArrowRight color="white" size={40} />
-        </div>
-      </div>
+      )}
     </div>
   );
 };

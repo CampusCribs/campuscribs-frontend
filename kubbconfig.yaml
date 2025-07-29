@@ -506,6 +506,7 @@ paths:
                         format: uuid
                       post:
                         type: boolean
+                        format: boolean
                   userProfile:
                     type: object
                     properties:

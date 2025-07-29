@@ -109,7 +109,7 @@ const Post = () => {
       .then((res) => {
         console.log("✅ Success:", res);
         alert(res.status + " Post updated successfully!");
-        // navigate("/profile");
+        navigate("/profile");
       })
       .catch((error) => {
         console.error("Error updating post:", error);
