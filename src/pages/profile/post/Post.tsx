@@ -103,6 +103,7 @@ const Post = () => {
         })),
         termStartDate: updatedPost.beginDate.toISOString(),
         termEndDate: updatedPost.endDate.toISOString(),
+        submit: true,
       },
     });
     response

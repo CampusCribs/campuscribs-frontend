@@ -695,6 +695,8 @@ components:
     CreatePostDraftDTO:
       type: object
       properties:
+        submit:
+          type: boolean
         title:
           type: string
         description:
