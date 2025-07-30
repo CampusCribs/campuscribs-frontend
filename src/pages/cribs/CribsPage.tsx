@@ -170,7 +170,6 @@ const Welcome = ({
 }: {
   setOpenWelcome: (open: boolean) => void;
 }) => {
-  const navigate = useNavigate();
   return (
     <>
       <div className="fixed inset-0 opacity-50 bg-black flex items-center justify-center z-50" />

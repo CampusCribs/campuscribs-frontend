@@ -108,7 +108,7 @@ const Post = ({
   const [isDeleting, setIsDeleting] = useState(false);
   const config = useAuthenticatedClientConfig();
   const { mutateAsync: deletePost } = useDeletePosts({
-    ...config, // ✅ this attaches the Authorization header correctly
+    ...config,
   });
   console.log(isPost, "isPost");
   const imageUrl = isPost
@@ -139,19 +139,20 @@ const Post = ({
   return (
     <div className=" mx-5 mb-10 rounded-xl border-1 border-black ">
       <div className="relative h-[500px] rounded-xl overflow-hidden bg-neutral-800">
-        {/* Placeholder image for the post */}
         <img
           src={imageUrl}
           alt="post"
           className=" w-full h-full object-contain"
         />
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent" />
-        <div
-          className="absolute top-0 right-0 p-4 text-white"
-          onClick={() => setIsDeleting(true)}
-        >
-          <X size={50} />
-        </div>
+        {isPost && (
+          <div
+            className="absolute top-0 right-0 p-4 text-white"
+            onClick={() => setIsDeleting(true)}
+          >
+            <X size={50} />
+          </div>
+        )}
       </div>
       {!isPost && (
         <div className="flex justify-end p-3">
