@@ -1,11 +1,17 @@
-import { CircleUserRound, Search } from "lucide-react";
+import { Bell, BellDot, CircleUserRound, Search } from "lucide-react";
 import { useNavigate } from "react-router";
 import HeaderSearch from "./HeaderSearch";
 import { useState } from "react";
 import HatHouseBlack from "../ui/HatHouseBlack";
+import useEasyAuth from "@/hooks/use-easy-auth";
+import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
+import { useHasUnreadNotifications } from "@/gen";
 const Header = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const { user } = useEasyAuth();
+  const config = useAuthenticatedClientConfig();
+  const { data } = useHasUnreadNotifications({ ...config });
   return (
     <div className="flex justify-between items-center p-4">
       <div className="flex items-center gap-2">
@@ -21,6 +27,24 @@ const Header = () => {
       </div>
 
       <div className="flex items-center gap-2">
+        {user?.access_token && (
+          <div
+            className="cursor-pointer"
+            onClick={() => navigate("/settings/notifications")}
+          >
+            {data?.data ? (
+              <div
+                className="relative cursor-pointer"
+                onClick={() => navigate("/settings/notifications")}
+              >
+                <Bell size={23} />
+                <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500" />
+              </div>
+            ) : (
+              <Bell size={23} />
+            )}
+          </div>
+        )}
         <div className="cursor-pointer" onClick={() => navigate("/profile")}>
           <CircleUserRound />
         </div>
