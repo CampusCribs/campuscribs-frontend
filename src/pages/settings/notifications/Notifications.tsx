@@ -1,6 +1,7 @@
-import { useGetNotificationsInfinite } from "@/gen";
+import { useGetNotificationsInfinite, useMarkNotificationAsRead } from "@/gen";
 import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-config";
 import { ArrowLeftIcon } from "lucide-react";
+import { useNavigate } from "react-router";
 
 const Notifications = () => {
   const config = useAuthenticatedClientConfig();
@@ -16,15 +17,60 @@ const Notifications = () => {
         </div>
         <div className="flex justify-center items-center">
           <div className="flex flex-col mt-3 w-full py-5 rounded-lg">
-            {data &&
+            {data ? (
               data.pages.map((item) =>
                 item.data?.content?.map((item) => (
-                  <div className="border w-full p-4">{item.content}</div>
+                  <Notification
+                    title={item.title || ""}
+                    content={item.content || ""}
+                    isRead={item.read}
+                    id={item.id || ""}
+                  />
                 ))
-              )}
+              )
+            ) : (
+              <div>No notifications</div>
+            )}
+            {data && <div className="w-full border-t" />}
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const Notification = ({
+  title,
+  content,
+  isRead,
+  id,
+}: {
+  title: string;
+  content: string;
+  isRead?: boolean;
+  id: string;
+}) => {
+  const config = useAuthenticatedClientConfig();
+  const { mutateAsync } = useMarkNotificationAsRead({ ...config });
+
+  const navigate = useNavigate();
+  const handleClick = async () => {
+    await mutateAsync({ id: id }).then(() => navigate("/profile"));
+  };
+  return (
+    <div
+      className="border-t w-full px-4 py-2 flex cursor-pointer"
+      onClick={handleClick}
+    >
+      <div className="flex flex-col gap-y-1.5">
+        <div className="font-semibold ">{title}</div>
+        <div className="text-sm">{content}</div>
+      </div>
+      {!isRead && (
+        <div className="ml-auto flex items-center justify-center">
+          <div className="h-2 w-2 rounded-full bg-red-500" />
+        </div>
+      )}
     </div>
   );
 };

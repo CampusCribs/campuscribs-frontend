@@ -1,4 +1,4 @@
-import { Bell, BellDot, CircleUserRound, Search } from "lucide-react";
+import { Bell, CircleUserRound, Search } from "lucide-react";
 import { useNavigate } from "react-router";
 import HeaderSearch from "./HeaderSearch";
 import { useState } from "react";

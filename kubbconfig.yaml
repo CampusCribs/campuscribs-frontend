@@ -834,6 +834,8 @@ components:
     NotificationDTO:
       type: object
       properties:
+        title:
+          type: string
         id:
           type: string
           format: uuid

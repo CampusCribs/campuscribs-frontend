@@ -11,8 +11,6 @@ import {
   buildImageURL,
   buildThumbnailURL,
 } from "@/lib/image-resolver";
-import { set } from "date-fns";
-import { de, is } from "date-fns/locale";
 import { ArrowRight, CirclePlus, CircleUserRound, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
@@ -32,7 +30,7 @@ const ProfilePage = () => {
     data?.data.thumbnailMediaId || ""
   );
 
-  console.log("profileData", data, profile_draft);
+  console.log(data);
   return (
     <div className="flex flex-col w-full">
       <div className="flex p-3 w-full">
