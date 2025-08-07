@@ -131,6 +131,10 @@ const Post = () => {
     const files = e.target.files;
     if (!files || !postDraft?.id) return;
 
+    if ((postDraft.media && postDraft.media?.length >= 5) || false) {
+      alert("You can only upload up to 5 images.");
+      return;
+    }
     upload(postDraft.id, files[0])
       .then(() => refetchPostDraft())
       .catch((err) => {

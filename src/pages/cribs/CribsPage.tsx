@@ -6,8 +6,9 @@ import { useInView } from "react-intersection-observer";
 
 import TagCarousel from "./TagCarousel";
 import { useNavigate } from "react-router";
-import { useGetPublicCuratedInfinite, useGetPublicTags } from "@/gen";
+import { useGetPublicTags } from "@/gen";
 import { buildImageURL } from "@/lib/image-resolver";
+import { useCuratedInfiniteQuery } from "@/hooks/use-curated-infinite";
 
 const CribsPage = () => {
   //variables to store the selected tags and the state of the tag selector and find the intersection of the tags
@@ -23,22 +24,19 @@ const CribsPage = () => {
   }, []);
 
   const {
-    data: curated,
-    error: curated_error,
-    isLoading: curated_isLoading,
-  } = useGetPublicCuratedInfinite({
-    page: 0,
-    size: 10,
-    sort: ["createdAt,desc"],
-    tag: selectedTags,
-  });
-
-  const {
     data: tags,
     error: tags_error,
     isLoading: tags_isLoading,
   } = useGetPublicTags({});
 
+  const {
+    data: curated,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading: curated_isLoading,
+    error: curated_error,
+  } = useCuratedInfiniteQuery(selectedTags);
   const handleTagClick = (tag: string) => {
     setSelectedTags((prevTags) =>
       prevTags.includes(tag)
@@ -49,7 +47,9 @@ const CribsPage = () => {
 
   useEffect(() => {
     if (inView) {
-      // call the generated function
+      console.log("in view");
+      // call the generated funct
+      fetchNextPage();
     }
   }, [inView]);
   return (
@@ -83,15 +83,13 @@ const CribsPage = () => {
           </div>
           <div className="grid grid-cols-2 gap-1 w-full p-2">
             {curated_isLoading && <p>loading...</p>}
-            {curated_error?.response?.status !== 404 && curated_error && (
+            {curated_error?.message !== "404" && curated_error && (
               <p>error occured</p>
             )}
-            {curated_error?.response?.status === 404 && (
-              <p>No residences found</p>
-            )}
+            {curated_error?.message === "404" && <p>No residences found</p>}
             {curated &&
               curated.pages.map((item) =>
-                item.data.content?.map((residence) => (
+                item.content?.map((residence) => (
                   <ResidenceCard
                     key={residence.id}
                     userId={residence.userId || ""}
@@ -146,7 +144,11 @@ const ResidenceCard = ({
       key={id}
     >
       <CardContent className="p-0 m-0 w-full border-none ">
-        <img src={thumbnail} alt="Residence" className="object-cover" />
+        <img
+          src="https://tse2.mm.bing.net/th/id/OIP.D1Sqr6pni4cPbDipu_q66QHaE7?rs=1&pid=ImgDetMain&o=7&rm=3"
+          alt="Residence"
+          className="object-cover"
+        />
       </CardContent>
       <CardFooter className="p-0 m-0 w-full px-4 py-2">
         <div className="flex justify-between  w-full ">
