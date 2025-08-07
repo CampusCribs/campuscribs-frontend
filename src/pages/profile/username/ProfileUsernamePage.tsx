@@ -24,7 +24,7 @@ const ProfileUsernamePage = () => {
     profile?.data?.postProfile?.postId || "",
     profile?.data?.postProfile?.mediaId || ""
   );
-  console.log("profile", profile);
+
   return (
     <div className="flex flex-col w-full">
       <div className="px-3 pt-3">

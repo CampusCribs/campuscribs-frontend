@@ -30,7 +30,6 @@ const ProfilePage = () => {
     data?.data.thumbnailMediaId || ""
   );
 
-  console.log(data);
   return (
     <div className="flex flex-col w-full">
       <div className="flex p-3 w-full">
@@ -108,7 +107,6 @@ const Post = ({
   const { mutateAsync: deletePost } = useDeletePosts({
     ...config,
   });
-  console.log(isPost, "isPost");
   const imageUrl = isPost
     ? buildImageURL(
         profile?.userProfile?.id || "",
