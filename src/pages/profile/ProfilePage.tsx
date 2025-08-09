@@ -186,20 +186,20 @@ const Post = ({
 
       {isPost && (
         <div className=" gap-y-2 flex justify-between ">
-          <div className=" px-8 gap-y-2 my-3 flex flex-col  ">
-            <div>
+          <div className=" px-8 gap-y-2 my-3 flex flex-col w-3/4 ">
+            <div className="line-clamp-2">
               description: {profile && profile.postProfile?.description}
             </div>
             <div>roomates: {profile && profile.postProfile?.roommates}</div>
             <div>price: {profile && profile.postProfile?.price}</div>
             <div className=" flex flex-row justify-between ">
-              <div className="flex text-wrap w-2/3">
+              <div className="line-clamp-2">
                 description: {profile && profile.postProfile?.description}
               </div>
             </div>
           </div>
           <div
-            className="flex border w-1/6 bg-black justify-center items-center cursor-pointer"
+            className="flex w-1/6 bg-black justify-center items-center cursor-pointer"
             onClick={() => {
               if (isPost) {
                 navigate(`/cribs/${profile?.postProfile?.postId}`);

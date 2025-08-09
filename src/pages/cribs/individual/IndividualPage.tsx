@@ -55,7 +55,7 @@ const IndividualPage = () => {
                 <img
                   alt="profile"
                   src={thumbnailUrl}
-                  className="rounded-full h-24 m-5 w-24 object-fill shadow-2xl border"
+                  className="rounded-full h-24 m-5 w-24 object-cover shadow-2xl border"
                 />
               </div>
             )}

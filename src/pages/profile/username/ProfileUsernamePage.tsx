@@ -34,15 +34,18 @@ const ProfileUsernamePage = () => {
       </div>
       <div className="flex p-3 w-full">
         <div className="flex rounded-full w-24 h-24 overflow-hidden">
-          {thumbnailUrl != null && (
-            <div className="w-full h-full">
-              <img src={thumbnailUrl} alt="Profile" className="object-cover" />
-            </div>
-          )}
-          {thumbnailUrl == null && (
+          {thumbnailUrl == null && <div>Loading...</div>}
+          {profile && !profile.data.userProfile?.thumbnailMediaId && (
             <div className="flex justify-center items-center w-full">
               <CircleUserRound size={80} />
             </div>
+          )}
+          {profile && profile.data.userProfile?.thumbnailMediaId && (
+            <img
+              src={thumbnailUrl || ""}
+              alt="Profile"
+              className="object-cover w-full h-full "
+            />
           )}
         </div>
         <div className="flex flex-col w-3/4">
@@ -88,22 +91,24 @@ const ProfileUsernamePage = () => {
               />
               <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent" />
             </div>
-            <div className=" gap-y-2 flex justify-between border">
-              <div className=" px-8 gap-y-2 my-3 flex flex-col  ">
-                <div>{profile && profile.data.postProfile?.description}</div>
+            <div className=" gap-y-2 flex justify-between ">
+              <div className=" px-8 gap-y-2 my-3 flex flex-col  w-3/4">
+                <div className="line-clamp-2">
+                  {profile && profile.data.postProfile?.description}
+                </div>
                 <div>
                   roomates: {profile && profile.data.postProfile?.roommates}
                 </div>
                 <div>price: {profile && profile.data.postProfile?.price}</div>
                 <div className=" flex flex-row justify-between ">
-                  <div className="flex text-wrap w-2/3">
+                  <div className="line-clamp-2 ">
                     description:{" "}
                     {profile && profile.data.postProfile?.description}
                   </div>
                 </div>
               </div>
               <div
-                className="flex border w-1/6 bg-black justify-center items-center cursor-pointer"
+                className="flex w-1/6 bg-black justify-center items-center cursor-pointer"
                 onClick={() =>
                   navigate(`/cribs/${profile.data.postProfile?.postId}`)
                 }
