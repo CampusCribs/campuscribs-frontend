@@ -188,7 +188,7 @@ const Post = ({
         <div className=" gap-y-2 flex justify-between ">
           <div className=" px-8 gap-y-2 my-3 flex flex-col w-3/4 ">
             <div className="line-clamp-2">
-              description: {profile && profile.postProfile?.description}
+              title: {profile && profile.postProfile?.title}
             </div>
             <div>roomates: {profile && profile.postProfile?.roommates}</div>
             <div>price: {profile && profile.postProfile?.price}</div>

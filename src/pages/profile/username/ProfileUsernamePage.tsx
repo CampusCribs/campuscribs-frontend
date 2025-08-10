@@ -94,7 +94,7 @@ const ProfileUsernamePage = () => {
             <div className=" gap-y-2 flex justify-between ">
               <div className=" px-8 gap-y-2 my-3 flex flex-col  w-3/4">
                 <div className="line-clamp-2">
-                  {profile && profile.data.postProfile?.description}
+                  title: {profile && profile.data.postProfile?.title}
                 </div>
                 <div>
                   roomates: {profile && profile.data.postProfile?.roommates}
