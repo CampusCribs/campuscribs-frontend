@@ -8,6 +8,8 @@ import TagCarousel from "./TagCarousel";
 import { useNavigate } from "react-router";
 import { useGetPublicCuratedInfinite, useGetPublicTags } from "@/gen";
 import { buildImageURL } from "@/lib/image-resolver";
+import SmallAd from "../ads/SmallAd";
+import LargeAd from "../ads/LargeAd";
 
 const CribsPage = () => {
   //variables to store the selected tags and the state of the tag selector and find the intersection of the tags
@@ -81,7 +83,7 @@ const CribsPage = () => {
               <div className="text-lg font-bold">Cincinnati</div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-1 w-full p-2">
+          <div className="w-full ">
             {curated_isLoading && <p>loading...</p>}
             {curated_error?.response?.status !== 404 && curated_error && (
               <p>error occured</p>
@@ -89,19 +91,21 @@ const CribsPage = () => {
             {curated_error?.response?.status === 404 && (
               <p>No residences found</p>
             )}
-            {curated &&
-              curated.pages.map((item) =>
-                item.data.content?.map((residence) => (
-                  <ResidenceCard
-                    key={residence.id}
-                    userId={residence.userId || ""}
-                    thumbnail={residence.mediaId || ""}
-                    id={residence.id || ""}
-                    price={residence.price || 0}
-                    location="CUF"
-                  />
-                ))
-              )}
+            <div className="grid grid-cols-2 gap-1 w-full p-2">
+              {curated &&
+                curated.pages.map((item) =>
+                  item.data.content?.map((residence) => (
+                    <ResidenceCard
+                      key={residence.id}
+                      userId={residence.userId || ""}
+                      thumbnail={residence.mediaId || ""}
+                      id={residence.id || ""}
+                      price={residence.price || 0}
+                      location="CUF"
+                    />
+                  ))
+                )}
+            </div>
           </div>
           <div />
           <div ref={ref} />
@@ -141,12 +145,16 @@ const ResidenceCard = ({
   thumbnail = buildImageURL(userId, id, thumbnail);
   return (
     <Card
-      className="rounded-none shadow-none m-0 w-full border-none cursor-pointer p-1"
+      className="rounded-none  shadow-none m-0 w-full border-none cursor-pointer p-1"
       onClick={() => navigate(`/cribs/${id}`)}
       key={id}
     >
-      <CardContent className="p-0 m-0 w-full border-none ">
-        <img src={thumbnail} alt="Residence" className="object-cover" />
+      <CardContent className="p-0 m-0 w-full border-none aspect-[4/3] ">
+        <img
+          src={thumbnail}
+          alt="Residence"
+          className="object-cover aspect-[4/3] w-full h-full"
+        />
       </CardContent>
       <CardFooter className="p-0 m-0 w-full px-4 py-2">
         <div className="flex justify-between  w-full ">
