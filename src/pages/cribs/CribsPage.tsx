@@ -80,7 +80,7 @@ const CribsPage = () => {
               <div className="text-lg font-bold">Cincinnati</div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-1 w-full p-2">
+          <div className="w-full">
             {curated_isLoading && <p>loading...</p>}
             {curated_error?.message !== "Request failed with status code 404" &&
               curated_error && <p>error occured</p>}
@@ -88,19 +88,21 @@ const CribsPage = () => {
               "Request failed with status code 404" && (
               <p>No residences found</p>
             )}
-            {curated &&
-              curated.pages.map((item) =>
-                item.content?.map((residence) => (
-                  <ResidenceCard
-                    key={residence.id}
-                    userId={residence.userId || ""}
-                    thumbnail={residence.mediaId || ""}
-                    id={residence.id || ""}
-                    price={residence.price || 0}
-                    location="CUF"
-                  />
-                ))
-              )}
+            <div className="grid grid-cols-2 gap-1 w-full p-2">
+              {curated &&
+                curated.pages.map((item) =>
+                  item.content?.map((residence) => (
+                    <ResidenceCard
+                      key={residence.id}
+                      userId={residence.userId || ""}
+                      thumbnail={residence.mediaId || ""}
+                      id={residence.id || ""}
+                      price={residence.price || 0}
+                      location="CUF"
+                    />
+                  ))
+                )}
+            </div>
           </div>
           <div />
           {isFetchingNextPage && (
@@ -149,8 +151,12 @@ const ResidenceCard = ({
       onClick={() => navigate(`/cribs/${id}`)}
       key={id}
     >
-      <CardContent className="p-0 m-0 w-full border-none ">
-        <img src={thumbnail} alt="Residence" className="object-cover" />
+      <CardContent className="p-0 m-0 w-full border-none aspect-[4/3] ">
+        <img
+          src={thumbnail}
+          alt="Residence"
+          className="object-cover aspect-[4/3] w-full h-full"
+        />
       </CardContent>
       <CardFooter className="p-0 m-0 w-full px-4 py-2">
         <div className="flex justify-between  w-full ">
