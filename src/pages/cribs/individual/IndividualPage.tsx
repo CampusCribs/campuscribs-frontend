@@ -55,7 +55,7 @@ const IndividualPage = () => {
                 <img
                   alt="profile"
                   src={thumbnailUrl}
-                  className="rounded-full h-24 m-5 w-24 object-fill shadow-2xl border"
+                  className="rounded-full h-24 m-5 w-24 object-cover shadow-2xl border"
                 />
               </div>
             )}
@@ -69,7 +69,9 @@ const IndividualPage = () => {
           </div>
           <div>
             <div className="text-3xl font-semibold p-4">{post.data.title}</div>
-            <div className="text-lg px-6">{post.data.description}</div>
+            <div className="text-lg px-6 text-wrap wrap-break-word">
+              {post.data.description}
+            </div>
             <div className="text-lg px-8 py-3 flex">
               <div className="font-semibold flex mr-1">Price: </div>{" "}
               {post.data.price}

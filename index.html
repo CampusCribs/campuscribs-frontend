@@ -8,23 +8,136 @@
   </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
     <script>
-      var _paq = (window._paq = window._paq || []);
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-      _paq.push(["trackPageView"]);
-      _paq.push(["enableLinkTracking"]);
       (function () {
-        var u = "//localhost:8080/";
-        _paq.push(["setTrackerUrl", u + "matomo.php"]);
-        _paq.push(["setSiteId", "1"]);
-        var d = document,
-          g = d.createElement("script"),
-          s = d.getElementsByTagName("script")[0];
-        g.async = true;
-        g.src = u + "matomo.js";
-        s.parentNode.insertBefore(g, s);
+        // --- config ---
+        const INGEST_URL = "http://localhost:8083/analytics"; // change me
+        const APP_VERSION = "web-1.0.0";
+
+        // --- simple ids ---
+        function uuid() {
+          return crypto && crypto.randomUUID
+            ? crypto.randomUUID()
+            : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+                const r = (Math.random() * 16) | 0,
+                  v = c === "x" ? r : (r & 0x3) | 0x8;
+                return v.toString(16);
+              });
+        }
+        function getOrSet(key, gen) {
+          try {
+            const v = localStorage.getItem(key);
+            if (v) return v;
+            const n = gen();
+            localStorage.setItem(key, n);
+            return n;
+          } catch {
+            return gen();
+          }
+        }
+
+        const userId = getOrSet("cc_user_id", uuid);
+        const sessionId = (function () {
+          const now = Date.now();
+          try {
+            const last = Number(localStorage.getItem("cc_last"));
+            const sid = localStorage.getItem("cc_sid");
+            // 30 min inactivity -> new session
+            if (!sid || isNaN(last) || now - last > 30 * 60 * 1000) {
+              const n = uuid();
+              localStorage.setItem("cc_sid", n);
+              localStorage.setItem("cc_last", String(now));
+              return n;
+            } else {
+              localStorage.setItem("cc_last", String(now));
+              return sid;
+            }
+          } catch {
+            return uuid();
+          }
+        })();
+
+        function parseUTM(url) {
+          const u = new URL(url, location.origin);
+          return {
+            utm_source: u.searchParams.get("utm_source") || undefined,
+            utm_medium: u.searchParams.get("utm_medium") || undefined,
+            utm_campaign: u.searchParams.get("utm_campaign") || undefined,
+          };
+        }
+
+        function baseEvent() {
+          const utm = parseUTM(location.href);
+          // Use Client Hints if available; server will do final parsing
+          const evt = {
+            ts: new Date().toISOString(),
+            trace_id: uuid(),
+            user_id: userId,
+            session_id: sessionId,
+            source: document.referrer
+              ? new URL(document.referrer).host
+              : "direct",
+            page: location.href,
+            referrer: document.referrer || undefined,
+            app_version: APP_VERSION,
+            // placeholders the server will enrich:
+            device: undefined,
+            browser: undefined,
+            country: undefined,
+            region: undefined,
+            ...utm,
+          };
+          return evt;
+        }
+
+        function send(eventObj) {
+          const payload = JSON.stringify(eventObj);
+          // Try sendBeacon for unload-safe fire-and-forget
+          const ok =
+            navigator.sendBeacon &&
+            navigator.sendBeacon(
+              INGEST_URL,
+              new Blob([payload], { type: "application/json" })
+            );
+          if (!ok) {
+            // Fallback to fetch with keepalive for page unload
+            fetch(INGEST_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: payload,
+              keepalive: true,
+              credentials: "omit",
+            }).catch(() => {
+              /* swallow */
+            });
+          }
+        }
+
+        // Public API
+        window.CCAnalytics = {
+          trackPage(value) {
+            const evt = {
+              ...baseEvent(),
+              event: "page_view",
+              value: value ?? undefined,
+            };
+            send(evt);
+          },
+          trackEvent(name, value, extras = {}) {
+            const evt = {
+              ...baseEvent(),
+              event: name,
+              value: value ?? undefined,
+              ...extras,
+            };
+            send(evt);
+          },
+        };
+
+        // Auto fire a page_view
+        window.addEventListener("load", () => window.CCAnalytics.trackPage());
       })();
     </script>
-    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

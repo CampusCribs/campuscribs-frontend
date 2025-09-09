@@ -17,11 +17,9 @@ const oidcConfig = {
 };
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider {...oidcConfig}>
-        <App />
-      </AuthProvider>
-    </QueryClientProvider>
-  </StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider {...oidcConfig}>
+      <App />
+    </AuthProvider>
+  </QueryClientProvider>
 );

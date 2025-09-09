@@ -8,8 +8,6 @@ import TagCarousel from "./TagCarousel";
 import { useNavigate } from "react-router";
 import { useGetPublicCuratedInfinite, useGetPublicTags } from "@/gen";
 import { buildImageURL } from "@/lib/image-resolver";
-import SmallAd from "../ads/SmallAd";
-import LargeAd from "../ads/LargeAd";
 
 const CribsPage = () => {
   //variables to store the selected tags and the state of the tag selector and find the intersection of the tags
