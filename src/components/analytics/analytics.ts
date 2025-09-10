@@ -19,8 +19,9 @@ export type BaseEvent = {
   // server will enrich: device, browser, country, region
 };
 
-const INGEST_URL = "http://localhost:8788/geo";
-const APP_VERSION = "web-1.0.0";
+const INGEST_URL =
+  import.meta.env.VITE_GEO_URL || "https://campuscribs.org/geo";
+const APP_VERSION = import.meta.env.VITE_APP_VERSION || "dev";
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 export type DeviceType = "Mobile" | "Tablet" | "Desktop" | "Unknown";
 
