@@ -19,7 +19,7 @@ export type BaseEvent = {
   // server will enrich: device, browser, country, region
 };
 
-const INGEST_URL = "http://localhost:8083/analytics";
+const INGEST_URL = "http://localhost:8788/geo";
 const APP_VERSION = "web-1.0.0";
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 export type DeviceType = "Mobile" | "Tablet" | "Desktop" | "Unknown";
@@ -194,7 +194,6 @@ export function sendAnalytics(evt: BaseEvent) {
   if (!shouldSend(key)) return;
 
   const payload = JSON.stringify(evt);
-
   // sendBeacon first; only fallback to fetch if beacon definitely failed
   if (typeof navigator.sendBeacon === "function") {
     const ok = navigator.sendBeacon(
@@ -203,6 +202,7 @@ export function sendAnalytics(evt: BaseEvent) {
     );
     if (ok) return;
   }
+
   fetch(INGEST_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
