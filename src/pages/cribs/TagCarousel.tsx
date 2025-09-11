@@ -1,6 +1,7 @@
 import useEmblaCarousel from "embla-carousel-react";
 import { Badge } from "@/components/ui/badge";
 import { ResponseErrorConfig } from "@/lib/client";
+import Spinner from "@/components/ui/Spinner";
 
 type fetched_tag_string = {
   id?: string;
@@ -26,8 +27,10 @@ const Carousel = (props: Props) => {
     <div className="overflow-hidden" ref={emblaRef}>
       <div className="flex gap-2">
         {props.tag_isLoading && (
-          <div className="flex items-center justify-center w-full">
-            <span>Loading...</span>
+          <div className="flex items-center justify-center w-full pl-4">
+            <span>
+              <Spinner />
+            </span>
           </div>
         )}
         {props.tag_error ? (

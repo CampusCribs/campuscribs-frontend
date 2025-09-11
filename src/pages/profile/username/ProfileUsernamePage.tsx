@@ -70,7 +70,7 @@ const ProfileUsernamePage = () => {
       {profile && (
         <>
           <div>
-            <div className="p-5">
+            <div className="p-5 text-wrap wrap-break-word">
               {profile && profile.data.userProfile?.bio}
             </div>
             <div className="px-5 pb-5">

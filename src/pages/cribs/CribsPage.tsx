@@ -1,13 +1,15 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Dot, ListFilter, MapPin } from "lucide-react";
+import { Dot, ListFilter, MapPin, SearchX } from "lucide-react";
 import { useEffect, useState } from "react";
 import TagSelector from "./TagSelector";
 import { useInView } from "react-intersection-observer";
-
 import TagCarousel from "./TagCarousel";
 import { useNavigate } from "react-router";
 import { useGetPublicCuratedInfinite, useGetPublicTags } from "@/gen";
 import { buildImageURL } from "@/lib/image-resolver";
+
+import Lottie from "lottie-react";
+import house from "@/components/ui/houseanimation.json"; // IMPORTANT: import, don't pass a string path
 
 const CribsPage = () => {
   //variables to store the selected tags and the state of the tag selector and find the intersection of the tags
@@ -82,12 +84,31 @@ const CribsPage = () => {
             </div>
           </div>
           <div className="w-full ">
-            {curated_isLoading && <p>loading...</p>}
+            {curated_isLoading && (
+              <div className="flex w-full h-[400px] justify-center items-center ">
+                <div className="flex flex-col items-center justify-center">
+                  <Lottie
+                    animationData={house}
+                    loop
+                    autoplay
+                    style={{ width: 200, height: 200 }}
+                  />
+                  <div>loading...</div>
+                </div>
+              </div>
+            )}
             {curated_error?.response?.status !== 404 && curated_error && (
-              <p>error occured</p>
+              <div>error occured</div>
             )}
             {curated_error?.response?.status === 404 && (
-              <p>No residences found</p>
+              <div className="flex w-full h-[400px] justify-center items-center ">
+                <div className="flex flex-col">
+                  <div className="flex justify-center mb-4">
+                    <SearchX size={82} />
+                  </div>
+                  <div>No residences found</div>
+                </div>
+              </div>
             )}
             <div className="grid grid-cols-2 gap-1 w-full p-2">
               {curated &&
