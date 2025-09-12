@@ -30,17 +30,6 @@ const AuthContextProvider = ({ children }: Props) => {
   }, [authContext]);
 
   useEffect(() => {
-    return authContext.events.addAccessTokenExpiring(() => {
-      alert("Your session is about to expire. We will refresh it for you now.");
-      //   toast({
-      //     title: "Session Expiring",
-      //     description:
-      //       "Your session is about to expire. We will refresh it for you now.",
-      //   });
-    });
-  }, [authContext]);
-
-  useEffect(() => {
     return authContext.events.addUserLoaded(() => {
       navigate(location.pathname, { replace: true });
     });

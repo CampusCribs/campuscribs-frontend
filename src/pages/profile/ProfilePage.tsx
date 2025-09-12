@@ -11,11 +11,12 @@ import {
   buildImageURL,
   buildThumbnailURL,
 } from "@/lib/image-resolver";
-import { set } from "date-fns";
-import { de, is } from "date-fns/locale";
 import { ArrowRight, CirclePlus, CircleUserRound, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { LoadingProfilePage } from "./loading/LoadingComponents";
+import { is } from "date-fns/locale";
+import Error from "../error/Error";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -24,60 +25,73 @@ const ProfilePage = () => {
 
   const { data, isLoading, isError, error } = useGetUsersMe({ ...config });
 
-  const { data: profile_draft, isLoading: profile_draftLoading } =
-    useGetUsersProfile({ ...config });
+  const {
+    data: profile_draft,
+    isLoading: profile_draftLoading,
+    isError: profile_draftError,
+  } = useGetUsersProfile({ ...config });
 
   const Thumbnail = buildThumbnailURL(
     data?.data.id || "",
     data?.data.thumbnailMediaId || ""
   );
-
-  console.log("profileData", data, profile_draft);
+  if (isLoading || profile_draftLoading) {
+    return <LoadingProfilePage />;
+  }
+  if (isError || profile_draftError) {
+    return <Error />;
+  }
   return (
     <div className="flex flex-col w-full">
-      <div className="flex p-3 w-full">
-        <div className="flex rounded-full w-24 h-24 overflow-hidden">
-          {isLoading && <div>Loading...</div>}
-          {data && !data.data.thumbnailMediaId && (
-            <div className="flex justify-center items-center w-full">
-              <CircleUserRound size={80} />
+      {data && (
+        <>
+          <div className="flex p-3 w-full">
+            <div className="flex rounded-full w-24 h-24 overflow-hidden">
+              {data && !data.data.thumbnailMediaId && (
+                <div className="flex justify-center items-center w-full">
+                  <CircleUserRound size={80} />
+                </div>
+              )}
+              {data && data.data.thumbnailMediaId && (
+                <img
+                  src={Thumbnail}
+                  alt="Profile"
+                  className="object-cover w-full h-full "
+                />
+              )}
             </div>
-          )}
-          {data && data.data.thumbnailMediaId && (
-            <img
-              src={Thumbnail}
-              alt="Profile"
-              className="object-cover w-full h-full "
-            />
-          )}
-        </div>
-        <div className="flex flex-col w-3/4">
-          <div className="text-lg font-medium px-4">
-            {data?.data.firstName} {data?.data.lastName}
+            <div className="flex flex-col w-3/4">
+              <div className="text-lg font-medium px-4">
+                {data?.data.firstName} {data?.data.lastName}
+              </div>
+              <div className="px-5 font-light text-md">
+                @{data?.data.username}
+              </div>
+              <div className="text-wrap flex text-sm w-full  px-5">
+                <button
+                  className="mt-2 cursor-pointer w-full border p-2 bg-neutral-700 text-white shadow-lg rounded-xl"
+                  onClick={() => navigate("edit")}
+                >
+                  edit profile
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="px-5 font-light text-md">@{data?.data.username}</div>
-          <div className="text-wrap flex text-sm w-full  px-5">
-            <button
-              className="mt-2 cursor-pointer w-full border p-2 bg-neutral-700 text-white shadow-lg rounded-xl"
-              onClick={() => navigate("edit")}
-            >
-              edit profile
-            </button>
+          <div>
+            {isError && <div>{error?.message}</div>}
+            <div className="p-5">
+              {data?.data.bio ??
+                "Please enter a bio to finish setting up your profile!"}
+            </div>
+            <div className="px-5 pb-5">
+              <div>Email: {data?.data.email ?? "N/A"}</div>
+              <div>
+                Phone: {data?.data.phone ?? "please set your phone number"}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div>
-        {isError && <div>{error?.message}</div>}
-        {isLoading && <div>Loading...</div>}
-        <div className="p-5">
-          {data?.data.bio ??
-            "Please enter a bio to finish setting up your profile!"}
-        </div>
-        <div className="px-5 pb-5">
-          <div>Email: {data?.data.email ?? "N/A"}</div>
-          <div>Phone: {data?.data.phone ?? "please set your phone number"}</div>
-        </div>
-      </div>
+        </>
+      )}
       <div className="w-full">
         {profile_draft?.data?.postProfile && (
           <Post
@@ -110,7 +124,7 @@ const Post = ({
   const { mutateAsync: deletePost } = useDeletePosts({
     ...config,
   });
-  console.log(isPost, "isPost");
+
   const imageUrl = isPost
     ? buildImageURL(
         profile?.userProfile?.id || "",

@@ -1,5 +1,5 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Dot, ListFilter, MapPin, SearchX } from "lucide-react";
+import { CircleX, Dot, ListFilter, MapPin, SearchX } from "lucide-react";
 import { useEffect, useState } from "react";
 import TagSelector from "./TagSelector";
 import { useInView } from "react-intersection-observer";
@@ -98,7 +98,14 @@ const CribsPage = () => {
               </div>
             )}
             {curated_error?.response?.status !== 404 && curated_error && (
-              <div>error occured</div>
+              <div className="flex w-full h-[400px] justify-center items-center ">
+                <div className="flex flex-col">
+                  <div className="flex justify-center mb-4">
+                    <CircleX size={82} />
+                  </div>
+                  <div>An Error Occured</div>
+                </div>
+              </div>
             )}
             {curated_error?.response?.status === 404 && (
               <div className="flex w-full h-[400px] justify-center items-center ">

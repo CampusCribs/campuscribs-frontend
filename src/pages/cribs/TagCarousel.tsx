@@ -26,13 +26,15 @@ const Carousel = (props: Props) => {
   return (
     <div className="overflow-hidden" ref={emblaRef}>
       <div className="flex gap-2">
-        {props.tag_isLoading && (
-          <div className="flex items-center justify-center w-full pl-4">
-            <span>
-              <Spinner />
-            </span>
-          </div>
-        )}
+        {props.tag_isLoading &&
+          Array.from({ length: 10 }).map((_, index) => (
+            <Badge
+              key={index}
+              variant="outline"
+              className="cursor-pointer rounded-full px-10 py-2 animate-pulse bg-neutral-500"
+              style={{ animationDelay: `${index * 0.2}s` }}
+            ></Badge>
+          ))}
         {props.tag_error ? (
           <div className="flex items-center justify-center w-full ">
             <span>Error loading tags</span>
