@@ -154,7 +154,12 @@ const EditProfile = () => {
         </div>
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label htmlFor="bio">Bio</Label>
-          <Textarea {...register("bio")} id="bio" placeholder="bio" />
+          <Textarea
+            {...register("bio")}
+            id="bio"
+            placeholder="bio"
+            className="h-50"
+          />
           {errors.bio && (
             <p className="text-sm text-red-500">{errors.bio.message}</p>
           )}

@@ -2,6 +2,8 @@ import { useGetPublicProfileByUsername } from "@/gen";
 import { buildImageURL, buildThumbnailURL } from "@/lib/image-resolver";
 import { ArrowLeftIcon, ArrowRight, CircleUserRound } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
+import { LoadingProfilePage } from "../loading/LoadingComponents";
+import Error from "@/pages/error/Error";
 
 const ProfileUsernamePage = () => {
   const navigate = useNavigate();
@@ -24,7 +26,13 @@ const ProfileUsernamePage = () => {
     profile?.data?.postProfile?.postId || "",
     profile?.data?.postProfile?.mediaId || ""
   );
-
+  console.log("profile", profile);
+  if (profile_isLoading) {
+    return <LoadingProfilePage />;
+  }
+  if (profile_error) {
+    return <Error />;
+  }
   return (
     <div className="flex flex-col w-full">
       <div className="px-3 pt-3">
@@ -60,20 +68,10 @@ const ProfileUsernamePage = () => {
           </div>
         </div>
       </div>
-      {profile_isLoading && (
-        <div className="flex items-center justify-center w-full">
-          <span>Loading...</span>
-        </div>
-      )}
-      {profile_error && (
-        <div className="flex items-center justify-center w-full">
-          <span>Error loading profile</span>
-        </div>
-      )}
       {profile && (
         <>
           <div>
-            <div className="p-5">
+            <div className="p-5 text-wrap wrap-break-word">
               {profile && profile.data.userProfile?.bio}
             </div>
             <div className="px-5 pb-5">

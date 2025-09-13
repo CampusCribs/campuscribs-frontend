@@ -3,6 +3,8 @@ import IndividualSlider from "./IndividualSlider";
 import { useNavigate } from "react-router";
 import { useGetPublicCribPostid } from "@/gen";
 import { buildThumbnailURL } from "@/lib/image-resolver";
+import Error from "@/pages/error/Error";
+import IndividualLoading from "./IndividualLoading";
 const IndividualPage = () => {
   const navigate = useNavigate();
   //fetch images from server and pass them to the slider prop
@@ -17,6 +19,12 @@ const IndividualPage = () => {
     post?.data?.userId || "",
     post?.data?.userThumbnailId || ""
   );
+  if (post_isLoading) {
+    return <IndividualLoading />;
+  }
+  if (post_error) {
+    return <Error />;
+  }
   return (
     <div className="mb-6">
       <div
@@ -32,16 +40,7 @@ const IndividualPage = () => {
           postId={post?.data?.id || ""}
         />
       </div>
-      {post_isLoading && (
-        <div className="flex items-center justify-center w-full">
-          <span>Loading...</span>
-        </div>
-      )}
-      {post_error && (
-        <div className="flex items-center justify-center w-full ">
-          <span>Error loading post</span>
-        </div>
-      )}
+
       {post && (
         <>
           <div className="flex ">
@@ -69,7 +68,9 @@ const IndividualPage = () => {
           </div>
           <div>
             <div className="text-3xl font-semibold p-4">{post.data.title}</div>
-            <div className="text-lg px-6">{post.data.description}</div>
+            <div className="text-lg px-6 text-wrap wrap-break-word">
+              {post.data.description}
+            </div>
             <div className="text-lg px-8 py-3 flex">
               <div className="font-semibold flex mr-1">Price: </div>{" "}
               {post.data.price}

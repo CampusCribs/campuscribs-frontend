@@ -15,42 +15,45 @@ import General from "./pages/settings/general/General";
 import Notifications from "./pages/settings/notifications/Notifications";
 import Account from "./pages/settings/account/Account";
 import EditProfile from "./pages/profile/edit/EditProfile";
+import { AnalyticsProvider } from "./components/analytics/AnalyticsProvider";
 
 function App() {
   return (
     // Default font is Roboto Mono
     <div className="font-['Roboto_Mono']">
       <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<CribsPage />} />
-            <Route path="/cribs/:cribId" element={<IndividualPage />} />
-            <Route
-              path="/profile/:username"
-              element={<ProfileUsernamePage />}
-            />
-            <Route path="/support" element={<SupportPage />} />
-
-            <Route element={<ProtectedRoute />}>
-              <Route path="/settings" element={<SettingsPage />} />
-              <Route path="/settings/general" element={<General />} />
-              <Route path="/settings/account" element={<Account />} />
+        <AnalyticsProvider>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<CribsPage />} />
+              <Route path="/cribs/:cribId" element={<IndividualPage />} />
               <Route
-                path="/settings/notifications"
-                element={<Notifications />}
+                path="/profile/:username"
+                element={<ProfileUsernamePage />}
               />
-              <Route path="/profile" element={<ProfilePage />}>
-                <Route path=":username" element={<ProfileUsernamePage />} />
-              </Route>
-              <Route path="/profile/post" element={<Post />} />
-              <Route path="/profile/edit" element={<EditProfile />} />
-            </Route>
+              <Route path="/support" element={<SupportPage />} />
 
-            <Route element={<ReverseProtectedRoute />}>
-              <Route path="/login" element={<LoginPage />} />
+              <Route element={<ProtectedRoute />}>
+                <Route path="/settings" element={<SettingsPage />} />
+                <Route path="/settings/general" element={<General />} />
+                <Route path="/settings/account" element={<Account />} />
+                <Route
+                  path="/settings/notifications"
+                  element={<Notifications />}
+                />
+                <Route path="/profile" element={<ProfilePage />}>
+                  <Route path=":username" element={<ProfileUsernamePage />} />
+                </Route>
+                <Route path="/profile/post" element={<Post />} />
+                <Route path="/profile/edit" element={<EditProfile />} />
+              </Route>
+
+              <Route element={<ReverseProtectedRoute />}>
+                <Route path="/login" element={<LoginPage />} />
+              </Route>
             </Route>
-          </Route>
-        </Routes>
+          </Routes>
+        </AnalyticsProvider>
       </BrowserRouter>
     </div>
   );
