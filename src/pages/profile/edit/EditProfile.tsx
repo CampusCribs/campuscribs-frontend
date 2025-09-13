@@ -147,7 +147,13 @@ const EditProfile = () => {
         </div>
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label htmlFor="email">Email</Label>
-          <Input {...register("email")} id="email" placeholder="Email" />
+          <Input
+            {...register("email")}
+            id="email"
+            placeholder="Email"
+            value={userData?.data.email || ""}
+            disabled
+          />
           {errors.email && (
             <p className="text-sm text-red-500">{errors.email.message}</p>
           )}
