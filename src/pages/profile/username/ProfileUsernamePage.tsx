@@ -26,7 +26,6 @@ const ProfileUsernamePage = () => {
     profile?.data?.postProfile?.postId || "",
     profile?.data?.postProfile?.mediaId || ""
   );
-  console.log("profile", profile);
   if (profile_isLoading) {
     return <LoadingProfilePage />;
   }
@@ -42,7 +41,6 @@ const ProfileUsernamePage = () => {
       </div>
       <div className="flex p-3 w-full">
         <div className="flex rounded-full w-24 h-24 overflow-hidden">
-          {thumbnailUrl == null && <div>Loading...</div>}
           {profile && !profile.data.userProfile?.thumbnailMediaId && (
             <div className="flex justify-center items-center w-full">
               <CircleUserRound size={80} />

@@ -5,7 +5,7 @@ import TagSelector from "./TagSelector";
 import { useInView } from "react-intersection-observer";
 import TagCarousel from "./TagCarousel";
 import { useNavigate } from "react-router";
-import { useGetPublicTags } from "@/gen";
+import { useGetPublicCuratedInfinite, useGetPublicTags } from "@/gen";
 import { buildImageURL } from "@/lib/image-resolver";
 
 import Lottie from "lottie-react";
@@ -25,18 +25,22 @@ const CribsPage = () => {
   }, []);
 
   const {
+    data: curated,
+    error: curated_error,
+    isLoading: curated_isLoading,
+  } = useGetPublicCuratedInfinite({
+    page: 0,
+    size: 10,
+    sort: ["createdAt,desc"],
+    tag: selectedTags,
+  });
+
+  const {
     data: tags,
     error: tags_error,
     isLoading: tags_isLoading,
   } = useGetPublicTags({});
 
-  const {
-    data: curated,
-    fetchNextPage,
-    isFetchingNextPage,
-    isLoading: curated_isLoading,
-    error: curated_error,
-  } = useCuratedInfiniteQuery(selectedTags);
   const handleTagClick = (tag: string) => {
     setSelectedTags((prevTags) =>
       prevTags.includes(tag)
@@ -47,7 +51,7 @@ const CribsPage = () => {
 
   useEffect(() => {
     if (inView) {
-      fetchNextPage();
+      // call the generated function
     }
   }, [inView]);
   return (
@@ -130,11 +134,6 @@ const CribsPage = () => {
             </div>
           </div>
           <div />
-          {isFetchingNextPage && (
-            <div className="flex justify-center items-center p-4">
-              <p>Loading more residences...</p>
-            </div>
-          )}
           <div ref={ref} />
         </div>
         <TagSelector
@@ -208,26 +207,23 @@ const Welcome = ({
   return (
     <>
       <div className="fixed inset-0 opacity-50 bg-black flex items-center justify-center z-50" />
-      <div className=" mx-auto">
-        <div className=" fixed inset-0 flex items-center justify-center z-50 border ">
-          <div className=" max-w-[550px] bg-white z-50 py-20 p-6 rounded-lg shadow-lg text-center mx-10">
-            <h2 className="text-2xl font-bold ">Welcome to Campus Cribs!</h2>
-            <p className="mb-4">By Students for Students</p>
-            <p className="mb-1">Explore the best residences in Cincinnati.</p>
-            <p className="mb-6">
-              This application is in beta, so please be patient with us as we
-              work to improve it.
-            </p>
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600 transition-colors"
-              onClick={() => {
-                localStorage.setItem("firstVisit", "false");
-                setOpenWelcome(false);
-              }}
-            >
-              Start Exploring
-            </button>
-          </div>
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className=" bg-white z-50 py-20 p-6 rounded-lg shadow-lg text-center mx-10">
+          <h2 className="text-2xl font-bold mb-4">Welcome to Campus Cribs!</h2>
+          <p className="mb-4">Explore the best residences in Cincinnati.</p>
+          <p className="mb-6">
+            This application is in beta, so please be patient with us as we work
+            to improve it.
+          </p>
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600 transition-colors"
+            onClick={() => {
+              localStorage.setItem("firstVisit", "false");
+              setOpenWelcome(false);
+            }}
+          >
+            Start Exploring
+          </button>
         </div>
       </div>
     </>

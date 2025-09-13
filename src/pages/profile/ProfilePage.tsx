@@ -15,7 +15,6 @@ import { ArrowRight, CirclePlus, CircleUserRound, X } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { LoadingProfilePage } from "./loading/LoadingComponents";
-import { is } from "date-fns/locale";
 import Error from "../error/Error";
 
 const ProfilePage = () => {
@@ -36,7 +35,12 @@ const ProfilePage = () => {
     data?.data.thumbnailMediaId || ""
   );
 
-  console.log("profileData", data, profile_draft);
+  if (isLoading || profile_draftLoading) {
+    return <LoadingProfilePage />;
+  }
+  if (isError) {
+    return <Error />;
+  }
   return (
     <div className="flex flex-col w-full">
       {data && (
