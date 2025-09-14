@@ -3,7 +3,7 @@ interface Env {
 }
 
 export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
-  env.ANALYTICS_URL = "http://localhost:8083/analytics";
+  env.ANALYTICS_URL = "https://analytics.campuscribs.org/analytics";
   const cf: any = (request as any).cf ?? {};
   const country = cf.country ?? null;
   const region = (cf.region ?? cf.regionCode ?? null) as string | null;
