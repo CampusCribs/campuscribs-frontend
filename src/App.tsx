@@ -20,7 +20,7 @@ import { AnalyticsProvider } from "./components/analytics/AnalyticsProvider";
 function App() {
   return (
     // Default font is Roboto Mono
-    <div className="font-['Roboto_Mono']">
+    <div className="font-['Inter']">
       <BrowserRouter>
         <AnalyticsProvider>
           <Routes>

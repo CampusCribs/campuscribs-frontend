@@ -1,5 +1,15 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { CircleX, Dot, ListFilter, MapPin, SearchX } from "lucide-react";
+import {
+  BadgeAlert,
+  CircleX,
+  Dot,
+  ListFilter,
+  MapPin,
+  SearchX,
+  ShieldCheck,
+  ShieldOff,
+  Verified,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import TagSelector from "./TagSelector";
 import { useInView } from "react-intersection-observer";
@@ -7,7 +17,7 @@ import TagCarousel from "./TagCarousel";
 import { useNavigate } from "react-router";
 import { useGetPublicCuratedInfinite, useGetPublicTags } from "@/gen";
 import { buildImageURL } from "@/lib/image-resolver";
-
+import UcLogo from "@/components/ui/UC-Logo.webp";
 import Lottie from "lottie-react";
 import house from "@/components/ui/houseanimation.json"; // IMPORTANT: import, don't pass a string path
 
@@ -48,7 +58,7 @@ const CribsPage = () => {
         : [...prevTags, tag]
     );
   };
-
+  console.log(curated);
   useEffect(() => {
     if (inView) {
       // call the generated function
@@ -128,6 +138,9 @@ const CribsPage = () => {
                       id={residence.id || ""}
                       price={residence.price || 0}
                       location="CUF"
+                      name={residence.name || ""}
+                      iconKey={residence.iconKey || ""}
+                      ableToUse={residence.ableToUse || false}
                     />
                   ))
                 )}
@@ -160,15 +173,22 @@ const ResidenceCard = ({
   id,
   price,
   location,
+  name,
+  iconKey,
+  ableToUse,
 }: {
   userId: string;
   thumbnail: string;
   id: string;
   price: number;
   location: string;
+  name: string;
+  iconKey: string;
+  ableToUse: boolean;
 }) => {
   const navigate = useNavigate();
   thumbnail = buildImageURL(userId, id, thumbnail);
+
   return (
     <Card
       className="rounded-none  shadow-none m-0 w-full border-none cursor-pointer p-1"
@@ -184,14 +204,47 @@ const ResidenceCard = ({
       </CardContent>
       <CardFooter className="p-0 m-0 w-full px-4 py-2">
         <div className="flex justify-between  w-full ">
-          <div className="flex ">
-            <div className="text-md font-bold">${price}</div>
+          <div className="flex items-center">
+            <div className="flex ">
+              <div className="text-md font-bold">${price}</div>
+            </div>
+            <div className="flex justify-center  items-center">
+              <Dot width={24} height={24} />
+            </div>
+            <div className="flex w-full ">
+              <div className="text-md font-bold">{location}</div>
+            </div>
           </div>
-          <div className="flex justify-center  items-center">
-            <Dot width={24} height={24} />
-          </div>
-          <div className="flex w-full ">
-            <div className="text-md font-bold">{location}</div>
+          <div className="flex items-center flex-row-reverse mr-5 w-full">
+            {ableToUse && iconKey != "" && (
+              <div className="relative group">
+                <div className="absolute left-1/2 bottom-full translate-x-[-50%] mb-2 flex-col items-center group-hover:flex hidden ">
+                  <div className=" z-20 p-2 bg-white text-center rounded shadow text-sm">
+                    Student at the {name}
+                  </div>
+                </div>
+                <img title="UC Logo" className="w-10" src={UcLogo} />
+              </div>
+            )}
+            {!ableToUse && iconKey != "" ? (
+              <div className="relative group">
+                <div className="absolute left-1/2 bottom-full translate-x-[-50%] mb-2 flex-col items-center group-hover:flex hidden ">
+                  <div className=" z-20 p-2 bg-white text-center rounded shadow text-sm">
+                    Student at the {name}
+                  </div>
+                </div>
+                <ShieldCheck />
+              </div>
+            ) : (
+              <div className="relative group">
+                <div className="absolute left-1/2 bottom-full translate-x-[-50%] mb-2 flex-col items-center group-hover:flex hidden ">
+                  <div className=" z-20 p-2 bg-white text-center rounded shadow text-sm">
+                    Not verified
+                  </div>
+                </div>
+                <ShieldOff />
+              </div>
+            )}
           </div>
         </div>
       </CardFooter>
@@ -208,12 +261,15 @@ const Welcome = ({
     <>
       <div className="fixed inset-0 opacity-50 bg-black flex items-center justify-center z-50" />
       <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className=" bg-white z-50 py-20 p-6 rounded-lg shadow-lg text-center mx-10">
+        <div className=" bg-white z-50 rounded-2xl py-10 p-6  shadow-lg text-center mx-10">
           <h2 className="text-2xl font-bold mb-4">Welcome to Campus Cribs!</h2>
-          <p className="mb-4">Explore the best residences in Cincinnati.</p>
+          <p className="mb-4">Find subleases from fellow students</p>
           <p className="mb-6">
-            This application is in beta, so please be patient with us as we work
-            to improve it.
+            {" "}
+            Discover affordable subleases from fellow students, post your own
+            listing, and connect with a trusted community right here at UC.
+            CampusCribs makes it simple, secure, and student-friendly to find
+            your next home near campus.
           </p>
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600 transition-colors"

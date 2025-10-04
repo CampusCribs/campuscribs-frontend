@@ -105,6 +105,12 @@ paths:
                           type: string
                         price:
                           type: number
+                        iconKey:
+                          tye: string
+                        name:
+                          type: string
+                        ableToUse:
+                          type: boolean
                   pageable:
                     type: object
                   totalPages:
