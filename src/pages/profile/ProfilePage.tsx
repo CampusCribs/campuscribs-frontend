@@ -45,7 +45,7 @@ const ProfilePage = () => {
     <div className="flex flex-col w-full">
       {data && (
         <>
-          <div className="flex p-3 w-full">
+          <div className="flex px-3 pt-3 w-full">
             <div className="flex rounded-full w-24 h-24 overflow-hidden">
               {data && !data.data.thumbnailMediaId && (
                 <div className="flex justify-center items-center w-full">
@@ -67,15 +67,22 @@ const ProfilePage = () => {
               <div className="px-5 font-light text-md">
                 @{data?.data.username}
               </div>
-              <div className="text-wrap flex text-sm w-full  px-5">
-                <button
-                  className="mt-2 cursor-pointer w-full border p-2 bg-neutral-700 text-white shadow-lg rounded-xl"
-                  onClick={() => navigate("edit")}
-                >
-                  edit profile
-                </button>
+              <div className="text-wrap flex text-sm w-full mt-1 px-4">
+                {profile_draft?.data?.userProfile?.institutionName && (
+                  <div className="text-sm font-medium">
+                    {profile_draft.data.userProfile.institutionName}
+                  </div>
+                )}
               </div>
             </div>
+          </div>
+          <div className="text-wrap flex text-sm w-full  px-5">
+            <button
+              className="mt-2 cursor-pointer w-full border p-2 bg-neutral-700 text-white shadow-lg rounded-xl"
+              onClick={() => navigate("edit")}
+            >
+              edit profile
+            </button>
           </div>
           <div>
             {isError && <div>{error?.message}</div>}

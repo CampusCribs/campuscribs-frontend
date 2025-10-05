@@ -1,6 +1,5 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
-  BadgeAlert,
   CircleX,
   Dot,
   ListFilter,
@@ -8,7 +7,6 @@ import {
   SearchX,
   ShieldCheck,
   ShieldOff,
-  Verified,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import TagSelector from "./TagSelector";
@@ -17,7 +15,7 @@ import TagCarousel from "./TagCarousel";
 import { useNavigate } from "react-router";
 import { useGetPublicCuratedInfinite, useGetPublicTags } from "@/gen";
 import { buildImageURL } from "@/lib/image-resolver";
-import UcLogo from "@/components/ui/UC-Logo.webp";
+
 import Lottie from "lottie-react";
 import house from "@/components/ui/houseanimation.json"; // IMPORTANT: import, don't pass a string path
 

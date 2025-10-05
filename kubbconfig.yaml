@@ -536,6 +536,8 @@ paths:
                       id:
                         type: string
                         format: uuid
+                      institutionName:
+                        type: string
   /posts:
     delete:
       tags:

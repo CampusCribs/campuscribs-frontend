@@ -21,6 +21,7 @@ const ProfileUsernamePage = () => {
           profile?.data?.userProfile?.thumbnailMediaId || ""
         )
       : null;
+      
   const postThumbnailUrl = buildImageURL(
     profile?.data?.userProfile?.id || "",
     profile?.data?.postProfile?.postId || "",
