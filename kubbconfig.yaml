@@ -325,6 +325,8 @@ paths:
                       id:
                         type: string
                         format: uuid
+                      institutionName:
+                        type: string
   #Put to update user profile
   /users/update:
     put:

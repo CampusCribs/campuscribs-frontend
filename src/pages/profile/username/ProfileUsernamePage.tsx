@@ -21,12 +21,38 @@ const ProfileUsernamePage = () => {
           profile?.data?.userProfile?.thumbnailMediaId || ""
         )
       : null;
-      
+
   const postThumbnailUrl = buildImageURL(
     profile?.data?.userProfile?.id || "",
     profile?.data?.postProfile?.postId || "",
     profile?.data?.postProfile?.mediaId || ""
   );
+  function formatPhoneNumber(phoneNumber: string | undefined): string {
+    if (!phoneNumber) return "";
+
+    // strip all non-digits
+    const cleaned = phoneNumber.replace(/\D/g, "");
+
+    // handle 10-digit US numbers
+    if (cleaned.length === 10) {
+      const area = cleaned.slice(0, 3);
+      const middle = cleaned.slice(3, 6);
+      const last = cleaned.slice(6);
+      return `(${area}) ${middle}-${last}`;
+    }
+
+    // handle 11-digit with leading "1"
+    if (cleaned.length === 11 && cleaned.startsWith("1")) {
+      const area = cleaned.slice(1, 4);
+      const middle = cleaned.slice(4, 7);
+      const last = cleaned.slice(7);
+      return `+1 (${area}) ${middle}-${last}`;
+    }
+
+    // fallback: just return original string
+    return phoneNumber;
+  }
+  console.log(profile);
   if (profile_isLoading) {
     return <LoadingProfilePage />;
   }
@@ -65,17 +91,35 @@ const ProfileUsernamePage = () => {
           <div className="px-5 font-light text-md">
             {profile && "@" + username}
           </div>
+          <div className="text-wrap flex text-sm w-full mt-1 px-4">
+            {profile?.data?.userProfile?.institutionName && (
+              <div className="text-sm font-medium">
+                {profile.data.userProfile.institutionName}
+              </div>
+            )}
+          </div>
         </div>
       </div>
       {profile && (
         <>
           <div>
-            <div className="p-5 text-wrap wrap-break-word">
+            <div className="px-5 pb-5 text-wrap wrap-break-word">
               {profile && profile.data.userProfile?.bio}
             </div>
-            <div className="px-5 pb-5">
-              <div>{profile && profile.data.userProfile?.email}</div>
-              <div>{profile && profile.data.userProfile?.phone}</div>
+            <div className="px-5 pb-5 underline">
+              <div>
+                <a
+                  href={`mailto:${profile && profile.data.userProfile?.email}`}
+                >
+                  {profile && profile.data.userProfile?.email}
+                </a>
+              </div>
+              <div>
+                <a href={`tel:${profile && profile.data.userProfile?.phone}`}>
+                  {profile &&
+                    formatPhoneNumber(profile.data.userProfile?.phone)}
+                </a>
+              </div>
             </div>
           </div>
           <div className=" mx-5 mb-10 rounded-xl border">

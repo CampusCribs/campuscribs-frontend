@@ -34,7 +34,31 @@ const ProfilePage = () => {
     data?.data.id || "",
     data?.data.thumbnailMediaId || ""
   );
+  function formatPhoneNumber(phoneNumber: string | undefined): string {
+    if (!phoneNumber) return "";
 
+    // strip all non-digits
+    const cleaned = phoneNumber.replace(/\D/g, "");
+
+    // handle 10-digit US numbers
+    if (cleaned.length === 10) {
+      const area = cleaned.slice(0, 3);
+      const middle = cleaned.slice(3, 6);
+      const last = cleaned.slice(6);
+      return `(${area}) ${middle}-${last}`;
+    }
+
+    // handle 11-digit with leading "1"
+    if (cleaned.length === 11 && cleaned.startsWith("1")) {
+      const area = cleaned.slice(1, 4);
+      const middle = cleaned.slice(4, 7);
+      const last = cleaned.slice(7);
+      return `+1 (${area}) ${middle}-${last}`;
+    }
+
+    // fallback: just return original string
+    return phoneNumber;
+  }
   if (isLoading || profile_draftLoading) {
     return <LoadingProfilePage />;
   }
@@ -86,14 +110,16 @@ const ProfilePage = () => {
           </div>
           <div>
             {isError && <div>{error?.message}</div>}
-            <div className="p-5">
+            <div className="p-5 ">
               {data?.data.bio ??
                 "Please enter a bio to finish setting up your profile!"}
             </div>
-            <div className="px-5 pb-5">
-              <div>Email: {data?.data.email ?? "N/A"}</div>
+            <div className="px-5 pb-5 underline">
+              <div> {data?.data.email ?? "N/A"}</div>
               <div>
-                Phone: {data?.data.phone ?? "please set your phone number"}
+                {data?.data.phone
+                  ? formatPhoneNumber(data.data.phone)
+                  : "please set your phone number"}
               </div>
             </div>
           </div>
@@ -103,7 +129,7 @@ const ProfilePage = () => {
         {profile_draft?.data?.postProfile && (
           <Post
             profile={profile_draft.data}
-            isPost={profile_draft.data.postProfile.post}
+            isPost={profile_draft.data.postProfile.post !== undefined}
           />
         )}
         {!profile_draft?.data?.postProfile?.title && (
