@@ -16,6 +16,7 @@ import Notifications from "./pages/settings/notifications/Notifications";
 import Account from "./pages/settings/account/Account";
 import EditProfile from "./pages/profile/edit/EditProfile";
 import { AnalyticsProvider } from "./components/analytics/AnalyticsProvider";
+import GiveAway from "./pages/giveaway/GiveAway";
 
 function App() {
   return (
@@ -51,6 +52,9 @@ function App() {
               <Route element={<ReverseProtectedRoute />}>
                 <Route path="/login" element={<LoginPage />} />
               </Route>
+            </Route>
+            <Route element={<ReverseProtectedRoute />}>
+              <Route path="/contest" element={<GiveAway />} />
             </Route>
           </Routes>
         </AnalyticsProvider>
