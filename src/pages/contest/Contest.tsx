@@ -6,7 +6,7 @@ import { useNavigate } from "react-router";
 // Tailwind is assumed. All components are accessible and mobile-first.
 // Replace the placeholder handlers (onSubmit, onCTA) with your app routes/APIs.
 
-export default function GiveAway() {
+export default function Contest() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
@@ -134,14 +134,13 @@ export default function GiveAway() {
                   CampusCribs Halloween Showcase
                 </p>
               </div>
-              <div className="mt-4 h-48 rounded-2xl bg-[linear-gradient(135deg,_#FFEDD5,_#FFF7ED)] border border-amber-200 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-amber-700 font-semibold">
-                    Post your decorated listing
-                  </div>
-                  <div className="text-slate-600 text-sm">
-                    photos, lights, pumpkins 🎃
-                  </div>
+              <div className="mt-4 h-auto rounded-2xl bg-[linear-gradient(135deg,_#FFEDD5,_#FFF7ED)] border border-amber-200 flex items-center justify-center">
+                <div className="w-full h-full flex items-center justify-center">
+                  <img
+                    src="/image.png"
+                    alt="Halloween decorated house"
+                    className="max-w-full max-h-full object-contain"
+                  />
                 </div>
               </div>
               <ul className="mt-5 text-sm text-slate-600 space-y-2">
