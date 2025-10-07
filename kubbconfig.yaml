@@ -540,6 +540,58 @@ paths:
                         format: uuid
                       institutionName:
                         type: string
+
+        "210":
+          description: Successful response with combined post and user profile but post is empty
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  postProfile:
+                    type: object
+                    properties:
+                      postId:
+                        type: string
+                        format: uuid
+                      description:
+                        type: string
+                      roommates:
+                        type: integer
+                      price:
+                        type: number
+                      title:
+                        type: string
+                      mediaId:
+                        type: string
+                        format: uuid
+                      post:
+                        type: boolean
+                        format: boolean
+                  userProfile:
+                    type: object
+                    properties:
+                      firstName:
+                        type: string
+                      lastName:
+                        type: string
+                      username:
+                        type: string
+                      thumbnailMediaId:
+                        type: string
+                        format: uuid
+                      bio:
+                        type: string
+                      email:
+                        type: string
+                        format: email
+                      phone:
+                        type: string
+                      id:
+                        type: string
+                        format: uuid
+                      institutionName:
+                        type: string
   /posts:
     delete:
       tags:

@@ -34,6 +34,8 @@ const ProfilePage = () => {
     data?.data.id || "",
     data?.data.thumbnailMediaId || ""
   );
+
+  console.log(profile_draft, "profile_draft");
   function formatPhoneNumber(phoneNumber: string | undefined): string {
     if (!phoneNumber) return "";
 
@@ -129,7 +131,7 @@ const ProfilePage = () => {
         {profile_draft?.data?.postProfile && (
           <Post
             profile={profile_draft.data}
-            isPost={profile_draft.data.postProfile.post !== undefined}
+            isPost={profile_draft.data.postProfile.post}
           />
         )}
         {!profile_draft?.data?.postProfile?.title && (
@@ -202,9 +204,12 @@ const Post = ({
         )}
       </div>
       {!isPost && (
-        <div className="flex justify-end p-3">
+        <div className="flex  p-3 items-center ">
           <div>Please wait for post to be verified </div>
-          <Button className="cursor-pointer" onClick={() => navigate("post")}>
+          <Button
+            className=" ml-auto cursor-pointer"
+            onClick={() => navigate("post")}
+          >
             Edit Post
           </Button>
         </div>
