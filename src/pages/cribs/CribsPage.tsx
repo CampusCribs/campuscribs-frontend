@@ -56,7 +56,7 @@ const CribsPage = () => {
         : [...prevTags, tag]
     );
   };
-  console.log(curated);
+
   useEffect(() => {
     if (inView) {
       // call the generated function

@@ -1,5 +1,6 @@
 import {
   CircleUserRound,
+  Ghost,
   Info,
   LogIn,
   LogOut,
@@ -116,6 +117,15 @@ const Footer = () => {
                     <div className="cursor-pointer">Logout</div>
                   </div>
                 ) : null}
+                <div
+                  className="flex flex-row mx-4 my-4  text-left text-orange-400"
+                  onClick={() => navigate("/contest")}
+                >
+                  <div className="mr-2 cursor-pointer">
+                    <Ghost />
+                  </div>
+                  <div className="cursor-pointer">Halloween Contest</div>
+                </div>
               </div>
             </motion.div>
           )}

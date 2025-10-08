@@ -35,7 +35,6 @@ const ProfilePage = () => {
     data?.data.thumbnailMediaId || ""
   );
 
-  console.log(profile_draft, "profile_draft");
   function formatPhoneNumber(phoneNumber: string | undefined): string {
     if (!phoneNumber) return "";
 
@@ -159,7 +158,7 @@ const Post = ({
   const { mutateAsync: deletePost } = useDeletePosts({
     ...config,
   });
-  console.log(isPost, "isPost");
+
   const imageUrl = isPost
     ? buildImageURL(
         profile?.userProfile?.id || "",

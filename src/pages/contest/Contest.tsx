@@ -85,7 +85,7 @@ export default function Contest() {
               Win <span className="text-amber-600">$75</span> this Halloween
             </h1>
             <p className="mt-4 text-slate-600 text-lg leading-relaxed">
-              Join our campus-wide giveaway for student subletters. Enter your
+              Join our campus-wide contest for student subletters. Enter your
               info and show off your Halloween-decorated listing on CampusCribs
               for a chance to win.
             </p>
@@ -203,8 +203,8 @@ export default function Contest() {
             </div>
           </div>
           <p className="mt-6 text-sm text-slate-500">
-            No purchase necessary. One entry per student account. Winner chosen
-            at random from eligible entries.
+            No purchase necessary. One entry per student account. Student with
+            the best decorated house will be chosen as the winner.
           </p>
         </div>
       </section>

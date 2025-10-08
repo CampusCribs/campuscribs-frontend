@@ -52,7 +52,7 @@ const ProfileUsernamePage = () => {
     // fallback: just return original string
     return phoneNumber;
   }
-  console.log(profile);
+
   if (profile_isLoading) {
     return <LoadingProfilePage />;
   }

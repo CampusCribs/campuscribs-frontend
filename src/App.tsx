@@ -20,7 +20,7 @@ import Contest from "./pages/contest/Contest";
 
 function App() {
   return (
-    // Default font is Roboto Mono
+    // Default font is Inter
     <div className="font-['Inter']">
       <BrowserRouter>
         <AnalyticsProvider>
@@ -53,9 +53,8 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
               </Route>
             </Route>
-            <Route element={<ReverseProtectedRoute />}>
-              <Route path="/contest" element={<Contest />} />
-            </Route>
+
+            <Route path="/contest" element={<Contest />} />
           </Routes>
         </AnalyticsProvider>
       </BrowserRouter>
