@@ -137,7 +137,10 @@ export default function Contest() {
               <div className="mt-4 h-auto rounded-2xl bg-[linear-gradient(135deg,_#FFEDD5,_#FFF7ED)] border border-amber-200 flex items-center justify-center">
                 <div className="w-full h-full flex items-center justify-center">
                   <img
-                    src="/image.png"
+                    src={
+                      import.meta.env.VITE_MINIO_FRONTEND_MEDIA_ENDPOINT +
+                      "/HauntedHouse.png"
+                    }
                     alt="Halloween decorated house"
                     className="max-w-full max-h-full object-contain"
                   />

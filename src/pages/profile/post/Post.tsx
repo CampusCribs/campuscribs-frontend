@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import React, { useEffect, useState } from "react";
 import CalendarComponent from "./CalendarComponent";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeftIcon, X } from "lucide-react";
+import { ArrowLeftIcon, Tag, X } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { postSchema, PostSchema } from "@/lib/schema/schema";
@@ -144,6 +144,7 @@ const Post = () => {
     e.target.value = "";
   };
 
+  console.log(tags);
   useEffect(() => {
     if (postDraft && tags?.data) {
       reset({
@@ -288,21 +289,13 @@ const Post = () => {
           <div className="border border-black rounded-2xl p-3 gap-x-1 gap-y-3 flex flex-wrap">
             {tags_error && <p className="text-red-500">Error loading tags</p>}
             {tags_isLoading && <p className="text-gray-500">Loading tags...</p>}
-            {tags &&
-              tags.data.map((tag) => (
-                <Badge
-                  className={`cursor-pointer rounded-full `}
-                  variant={
-                    selectedTags.find((t) => t.id === tag.id)
-                      ? "default"
-                      : "outline"
-                  }
-                  key={tag.id}
-                  onClick={() => handleTagClick(tag)}
-                >
-                  {tag.name}
-                </Badge>
-              ))}
+            {tags && (
+              <TagComponent
+                tags={tags.data}
+                selectedTags={selectedTags}
+                onTagClick={handleTagClick}
+              />
+            )}
           </div>
         </div>
         <div className="w-full">
@@ -364,6 +357,106 @@ const Post = () => {
           </div>
         </div>
       </form>
+    </div>
+  );
+};
+
+const TagComponent = ({
+  tags,
+  selectedTags,
+  onTagClick,
+}: {
+  tags: postTag[];
+  selectedTags: postTag[];
+  onTagClick: (tag: postTag) => void;
+}) => {
+  return (
+    <div className="flex flex-wrap p-4">
+      <div className="w-1/2 my-2">
+        <div className="text-lg font-semibold">Property Types</div>
+        {(tags ?? [])
+          .filter((tag): tag is { name: string; tagCategoryId: string } =>
+            Boolean(tag?.name && tag.tagCategoryId === "property")
+          )
+          .map((tag) => (
+            <Badge
+              key={tag.name}
+              className="cursor-pointer rounded-full"
+              variant={selectedTags.includes(tag) ? "default" : "outline"}
+              onClick={() => onTagClick(tag)}
+            >
+              {tag.name}
+            </Badge>
+          ))}
+      </div>
+      <div className="w-1/2 my-2">
+        <div className="text-lg font-semibold">Lease Types</div>
+        {(tags ?? [])
+          .filter((tag): tag is { name: string; tagCategoryId: string } =>
+            Boolean(tag?.name && tag.tagCategoryId === "lease")
+          )
+          .map((tag) => (
+            <Badge
+              key={tag.name}
+              className="cursor-pointer rounded-full"
+              variant={selectedTags.includes(tag) ? "default" : "outline"}
+              onClick={() => onTagClick(tag)}
+            >
+              {tag.name}
+            </Badge>
+          ))}
+      </div>
+      <div className="w-1/2 my-2">
+        <div className="text-lg font-semibold">Room Types</div>
+        {(tags ?? [])
+          .filter((tag): tag is { name: string; tagCategoryId: string } =>
+            Boolean(tag?.name && tag.tagCategoryId === "room")
+          )
+          .map((tag) => (
+            <Badge
+              key={tag.name}
+              className="cursor-pointer rounded-full"
+              variant={selectedTags.includes(tag) ? "default" : "outline"}
+              onClick={() => onTagClick(tag)}
+            >
+              {tag.name}
+            </Badge>
+          ))}
+      </div>
+      <div className="w-1/2 my-2">
+        <div className="text-lg font-semibold">Preferences</div>
+        {(tags ?? [])
+          .filter((tag): tag is { name: string; tagCategoryId: string } =>
+            Boolean(tag?.name && tag.tagCategoryId === "preferences")
+          )
+          .map((tag) => (
+            <Badge
+              key={tag.name}
+              className="cursor-pointer rounded-full"
+              variant={selectedTags.includes(tag) ? "default" : "outline"}
+              onClick={() => onTagClick(tag)}
+            >
+              {tag.name}
+            </Badge>
+          ))}
+      </div>
+      <div className="w-1/2 my-2">
+        <div className="text-lg font-semibold">Amenities</div>
+        {(tags ?? [])
+          .filter((tag): tag is { name: string; tagCategoryId: string } =>
+            Boolean(tag?.name && tag.tagCategoryId === "amenities")
+          )
+          .map((tag) => (
+            <Badge
+              key={tag.name}
+              className="cursor-pointer rounded-full"
+              variant={selectedTags.includes(tag) ? "default" : "outline"}
+              onClick={() => onTagClick(tag)}
+            >
+              {tag.name}
+            </Badge>
+          ))}
+      </div>
     </div>
   );
 };

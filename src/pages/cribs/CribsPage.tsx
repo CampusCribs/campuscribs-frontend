@@ -56,7 +56,7 @@ const CribsPage = () => {
         : [...prevTags, tag]
     );
   };
-
+  console.log(curated);
   useEffect(() => {
     if (inView) {
       // call the generated function
@@ -214,17 +214,20 @@ const ResidenceCard = ({
             </div>
           </div>
           <div className="flex items-center flex-row-reverse mr-5 w-full">
-            {ableToUse && iconKey != "" && (
+            {ableToUse && iconKey != "" ? (
               <div className="relative group">
                 <div className="absolute left-1/2 bottom-full translate-x-[-50%] mb-2 flex-col items-center group-hover:flex hidden ">
                   <div className=" z-20 p-2 bg-white text-center rounded shadow text-sm">
                     Student at the {name}
                   </div>
                 </div>
-                <img title="UC Logo" className="w-10" src={UcLogo} />
+                <img
+                  title="UC Logo"
+                  className="w-10"
+                  src={import.meta.env.VITE_SCHOOL_LOGO + iconKey}
+                />
               </div>
-            )}
-            {!ableToUse && iconKey != "" ? (
+            ) : !ableToUse && iconKey != "" ? (
               <div className="relative group">
                 <div className="absolute left-1/2 bottom-full translate-x-[-50%] mb-2 flex-col items-center group-hover:flex hidden ">
                   <div className=" z-20 p-2 bg-white text-center rounded shadow text-sm">
