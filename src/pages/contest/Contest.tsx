@@ -82,7 +82,7 @@ export default function Contest() {
               Halloween Contest — Limited Time
             </div>
             <h1 className="mt-4 text-4xl md:text-5xl font-extrabold tracking-tight">
-              Win <span className="text-amber-600">$75</span> this Halloween
+              Win <span className="text-amber-600">$100</span> this Halloween
             </h1>
             <p className="mt-4 text-slate-600 text-lg leading-relaxed">
               Join our campus-wide contest for student subletters. Enter your
@@ -98,7 +98,7 @@ export default function Contest() {
               </button>
               <div className="flex items-center text-sm text-slate-500">
                 <Gift className="h-4 w-4 mr-2" aria-hidden />
-                Prize: $75 gift card
+                Prize: $100 gift card
               </div>
             </div>
             <ul className="mt-6 space-y-2 text-sm text-slate-600" id="how">
@@ -159,7 +159,7 @@ export default function Contest() {
                     className="h-5 w-5 text-emerald-600"
                     aria-hidden
                   />
-                  Eligible for $75 contest
+                  Eligible for $100 contest
                 </li>
                 <li className="flex gap-2">
                   <CheckCircle2
@@ -217,7 +217,7 @@ export default function Contest() {
         <div className="mx-auto max-w-3xl px-4">
           <div className="rounded-3xl border border-slate-200 bg-white shadow-xl p-6 md:p-8">
             <h3 className="text-xl md:text-2xl font-bold tracking-tight">
-              Enter the $75 Halloween Contest
+              Enter the $100 Halloween Contest
             </h3>
             <p className="mt-2 text-slate-600">
               We’ll use your info to verify your entry and contact you if you
