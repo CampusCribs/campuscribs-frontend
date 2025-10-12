@@ -59,11 +59,20 @@ const IndividualPage = () => {
               </div>
             )}
 
-            <div className="flex flex-col justify-center w-full mx-7">
-              <div className="font-semibold text-xl">
-                {post.data.firstName + " " + post.data.lastName}{" "}
+            <div className="flex flex-col w-3/4">
+              <div className="text-lg font-medium px-4">
+                {post?.data.firstName} {post?.data.lastName}
               </div>
-              <div className="border-b pb-2 w-full">@{post.data.username}</div>
+              <div className="px-5 font-light text-md">
+                @{post?.data.username}
+              </div>
+              <div className="text-wrap flex text-sm w-full mt-1 px-4 border-b pb-3">
+                {post?.data?.institutionName && (
+                  <div className="text-sm font-medium">
+                    {post.data.institutionName}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div>

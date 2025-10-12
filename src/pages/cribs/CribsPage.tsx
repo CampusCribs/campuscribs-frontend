@@ -213,7 +213,7 @@ const ResidenceCard = ({
               <div className="text-md font-bold">{location}</div>
             </div>
           </div>
-          <div className="flex items-center flex-row-reverse mr-5 w-full">
+          <div className="flex  items-center justify-center mr-5 w-full">
             {ableToUse && iconKey != "" ? (
               <div className="relative group">
                 <div className="absolute left-1/2 bottom-full translate-x-[-50%] mb-2 flex-col items-center group-hover:flex hidden ">
@@ -221,6 +221,7 @@ const ResidenceCard = ({
                     Student at the {name}
                   </div>
                 </div>
+
                 <img
                   title="UC Logo"
                   className="w-10"
@@ -234,7 +235,9 @@ const ResidenceCard = ({
                     Student at the {name}
                   </div>
                 </div>
-                <ShieldCheck />
+                <div className="flex justify-center items-center w-full">
+                  <p className=" font-semibold text-lg italic ">UC</p>
+                </div>
               </div>
             ) : (
               <div className="relative group">

@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import React, { useEffect, useState } from "react";
 import CalendarComponent from "./CalendarComponent";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeftIcon, Tag, X } from "lucide-react";
+import { ArrowLeftIcon, X } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { postSchema, PostSchema } from "@/lib/schema/schema";
@@ -13,7 +13,6 @@ import { FieldErrors } from "react-hook-form";
 import { toZonedTime } from "date-fns-tz";
 import {
   useGetPublicTags,
-  TagDTO,
   usePutPostsDrafts,
   useDeletePostsDraftsPostdraftidMediaDeleteMediaid,
   useGetUsersMe,
@@ -34,7 +33,7 @@ const Post = () => {
 
   const navigate = useNavigate();
 
-  const [selectedTags, setSelectedTags] = useState<TagDTO[]>([]);
+  const [selectedTags, setSelectedTags] = useState<postTag[]>([]);
 
   const editDraft = usePutPostsDrafts({
     ...config,
@@ -71,9 +70,6 @@ const Post = () => {
     refetch: refetchPostDraft,
   } = useEnsurePostDraft();
 
-  // const { mutateAsync: deleteMedia } = useDeletePostsDraftsPostdraftidMediaDeleteMediaid({
-  //   ...config
-  // });
   const {
     register,
     handleSubmit,

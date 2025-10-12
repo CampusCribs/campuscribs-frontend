@@ -216,6 +216,8 @@ paths:
                     type: string
                   username:
                     type: string
+                  institutionName:
+                    type: string
                   title:
                     type: string
                   description:
