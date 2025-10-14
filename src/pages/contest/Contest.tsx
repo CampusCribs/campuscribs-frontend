@@ -45,7 +45,7 @@ export default function Contest() {
   }
 
   function onCTA() {
-    const el = document.getElementById("enter-form");
+    const el = document.getElementById("how");
     el?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
