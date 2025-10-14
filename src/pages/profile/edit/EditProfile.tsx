@@ -13,9 +13,10 @@ import { useGetUsersMe, usePutUsersUpdate } from "@/gen";
 import { useThumbnailUpload } from "@/lib/uploadThumbnail";
 import { useNavigate } from "react-router";
 import { buildThumbnailURL } from "@/lib/image-resolver";
+import { useNotify } from "@/components/ui/Notify";
 const EditProfile = () => {
   const config = useAuthenticatedClientConfig();
-
+  const notify = useNotify();
   const navigate = useNavigate();
   const {
     data: userData,
@@ -28,13 +29,22 @@ const EditProfile = () => {
   const { mutate: updateProfile } = usePutUsersUpdate({
     ...config,
     mutation: {
-      onSuccess: (response) => {
-        alert(response.status + " Profile updated successfully!");
+      onSuccess: async (response) => {
+        await notify({
+          title: "Profile Updated 🎉",
+          message: "Your profile has been successfully updated.",
+
+          buttonText: "Close",
+        });
         navigate("/profile");
       },
-      onError: (error) => {
+      onError: async (error) => {
         console.error(" Error:", error);
-        alert("Something went wrong.");
+        await notify({
+          title: "Error",
+          message: "Failed to update profile. Please try again later.",
+          buttonText: "Close",
+        });
       },
     },
   });
@@ -197,7 +207,11 @@ const EditProfile = () => {
 
                 const validTypes = ["image/jpeg", "image/png", "image/webp"];
                 if (!validTypes.includes(file.type)) {
-                  alert("Only JPEG, PNG, and WebP images are allowed.");
+                  await notify({
+                    title: "Invalid File Type",
+                    message: "Only JPEG, PNG, and WebP images are allowed.",
+                    buttonText: "Close",
+                  });
                   return;
                 }
 
@@ -208,7 +222,11 @@ const EditProfile = () => {
                   // <- store this for form submit
                 } catch (err) {
                   console.error("Image upload failed:", err);
-                  alert("Upload failed. Please try again.");
+                  await notify({
+                    title: "Upload Failed",
+                    message: "Upload failed. Please try again.",
+                    buttonText: "Close",
+                  });
                 }
               }}
             />

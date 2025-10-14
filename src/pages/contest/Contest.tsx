@@ -32,7 +32,7 @@ export default function Contest() {
       setSuccess(true);
     } catch (err) {
       console.error(err);
-      alert("Submission failed. Please try again.");
+      Message("Submission failed. Please try again.");
     } finally {
       setSubmitting(false);
     }

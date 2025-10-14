@@ -5,6 +5,7 @@ import App from "./App.tsx";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider, AuthProviderProps } from "react-oidc-context";
+import { NotifierProvider } from "./components/ui/Notify.tsx";
 
 const queryClient = new QueryClient();
 
@@ -19,7 +20,9 @@ const oidcConfig: AuthProviderProps = {
 createRoot(document.getElementById("root")!).render(
   <QueryClientProvider client={queryClient}>
     <AuthProvider {...oidcConfig}>
-      <App />
+      <NotifierProvider>
+        <App />
+      </NotifierProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

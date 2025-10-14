@@ -16,6 +16,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { LoadingProfilePage } from "./loading/LoadingComponents";
 import Error from "../error/Error";
+import { useNotify } from "@/components/ui/Notify";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -159,6 +160,8 @@ const Post = ({
     ...config,
   });
 
+  const notify = useNotify();
+
   const imageUrl = isPost
     ? buildImageURL(
         profile?.userProfile?.id || "",
@@ -173,15 +176,24 @@ const Post = ({
 
   const handleConfirmDelete = async () => {
     try {
-      await deletePost().then(() => {
+      await deletePost().then(async () => {
         setIsDeleting(false);
-        alert("Post deleted successfully");
+        await notify({
+          title: "Post Deleted",
+          message: "Your post has been deleted successfully.",
+          buttonText: "Close",
+        });
+
         window.location.reload();
       });
     } catch (error) {
       console.error("Error deleting post:", error);
       setIsDeleting(false);
-      alert("Failed to delete post");
+      await notify({
+        title: "Error",
+        message: "Failed to delete post. Please try again later.",
+        buttonText: "Close",
+      });
     }
   };
   return (

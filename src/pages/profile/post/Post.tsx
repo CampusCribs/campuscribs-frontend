@@ -21,6 +21,7 @@ import useAuthenticatedClientConfig from "@/hooks/use-authenticated-client-confi
 import { useEnsurePostDraft } from "@/hooks/use-get-post-drafts";
 import { usePostDraftMediaUpload } from "@/lib/post-media-upload";
 import { useNavigate } from "react-router";
+import { useNotify } from "@/components/ui/Notify";
 
 type postTag = {
   id?: string;
@@ -30,15 +31,13 @@ type postTag = {
 
 const Post = () => {
   const config = useAuthenticatedClientConfig();
-
+  const notify = useNotify();
   const navigate = useNavigate();
-
   const [selectedTags, setSelectedTags] = useState<postTag[]>([]);
 
   const editDraft = usePutPostsDrafts({
     ...config,
   });
-
   const { mutateAsync: deleteMedia } =
     useDeletePostsDraftsPostdraftidMediaDeleteMediaid({
       ...config,
@@ -103,13 +102,21 @@ const Post = () => {
       },
     });
     response
-      .then((res) => {
-        alert(res.status + " Post updated successfully!");
+      .then(async (res) => {
+        await notify({
+          title: "Post Updated 🎉",
+          message: "Your post has been successfully updated.",
+          buttonText: "Close",
+        });
         navigate("/profile");
       })
-      .catch((error) => {
+      .catch(async (error) => {
         console.error("Error updating post:", error);
-        alert("Failed to update post. Please try again.");
+        await notify({
+          title: "Error",
+          message: "Failed to update post. Please try again.",
+          buttonText: "Close",
+        });
       });
   };
   const onError = (errors: FieldErrors<PostSchema>) => {
@@ -122,19 +129,27 @@ const Post = () => {
         : [...prevTags, tag]
     );
   };
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || !postDraft?.id) return;
 
     if ((postDraft.media && postDraft.media?.length >= 5) || false) {
-      alert("You can only upload up to 5 images.");
+      await notify({
+        title: "Upload Limit Reached",
+        message: "You can only upload up to 5 images.",
+        buttonText: "Close",
+      });
       return;
     }
     upload(postDraft.id, files[0])
       .then(() => refetchPostDraft())
-      .catch((err) => {
+      .catch(async (err) => {
         console.error("Error uploading file:", err);
-        alert("Failed to upload image. Please try again.");
+        await notify({
+          title: "Upload Failed",
+          message: "Failed to upload image. Please try again.",
+          buttonText: "Close",
+        });
       });
     // reset the input value to allow re-uploading the same file
     e.target.value = "";
@@ -333,9 +348,14 @@ const Post = () => {
                         .then(() => {
                           refetchPostDraft();
                         })
-                        .catch((err) => {
+                        .catch(async (err) => {
                           console.error("Error deleting media:", err);
-                          alert("Failed to delete image. Please try again.");
+                          await notify({
+                            title: "Delete Failed",
+                            message:
+                              "Failed to delete image. Please try again.",
+                            buttonText: "Close",
+                          });
                         });
                     }}
                   >
