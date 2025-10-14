@@ -22,6 +22,7 @@ import { useEnsurePostDraft } from "@/hooks/use-get-post-drafts";
 import { usePostDraftMediaUpload } from "@/lib/post-media-upload";
 import { useNavigate } from "react-router";
 import { useNotify } from "@/components/ui/Notify";
+import Spinner from "@/components/ui/Spinner";
 
 type postTag = {
   id?: string;
@@ -310,14 +311,21 @@ const Post = () => {
           </div>
         </div>
         <div className="w-full">
-          <div className="grid w-full  items-center justify-center gap-1.5 mb-3">
-            <Label htmlFor="images">Images</Label>
-            <Input
-              type="file"
-              id="images"
-              onChange={(e) => handleFileUpload(e)}
-              disabled={uploading || postDraftLoading || !postDraft?.id}
-            />
+          <div className="flex border w-full items-center justify-around gap-1.5 mb-3 px-5">
+            <div className="grid w-full  items-center justify-center gap-1.5 mb-3">
+              <Label htmlFor="images">Images</Label>
+              <Input
+                type="file"
+                id="images"
+                onChange={(e) => handleFileUpload(e)}
+                disabled={uploading || postDraftLoading || !postDraft?.id}
+              />
+            </div>
+            {uploading && (
+              <div className="flex items-center justify-center mr-auto">
+                <Spinner />
+              </div>
+            )}
           </div>
           <div className="p-2 grid grid-cols-2 w-full justify-center items-center  gap-1.5">
             {postDraft?.media &&

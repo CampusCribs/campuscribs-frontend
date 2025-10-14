@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 import Layout from "@/components/layout/Layout";
 
 import CribsPage from "@/pages/cribs/CribsPage";
@@ -17,6 +17,7 @@ import Account from "./pages/settings/account/Account";
 import EditProfile from "./pages/profile/edit/EditProfile";
 import { AnalyticsProvider } from "./components/analytics/AnalyticsProvider";
 import Contest from "./pages/contest/Contest";
+import ContestBounce from "./pages/contest/ContestBounce";
 
 function App() {
   return (
@@ -55,7 +56,10 @@ function App() {
             </Route>
 
             <Route path="/contest" element={<Contest />} />
+            <Route path="/giveaway" element={<Navigate to="/contest" />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          <Routes></Routes>
         </AnalyticsProvider>
       </BrowserRouter>
     </div>

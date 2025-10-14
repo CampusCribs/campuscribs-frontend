@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Gift, Sparkles, Ghost, CheckCircle2, ArrowRight } from "lucide-react";
 import HatHouseBlack from "@/components/ui/HatHouseBlack";
 import { useNavigate } from "react-router";
+import { useNotify } from "@/components/ui/Notify";
+import Footer from "@/components/layout/Footer";
 
 // Tailwind is assumed. All components are accessible and mobile-first.
 // Replace the placeholder handlers (onSubmit, onCTA) with your app routes/APIs.
@@ -11,6 +13,7 @@ export default function Contest() {
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
+  const notify = useNotify();
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitting(true);
@@ -32,7 +35,10 @@ export default function Contest() {
       setSuccess(true);
     } catch (err) {
       console.error(err);
-      Message("Submission failed. Please try again.");
+      await notify({
+        title: "Submission failed",
+        message: "Please try again.",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -187,21 +193,30 @@ export default function Contest() {
             <div className="rounded-2xl border bg-white p-6 shadow-sm">
               <div className="text-sm font-medium text-slate-500">Step 1</div>
               <p className="mt-1 text-lg font-semibold">
+                Sign up & post your decorated house
+              </p>
+
+              <p className="mt-2 text-slate-600">
+                Create your CampusCribs account and publish a listing featuring
+                your Halloween decorations.
+              </p>
+              <div className="flex flex-row-reverse w-full mt-6">
+                <button
+                  onClick={() => navigate("/profile")}
+                  className="inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 transition shadow-md"
+                >
+                  Create post <ArrowRight className="h-5 w-5" aria-hidden />
+                </button>
+              </div>
+            </div>
+            <div className="rounded-2xl border bg-white p-6 shadow-sm">
+              <div className="text-sm font-medium text-slate-500">Step 2</div>
+              <p className="mt-1 text-lg font-semibold">
                 Enter your information
               </p>
               <p className="mt-2 text-slate-600">
                 Fill out the form below with your name, email, and listing link
                 to be included in the contest.
-              </p>
-            </div>
-            <div className="rounded-2xl border bg-white p-6 shadow-sm">
-              <div className="text-sm font-medium text-slate-500">Step 2</div>
-              <p className="mt-1 text-lg font-semibold">
-                Sign up & post your decorated house
-              </p>
-              <p className="mt-2 text-slate-600">
-                Create your CampusCribs account and publish a listing featuring
-                your Halloween decorations.
               </p>
             </div>
           </div>
@@ -363,6 +378,9 @@ export default function Contest() {
           </div>
         </div>
       </footer>
+      <div className="sticky left-0 bottom-5 w-10 ">
+        <Footer />
+      </div>
     </div>
   );
 }
