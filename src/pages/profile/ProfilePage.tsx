@@ -25,6 +25,7 @@ const ProfilePage = () => {
 
   const { data, isLoading, isError, error } = useGetUsersMe({ ...config });
 
+  console.log("profile me", config);
   const {
     data: profile_draft,
     isLoading: profile_draftLoading,

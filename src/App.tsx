@@ -17,7 +17,6 @@ import Account from "./pages/settings/account/Account";
 import EditProfile from "./pages/profile/edit/EditProfile";
 import { AnalyticsProvider } from "./components/analytics/AnalyticsProvider";
 import Contest from "./pages/contest/Contest";
-import ContestBounce from "./pages/contest/ContestBounce";
 
 function App() {
   return (

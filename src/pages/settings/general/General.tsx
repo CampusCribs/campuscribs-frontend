@@ -5,8 +5,12 @@ const General = () => {
   return (
     <div>
       <div className="px-3 pt-3">
-        <div onClick={() => window.history.back()}>
-          <ArrowLeftIcon size={40} />
+        <div
+          onClick={() => window.history.back()}
+          className="cursor-pointer inline-flex items-center"
+        >
+          <ArrowLeftIcon size={32} />
+          <span className="ml-2">Back</span>
         </div>
       </div>
       <div className="flex items-center justify-center text-xl font-semibold mt-5">

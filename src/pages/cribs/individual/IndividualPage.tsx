@@ -27,11 +27,14 @@ const IndividualPage = () => {
   }
   return (
     <div className="mb-6">
-      <div
-        className="flex justify-start pl-4 pb-3"
-        onClick={() => navigate(-1)}
-      >
-        <ArrowLeftIcon size={40} />
+      <div className="px-3 pt-3">
+        <div
+          onClick={() => window.history.back()}
+          className="cursor-pointer inline-flex items-center"
+        >
+          <ArrowLeftIcon size={32} />
+          <span className="ml-2">Back</span>
+        </div>
       </div>
       <div>
         <IndividualSlider
