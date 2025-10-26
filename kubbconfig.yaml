@@ -741,6 +741,8 @@ components:
           type: string
         username:
           type: string
+        newsletterConsent:
+          type: boolean
         bio:
           type: string
         thumbnailMediaId:
@@ -831,6 +833,8 @@ components:
         email:
           type: string
           format: email
+        newsletterConsent:
+          type: boolean
         phone:
           type: string
       required:
@@ -839,6 +843,7 @@ components:
         - username
         - email
         - phone
+        - newsletterConsent
 
     CreatePostDraftDTO:
       type: object

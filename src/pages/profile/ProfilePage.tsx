@@ -25,7 +25,6 @@ const ProfilePage = () => {
 
   const { data, isLoading, isError, error } = useGetUsersMe({ ...config });
 
-  console.log("profile me", config);
   const {
     data: profile_draft,
     isLoading: profile_draftLoading,
@@ -106,7 +105,7 @@ const ProfilePage = () => {
           <div className="text-wrap flex text-sm w-full  px-5">
             <button
               className="mt-2 cursor-pointer w-full border p-2 bg-neutral-700 text-white shadow-lg rounded-xl"
-              onClick={() => navigate("edit")}
+              onClick={() => navigate("/settings/account")}
             >
               edit profile
             </button>

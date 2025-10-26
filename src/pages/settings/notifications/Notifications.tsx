@@ -23,7 +23,8 @@ const Notifications = () => {
         </div>
         <div className="flex justify-center items-center">
           <div className="flex flex-col mt-3 w-full py-5 rounded-lg">
-            {data ? (
+            {data &&
+            data.pages?.flatMap((page) => page.data?.content).length > 0 ? (
               data.pages.map((item) =>
                 item.data?.content?.map((item) => (
                   <Notification
@@ -35,9 +36,14 @@ const Notifications = () => {
                 ))
               )
             ) : (
-              <div>No notifications</div>
+              <div className="flex items-center justify-center border-t pt-10">
+                No notifications
+              </div>
             )}
-            {data && <div className="w-full border-t" />}
+            {data &&
+              data.pages.flatMap((page) => page.data.content).length > 0 && (
+                <div className="w-full border-t" />
+              )}
           </div>
         </div>
       </div>
