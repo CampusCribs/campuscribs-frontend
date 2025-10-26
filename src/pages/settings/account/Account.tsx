@@ -31,6 +31,7 @@ import LoadingPage from "@/pages/loading/LoadingPage";
 import Error from "@/pages/error/Error";
 import { useThumbnailUpload } from "@/lib/uploadThumbnail";
 import { buildThumbnailURL } from "@/lib/image-resolver";
+import { EmailChangeFlow } from "./EmailChangeFlow";
 const accountSettingsSchema = z
   .object({
     // Read-only (shown for clarity)
@@ -90,6 +91,7 @@ const Account = () => {
   // const [confirmText, setConfirmText] = useState("");
   // const [ack, setAck] = useState(false);
   // const [passwordForDelete, setPasswordForDelete] = useState("");
+  const [renderEmail, setRenderEmail] = useState(false);
   const { upload, mediaId } = useThumbnailUpload();
 
   const {
@@ -198,16 +200,6 @@ const Account = () => {
 
   return (
     <div className="w-full">
-      <div className="px-3 pt-3">
-        <div
-          onClick={() => window.history.back()}
-          className="cursor-pointer inline-flex items-center"
-        >
-          <ArrowLeftIcon size={32} />
-          <span className="ml-2">Back</span>
-        </div>
-      </div>
-
       <div className="flex w-full justify-center text-xl font-semibold">
         Account Settings
       </div>
@@ -223,7 +215,10 @@ const Account = () => {
             <Input id="email" disabled {...register("email")} />
             <p className="text-sm text-end pr-3">
               Change your email{" "}
-              <a className="underline cursor-pointer" href="/">
+              <a
+                className="underline cursor-pointer"
+                onClick={() => setRenderEmail(!renderEmail)}
+              >
                 here
               </a>
             </p>
@@ -514,6 +509,9 @@ const Account = () => {
           </div>
         </div> */}
       </form>
+      {renderEmail && (
+        <EmailChangeFlow onClose={(val: boolean) => setRenderEmail(val)} />
+      )}
     </div>
   );
 };

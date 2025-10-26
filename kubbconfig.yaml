@@ -594,6 +594,159 @@ paths:
                         format: uuid
                       institutionName:
                         type: string
+  /users/email:
+    get:
+      summary: Get current email and pending change status
+      security:
+        - bearerAuth: []
+      tags: [Users]
+      responses:
+        "200":
+          description: Current email and any pending email change
+          headers:
+            X-Request-Id:
+              schema: { type: string }
+              description: Correlation ID for this request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type: string
+
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+    post:
+      summary: Initiate an email change (send verification code)
+      description:
+        Starts the email change flow by sending a 6-digit verification code to the **new** email address.
+        If a 30-day lock is in effect, returns **423 Locked**.
+      security:
+        - bearerAuth: []
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Email:
+                  type: string
+
+            examples:
+              basic:
+                value:
+                  newEmail: "alice@newmail.com"
+      responses:
+        "202":
+          description: Verification code sent to new email
+          headers:
+            X-Request-Id:
+              schema: { type: string }
+        "400":
+          description: Invalid input (e.g., bad email)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+              examples:
+                invalidEmail:
+                  value:
+                    code: "INVALID_EMAIL"
+                    message: "Please enter a valid email address."
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: New email conflicts with an existing account
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+              examples:
+                alreadyInUse:
+                  value:
+                    code: "EMAIL_IN_USE"
+                    message: "That email is already registered."
+        "423":
+          description: Email is locked from changes (30-day window)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+              examples:
+                locked:
+                  value:
+                    code: "EMAIL_LOCKED"
+                    message: "Email cannot be changed until 2025-11-25T00:00:00Z."
+                    lockedUntil: "2025-11-25T00:00:00Z"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+    put:
+      summary: Confirm email change with verification code
+      description: Confirms the pending email change using the 6-digit code sent to the new email.
+      security:
+        - bearerAuth: []
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verificationCode:
+                  type: string
+      responses:
+        "200":
+          description: Email changed successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "createdAt,desc"
+
+              examples:
+                ok:
+                  value:
+                    email: "alice@newmail.com"
+                    changedAt: "2025-10-26T18:44:55Z"
+                    lockedUntil: "2025-11-25T00:00:00Z"
+        "400":
+          description: Invalid or expired code / no pending change
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+              examples:
+                invalidCode:
+                  value:
+                    code: "INVALID_CODE"
+                    message: "The verification code is incorrect."
+                expiredCode:
+                  value:
+                    code: "CODE_EXPIRED"
+                    message: "The verification code has expired."
+                noPending:
+                  value:
+                    code: "NO_PENDING_CHANGE"
+                    message: "There is no pending email change to confirm."
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "423":
+          description: Email is locked from changes (should be rare here)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
   /posts:
     delete:
       tags:
@@ -928,3 +1081,54 @@ components:
           type: integer
         number:
           type: integer
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        lockedUntil:
+          type: string
+          format: date-time
+          description: Included when error relates to a lock window.
+  responses:
+    Unauthorized:
+      description: Missing or invalid bearer token
+      headers:
+        WWW-Authenticate:
+          schema: { type: string }
+          description: Bearer challenge details.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          examples:
+            unauth:
+              value:
+                code: "UNAUTHORIZED"
+                message: "Authentication required."
+    TooManyRequests:
+      description: Rate limit exceeded
+      headers:
+        Retry-After:
+          schema: { type: integer, format: int32 }
+          description: Seconds to wait before retrying.
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          examples:
+            ratelimited:
+              value:
+                code: "RATE_LIMITED"
+                message: "Too many requests. Please try again later."
+    ServerError:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/Error" }
+          examples:
+            oops:
+              value:
+                code: "INTERNAL_ERROR"
+                message: "Something went wrong."

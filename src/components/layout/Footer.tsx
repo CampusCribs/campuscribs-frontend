@@ -26,11 +26,11 @@ const Footer = () => {
     <>
       {open && (
         <div
-          className="fixed inset-0 bg-black opacity-30 z-10"
+          className="fixed inset-0 bg-black opacity-30 z-50"
           onClick={() => setOpen(false)}
         ></div>
       )}
-      <div className="relative w-10 ">
+      <div className="relative w-10 z-50 ">
         {/* Menu Button - Always Visible */}
         <div
           className="bg-black rounded-full w-20 shadow-2xl h-20 flex items-center justify-center  mb-5 ml-5"
