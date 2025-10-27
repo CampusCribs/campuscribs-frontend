@@ -76,7 +76,7 @@ export const EmailChangeFlow: React.FC<Props> = ({ onClose }) => {
   // 1) If pending: show verification form
   if (status === "PENDING") {
     const onSubmitVerify = async (data: VerificationFormData) => {
-      putUsersEmail({ data: { verificationCode: data.code } });
+      await putUsersEmail({ data: { verificationCode: data.code } });
     };
 
     return (
@@ -211,8 +211,8 @@ const Initiate = ({
   }, [setFocus]);
 
   const onSubmit = handleSubmit(async ({ newEmail }) => {
-    console.log(newEmail);
-    postUsersEmail({ data: { Email: newEmail } });
+    console.log();
+    postUsersEmail({ data: { email: newEmail } });
   });
 
   return (

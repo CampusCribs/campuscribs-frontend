@@ -16,7 +16,9 @@ import Notifications from "./pages/settings/notifications/Notifications";
 import Account from "./pages/settings/account/Account";
 import EditProfile from "./pages/profile/edit/EditProfile";
 import { AnalyticsProvider } from "./components/analytics/AnalyticsProvider";
-import Contest from "./pages/contest/Contest";
+
+import About from "./pages/about/About";
+// import Partners from "./pages/partners/Partners";
 
 function App() {
   return (
@@ -53,9 +55,8 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
               </Route>
             </Route>
-
-            <Route path="/contest" element={<Contest />} />
-            <Route path="/giveaway" element={<Navigate to="/contest" />} />
+            <Route path="/about" element={<About />} />
+            {/* <Route path="/partners" element={<Partners />} /> */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           <Routes></Routes>
