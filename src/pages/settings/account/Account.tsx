@@ -91,7 +91,6 @@ const Account = () => {
   // const [confirmText, setConfirmText] = useState("");
   // const [ack, setAck] = useState(false);
   // const [passwordForDelete, setPasswordForDelete] = useState("");
-  const [renderEmail, setRenderEmail] = useState(false);
   const { upload, mediaId } = useThumbnailUpload();
 
   const {
@@ -169,9 +168,6 @@ const Account = () => {
     }
   }, [userData, reset, thumbnailvalue, hasInitialized]);
 
-  useEffect(() => {
-    console.log(thumbnailvalue);
-  });
   const onSubmit = (data: AccountSettingsSchema) => {
     console.log(data);
     const payload: Record<string, unknown> = {
@@ -199,7 +195,7 @@ const Account = () => {
   if (isError) return <Error />;
 
   return (
-    <div className="w-full">
+    <div className="w-full px-2">
       <div className="flex w-full justify-center text-xl font-semibold">
         Account Settings
       </div>
@@ -217,7 +213,7 @@ const Account = () => {
               Change your email{" "}
               <a
                 className="underline cursor-pointer"
-                onClick={() => setRenderEmail(!renderEmail)}
+                onClick={() => navigate("email")}
               >
                 here
               </a>
@@ -509,9 +505,6 @@ const Account = () => {
           </div>
         </div> */}
       </form>
-      {renderEmail && (
-        <EmailChangeFlow onClose={(val: boolean) => setRenderEmail(val)} />
-      )}
     </div>
   );
 };

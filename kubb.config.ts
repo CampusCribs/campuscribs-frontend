@@ -30,7 +30,7 @@ export default defineConfig({
         importPath: "@/lib/client",
       },
       mutation: {
-        methods: ["post", "put", "delete"],
+        methods: ["post", "put", "delete", "patch"],
       },
       infinite: {
         queryParam: "next_page",

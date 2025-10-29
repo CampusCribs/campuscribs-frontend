@@ -18,6 +18,9 @@ import EditProfile from "./pages/profile/edit/EditProfile";
 import { AnalyticsProvider } from "./components/analytics/AnalyticsProvider";
 
 import About from "./pages/about/About";
+import { EmailChangeFlow } from "./pages/settings/account/EmailChangeFlow";
+import EmailInitiate from "./pages/settings/account/email/EmailInitiate";
+import EmailVerification from "./pages/settings/account/email/EmailVerification";
 // import Partners from "./pages/partners/Partners";
 
 function App() {
@@ -41,6 +44,14 @@ function App() {
                 <Route path="/settings/general" element={<General />} />
                 <Route path="/settings/account" element={<Account />} />
                 <Route
+                  path="/settings/account/email"
+                  element={<EmailInitiate />}
+                />
+                <Route
+                  path="/settings/account/email-verification"
+                  element={<EmailVerification />}
+                />
+                <Route
                   path="/settings/notifications"
                   element={<Notifications />}
                 />
@@ -55,6 +66,7 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
               </Route>
             </Route>
+
             <Route path="/about" element={<About />} />
             {/* <Route path="/partners" element={<Partners />} /> */}
             <Route path="*" element={<Navigate to="/" replace />} />
