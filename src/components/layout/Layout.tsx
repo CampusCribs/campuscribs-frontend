@@ -2,6 +2,7 @@ import { Outlet } from "react-router";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AuthContextProvider from "../auth/AuthContextProvider";
+import { ScrollRestorationBlocker } from "./ScrollRestorationBlocker";
 
 const Layout = () => {
   return (
@@ -15,6 +16,7 @@ const Layout = () => {
             <Header />
           </div>
           <div className="grow">
+            <ScrollRestorationBlocker />
             <Outlet />
           </div>
 
