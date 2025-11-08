@@ -196,6 +196,17 @@ const Account = () => {
 
   return (
     <div className="w-full px-2">
+      <div className="flex px-4 pt-4">
+        <button
+          type="button"
+          className="cursor-pointer inline-flex items-center"
+          aria-label="Go back"
+          onClick={() => window.history.back()}
+        >
+          <ArrowLeftIcon size={28} />
+          <span className="ml-2">Back</span>
+        </button>
+      </div>
       <div className="flex w-full justify-center text-xl font-semibold">
         Account Settings
       </div>
@@ -284,7 +295,7 @@ const Account = () => {
         {/* Thumbnail */}
         <div className="w-full">
           <div className="grid w-full items-center justify-center gap-1.5 mb-3">
-            <Label htmlFor="images">Profile Thumbnail</Label>
+            <Label htmlFor="images">Profile Picture</Label>
             <Input
               type="file"
               id="images"

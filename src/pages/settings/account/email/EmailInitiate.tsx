@@ -75,6 +75,7 @@ const EmailInitiate = () => {
           type="button"
           className="cursor-pointer inline-flex items-center"
           aria-label="Go back"
+          onClick={() => window.history.back()}
         >
           <ArrowLeftIcon size={28} />
           <span className="ml-2">Back</span>

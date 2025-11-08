@@ -16,7 +16,7 @@ export const postSchema = z
       .max(10000, "Price must be less than 10000"),
     roommates: z
       .number()
-      .min(1, "Roommates is required")
+      .min(0, "Roommates is required")
       .max(10, "Roommates must be less than 10"),
     beginDate: z.date(),
     endDate: z.date(),
