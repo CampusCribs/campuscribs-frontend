@@ -94,10 +94,12 @@ const IndividualPage = () => {
             <div className="text-lg px-8 flex mb-3">
               <div className="mr-1 font-semibold">Lease from:</div>{" "}
               {post.data.termStartDate &&
-                new Date(post.data.termStartDate).toLocaleDateString()}{" "}
+                new Date(post.data.termStartDate)
+                  .toISOString()
+                  .split("T")[0]}{" "}
               to{" "}
               {post.data.termEndDate &&
-                new Date(post.data.termEndDate).toLocaleDateString()}
+                new Date(post.data.termEndDate).toISOString().split("T")[0]}
             </div>
             <div className="text-lg px-8 flex">
               <div className="mr-1 font-semibold">Tags:</div>

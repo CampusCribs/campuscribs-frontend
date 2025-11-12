@@ -1,7 +1,6 @@
 import useEmblaCarousel from "embla-carousel-react";
 import { Badge } from "@/components/ui/badge";
 import { ResponseErrorConfig } from "@/lib/client";
-import Spinner from "@/components/ui/Spinner";
 
 type fetched_tag_string = {
   id?: string;

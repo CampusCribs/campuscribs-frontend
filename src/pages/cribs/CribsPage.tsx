@@ -5,7 +5,6 @@ import {
   ListFilter,
   MapPin,
   SearchX,
-  ShieldCheck,
   ShieldOff,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -17,32 +16,75 @@ import { useGetPublicCuratedInfinite, useGetPublicTags } from "@/gen";
 import { buildImageURL } from "@/lib/image-resolver";
 
 import Lottie from "lottie-react";
-import house from "@/components/ui/houseanimation.json"; // IMPORTANT: import, don't pass a string path
+import house from "@/components/ui/houseanimation.json";
 
 const CribsPage = () => {
   //variables to store the selected tags and the state of the tag selector and find the intersection of the tags
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [openTag, setOpenTag] = useState(false);
+  const [verification, setVerification] = useState<
+    "ANY" | "VERIFIED" | "UNVERIFIED"
+  >("ANY");
+  const [roommatesMin, setRoommatesMin] = useState<number | null>(0);
+  const [roommatesMax, setRoommatesMax] = useState<number | null>(10);
+  const [start, setStart] = useState<string | null>(new Date().toISOString());
+  const [end, setEnd] = useState<string | null>(null);
+  // local controlled inputs for price (to avoid half-updates)
+  const [minPrice, setMinPrice] = useState<number | null>(0);
+  const [maxPrice, setMaxPrice] = useState<number | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { ref, inView } = useInView();
   const [openWelcome, setOpenWelcome] = useState<boolean>(false);
+
+  const setPriceRange = (min: number | null, max: number | null) => {
+    setMaxPrice(max);
+    setMinPrice(min);
+  };
+
+  const setRoommatesRange = (min: number | null, max: number | null) => {
+    setRoommatesMax(max);
+    setRoommatesMin(min);
+  };
+
+  const setDateRange = (min: string | null, max: string | null) => {
+    setStart(min);
+    setEnd(max);
+  };
 
   useEffect(() => {
     const firstVisit = localStorage.getItem("firstVisit");
     setOpenWelcome(firstVisit === null);
   }, []);
 
+  function omitNullish<T extends Record<string, any>>(obj: T) {
+    return Object.fromEntries(
+      Object.entries(obj).filter(([_, v]) => {
+        if (v === null || v === undefined) return false;
+        if (typeof v === "string" && v.trim() === "") return false;
+        if (Array.isArray(v) && v.length === 0) return false;
+        return true; // keep 0 and false
+      })
+    ) as Partial<T>;
+  }
+
+  const params = omitNullish({
+    page: 0,
+    size: 10,
+    sort: ["createdAt,desc"],
+    tag: selectedTags, // [] will be dropped
+    roommatesMin,
+    roommatesMax,
+    minPrice,
+    maxPrice,
+    startDate: start, // "" or null gets dropped
+    endDate: end,
+    verification,
+  });
   const {
     data: curated,
     error: curated_error,
     isLoading: curated_isLoading,
-  } = useGetPublicCuratedInfinite({
-    page: 0,
-    size: 10,
-    sort: ["createdAt,desc"],
-    tag: selectedTags,
-  });
-
+  } = useGetPublicCuratedInfinite(params);
   const {
     data: tags,
     error: tags_error,
@@ -62,6 +104,7 @@ const CribsPage = () => {
       // call the generated function
     }
   }, [inView]);
+  console.log(params);
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col w-full  ">
@@ -158,6 +201,17 @@ const CribsPage = () => {
           setTags={(tag: string) => {
             handleTagClick(tag);
           }}
+          maxPrice={maxPrice}
+          minPrice={minPrice}
+          roommatesMax={roommatesMax}
+          roommatesMin={roommatesMin}
+          startDate={start}
+          endDate={end}
+          verification={verification}
+          setVerification={setVerification}
+          setDateRange={setDateRange}
+          setRoommatesRange={setRoommatesRange}
+          setPriceRange={setPriceRange}
         />
       </div>
       {openWelcome && <Welcome setOpenWelcome={setOpenWelcome} />}

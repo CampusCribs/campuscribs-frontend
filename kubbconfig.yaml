@@ -8,7 +8,7 @@ paths:
   /users/me:
     get:
       tags:
-        - User
+      - User
       summary: Get current user
       responses:
         "200":
@@ -23,7 +23,7 @@ paths:
   /public/tags:
     get:
       tags:
-        - Tag
+      - Tag
       summary: Get all tags
       responses:
         "200":
@@ -45,43 +45,110 @@ paths:
   /public/curated:
     get:
       tags:
-        - Curated
+      - Curated
       summary: Get curated items
       parameters:
-        - in: query
-          name: tag
-          description: Filter by tags
+
+      - in: query
+        name: maxPrice
+        description: Filter by price
+        required: false
+        schema:
+          type: integer
+          default: 10000
+          nullable: true
           required: false
-          schema:
-            type: array
-            items:
-              type: string
-          style: form
-          explode: true
-        - in: query
-          name: page
-          description: Page number (0-based)
+
+      - in: query
+        name: minPrice
+        description: Filter by price
+        required: false
+        schema:
+          type: integer
+          default: 0
+          nullable: true
           required: false
-          schema:
-            type: integer
-            default: 0
-        - in: query
-          name: size
-          description: Number of results per page
+
+      - in: query
+        name: verification
+        description: Filter by verification
+        required: true
+        schema:
+          type: string
+          default: "ANY"
+
+      - in: query
+        name: startDate
+        description: Filter by date
+        required: false
+        schema:
+          type: date-time
+          nullable: true
           required: false
-          schema:
-            type: integer
-            default: 20
-        - in: query
-          name: sort
-          description: Sort by field (e.g. `price,asc` or `mediaId,desc`)
+
+      - in: query
+        name: endDate
+        description: Filter by Date
+        required: false
+        schema:
+          type: date-time
+          nullable: true
           required: false
-          schema:
-            type: array
-            items:
-              type: string
-          style: form
-          explode: true
+
+      - in: query
+        name: roommatesMin
+        description: Filter by roommates
+        required: false
+        schema:
+          type: integer
+          default: 0
+          nullable: true
+          required: false
+
+      - in: query
+        name: roommatesMax
+        description: Filter by roommates
+        required: false
+        schema:
+          type: integer
+          default: 10
+          nullable: true
+          required: false
+
+      - in: query
+        name: tag
+        description: Filter by tags
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        style: form
+        explode: true
+      - in: query
+        name: page
+        description: Page number (0-based)
+        required: false
+        schema:
+          type: integer
+          default: 0
+      - in: query
+        name: size
+        description: Number of results per page
+        required: false
+        schema:
+          type: integer
+          default: 20
+      - in: query
+        name: sort
+        description: Sort by field (e.g. `price,asc` or `mediaId,desc`)
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        style: form
+        explode: true
 
       responses:
         "200":
@@ -136,12 +203,12 @@ paths:
     get:
       summary: Search for posts and users
       parameters:
-        - in: query
-          name: query
-          required: true
-          description: Search term
-          schema:
-            type: string
+      - in: query
+        name: query
+        required: true
+        description: Search term
+        schema:
+          type: string
       responses:
         "200":
           description: Successful search
@@ -184,15 +251,15 @@ paths:
     get:
       summary: Get a public post by ID
       tags:
-        - Public Posts
+      - Public Posts
       parameters:
-        - name: postId
-          in: path
-          required: true
-          description: The ID of the post to retrieve
-          schema:
-            type: string
-            format: uuid
+      - name: postId
+        in: path
+        required: true
+        description: The ID of the post to retrieve
+        schema:
+          type: string
+          format: uuid
       responses:
         "200":
           description: Successful retrieval of the post
@@ -253,7 +320,7 @@ paths:
     get:
       summary: Generate a presigned URL to upload the user's thumbnail image
       tags:
-        - Users
+      - Users
       responses:
         "200":
           description: Presigned upload URL and media ID generated successfully
@@ -272,14 +339,14 @@ paths:
       summary: Get public profile by username
       operationId: getPublicProfileByUsername
       tags:
-        - Profile
+      - Profile
       parameters:
-        - name: username
-          in: path
-          required: true
-          schema:
-            type: string
-          description: The username of the user to retrieve the profile for
+      - name: username
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The username of the user to retrieve the profile for
       responses:
         "200":
           description: Successful response with combined post and user profile
@@ -334,7 +401,7 @@ paths:
     put:
       summary: Update the current user's profile
       tags:
-        - Users
+      - Users
       requestBody:
         required: true
         content:
@@ -356,7 +423,7 @@ paths:
     get:
       summary: Get the current user's post draft
       tags:
-        - Drafts
+      - Drafts
       responses:
         "200":
           description: Successfully retrieved the user's post draft
@@ -371,7 +438,7 @@ paths:
     post:
       summary: Create a new post draft for the current user
       tags:
-        - Drafts
+      - Drafts
       responses:
         "201":
           description: Draft successfully created
@@ -386,7 +453,7 @@ paths:
     put:
       summary: update post draft for the current user
       tags:
-        - Drafts
+      - Drafts
       requestBody:
         required: true
         content:
@@ -409,14 +476,14 @@ paths:
     post:
       summary: Generate pre-signed URL for post draft media upload
       tags:
-        - Media
+      - Media
       parameters:
-        - name: postDraftId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: postDraftId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
       responses:
         "200":
           description: Successfully generated upload URL
@@ -433,20 +500,20 @@ paths:
     put:
       summary: Confirm uploaded media for post draft
       tags:
-        - Media
+      - Media
       parameters:
-        - name: postDraftId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: mediaId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: postDraftId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: mediaId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
       responses:
         "200":
           description: Successfully confirmed uploaded media
@@ -463,20 +530,20 @@ paths:
     delete:
       summary: Delete media from post draft
       tags:
-        - Media
+      - Media
       parameters:
-        - name: postDraftId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: mediaId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: postDraftId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: mediaId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
       responses:
         "200":
           description: Media deleted successfully
@@ -488,7 +555,7 @@ paths:
     get:
       summary: Get public profile by username
       tags:
-        - Profile
+      - Profile
 
       responses:
         "200":
@@ -598,8 +665,8 @@ paths:
     get:
       summary: Get current email and pending change status
       security:
-        - bearerAuth: []
-      tags: [Users]
+      - bearerAuth: []
+      tags: [ Users ]
       responses:
         "200":
           description: Current email and any pending email change
@@ -621,12 +688,10 @@ paths:
 
     post:
       summary: Initiate an email change (send verification code)
-      description:
-        Starts the email change flow by sending a 6-digit verification code to the **new** email address.
-        If a 30-day lock is in effect, returns **423 Locked**.
+      description: Starts the email change flow by sending a 6-digit verification code to the **new** email address. If a 30-day lock is in effect, returns **423 Locked**.
       security:
-        - bearerAuth: []
-      tags: [Users]
+      - bearerAuth: []
+      tags: [ Users ]
       requestBody:
         required: true
         content:
@@ -665,8 +730,8 @@ paths:
       summary: Confirm email change with verification code
       description: Confirms the pending email change using the 6-digit code sent to the new email.
       security:
-        - bearerAuth: []
-      tags: [Users]
+      - bearerAuth: []
+      tags: [ Users ]
       requestBody:
         required: true
         content:
@@ -707,8 +772,8 @@ paths:
     patch:
       summary: resend a new verification email
       security:
-        - bearerAuth: []
-      tags: [Users]
+      - bearerAuth: []
+      tags: [ Users ]
       responses:
         "200":
           description: Current email and any pending email change
@@ -725,7 +790,7 @@ paths:
   /posts:
     delete:
       tags:
-        - Posts
+      - Posts
       summary: Delete a post
       responses:
         "204":
@@ -740,24 +805,24 @@ paths:
       summary: Get a paginated list of notifications for the current user
       operationId: getNotifications
       parameters:
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            default: 0
-        - name: size
-          in: query
-          required: false
-          schema:
-            type: integer
-            default: 10
-        - name: sort
-          in: query
-          required: false
-          schema:
-            type: string
-            example: "createdAt,desc"
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 0
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          example: "createdAt,desc"
       responses:
         "200":
           description: List of notifications
@@ -783,12 +848,12 @@ paths:
       summary: Get a single notification by ID
       operationId: getNotification
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
       responses:
         "200":
           description: The notification
@@ -803,12 +868,12 @@ paths:
       summary: Mark a notification as read by ID
       operationId: markNotificationAsRead
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
       responses:
         "200":
           description: The updated notification
@@ -828,11 +893,11 @@ components:
     UserAnonymous:
       type: object
       required:
-        - id
-        - firstName
-        - lastName
-        - username
-        - createdAt
+      - id
+      - firstName
+      - lastName
+      - username
+      - createdAt
       properties:
         id:
           type: string
@@ -854,11 +919,11 @@ components:
     User:
       type: object
       required:
-        - id
-        - firstName
-        - lastName
-        - username
-        - createdAt
+      - id
+      - firstName
+      - lastName
+      - username
+      - createdAt
       properties:
         id:
           type: string
@@ -941,8 +1006,8 @@ components:
           type: string
           format: uuid
       required:
-        - uploadUrl
-        - mediaId
+      - uploadUrl
+      - mediaId
 
     UpdateUserProfileDTO:
       type: object
@@ -966,12 +1031,12 @@ components:
         phone:
           type: string
       required:
-        - firstName
-        - lastName
-        - username
-        - email
-        - phone
-        - newsletterConsent
+      - firstName
+      - lastName
+      - username
+      - email
+      - phone
+      - newsletterConsent
 
     CreatePostDraftDTO:
       type: object
@@ -1007,7 +1072,7 @@ components:
         media:
           $ref: "#/components/schemas/PostDraftMediaDTO"
       required:
-        - media
+      - media
 
     PostDraftMediaDTO:
       type: object
@@ -1024,10 +1089,10 @@ components:
           type: string
           format: uuid
       required:
-        - id
-        - postDraftId
-        - isPrimary
-        - mediaId
+      - id
+      - postDraftId
+      - isPrimary
+      - mediaId
     NotificationDTO:
       type: object
       properties:
@@ -1058,7 +1123,7 @@ components:
           type: integer
     Error:
       type: object
-      required: [code, title, message]
+      required: [ code, title, message ]
       properties:
         code:
           type: integer

@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import React, { useEffect, useState } from "react";
-import CalendarComponent from "./CalendarComponent";
+import CalendarComponent from "@/components/ui/CalendarComponent";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeftIcon, X } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
@@ -311,7 +311,7 @@ const Post = () => {
           </div>
         </div>
         <div className="w-full">
-          <div className="flex border w-full items-center justify-around gap-1.5 mb-3 px-5">
+          <div className="flex  w-full items-center justify-around gap-1.5 mb-3 px-5">
             <div className="grid w-full  items-center justify-center gap-1.5 mb-3">
               <Label htmlFor="images">Images</Label>
               <Input
