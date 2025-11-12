@@ -245,7 +245,7 @@ const ResidenceCard = ({
 
   return (
     <Card
-      className="rounded-none  shadow-none m-0 w-full border-none cursor-pointer p-1"
+      className="rounded-none  shadow-md m-0 w-full border-none cursor-pointer p-1"
       onClick={() => navigate(`/cribs/${id}`)}
       key={id}
     >
