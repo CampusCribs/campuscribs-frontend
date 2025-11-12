@@ -80,11 +80,13 @@ const CribsPage = () => {
     endDate: end,
     verification,
   });
+
   const {
     data: curated,
     error: curated_error,
     isLoading: curated_isLoading,
   } = useGetPublicCuratedInfinite(params);
+
   const {
     data: tags,
     error: tags_error,
@@ -99,6 +101,7 @@ const CribsPage = () => {
     );
   };
   console.log(curated);
+  console.log(curated_error);
   useEffect(() => {
     if (inView) {
       // call the generated function
@@ -148,7 +151,7 @@ const CribsPage = () => {
                 </div>
               </div>
             )}
-            {curated_error?.response?.status !== 404 && curated_error && (
+            {curated_error?.response?.status && curated_error && (
               <div className="flex w-full h-[400px] justify-center items-center ">
                 <div className="flex flex-col">
                   <div className="flex justify-center mb-4">
@@ -158,7 +161,7 @@ const CribsPage = () => {
                 </div>
               </div>
             )}
-            {curated_error?.response?.status === 404 && (
+            {curated?.pages[0].status === 202 && (
               <div className="flex w-full h-[400px] justify-center items-center ">
                 <div className="flex flex-col">
                   <div className="flex justify-center mb-4">

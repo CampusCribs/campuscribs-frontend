@@ -82,7 +82,7 @@ paths:
         description: Filter by date
         required: false
         schema:
-          type: date-time
+          type: string
           nullable: true
           required: false
 
@@ -91,7 +91,7 @@ paths:
         description: Filter by Date
         required: false
         schema:
-          type: date-time
+          type: string
           nullable: true
           required: false
 
@@ -198,7 +198,9 @@ paths:
                     type: integer
                   empty:
                     type: boolean
-  #Search endpoint for posts and users
+        "202":
+          description: No pages found
+          #Search endpoint for posts and users
   /public/search:
     get:
       summary: Search for posts and users
@@ -309,10 +311,10 @@ paths:
                           type: string
                   termStartDate:
                     type: string
-                    format: date-time
+                    format: string
                   termEndDate:
                     type: string
-                    format: date-time
+                    format: string
   #Edit profile endpoints
 
   #Fetch presigned URL for media upload
@@ -682,9 +684,9 @@ paths:
                   emailStatus:
                     type: string
                   emailResendAllowedAt:
-                    type: date-time
+                    type: string
                   emailChangeAllowedAt:
-                    type: date-time
+                    type: string
 
     post:
       summary: Initiate an email change (send verification code)
@@ -915,7 +917,7 @@ components:
           format: uuid
         createdAt:
           type: string
-          format: date-time
+          format: string
     User:
       type: object
       required:
@@ -943,7 +945,7 @@ components:
           format: uuid
         createdAt:
           type: string
-          format: date-time
+          format: string
         email:
           type: string
           format: email
@@ -977,16 +979,16 @@ components:
             $ref: "#/components/schemas/TagDTO"
         termStartDate:
           type: string
-          format: date-time
+          format: string
         termEndDate:
           type: string
-          format: date-time
+          format: string
         createdAt:
           type: string
-          format: date-time
+          format: string
         updatedAt:
           type: string
-          format: date-time
+          format: string
 
     TagDTO:
       type: object
@@ -1061,10 +1063,10 @@ components:
             $ref: "#/components/schemas/TagDTO"
         termStartDate:
           type: string
-          format: date-time
+          format: string
         termEndDate:
           type: string
-          format: date-time
+          format: string
 
     FinalizeMediaUploadDTO:
       type: object
