@@ -169,7 +169,6 @@ const Account = () => {
   }, [userData, reset, thumbnailvalue, hasInitialized]);
 
   const onSubmit = (data: AccountSettingsSchema) => {
-    console.log(data);
     const payload: Record<string, unknown> = {
       username: data.username,
       bio: data.bio,
@@ -180,11 +179,10 @@ const Account = () => {
       newPassword: "",
       phone: data.phone,
     };
-    console.log(payload);
+
     if (data.newPassword) {
       payload.newPassword = data.newPassword;
     }
-    console.log(payload.newPassword);
 
     updateAccount({ data: payload });
   };

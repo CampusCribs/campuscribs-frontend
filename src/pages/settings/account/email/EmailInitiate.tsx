@@ -24,7 +24,6 @@ const EmailInitiate = () => {
   const config = useAuthenticatedClientConfig();
   const { data: emailStatusResponse } = useGetUsersEmail({ ...config });
 
-  console.log(emailStatusResponse);
   const { mutateAsync: postUsersEmail } = usePostUsersEmail({
     ...config,
     mutation: {
@@ -46,7 +45,6 @@ const EmailInitiate = () => {
     },
   });
   const onSubmit = handleSubmit(async ({ newEmail }) => {
-    console.log();
     postUsersEmail({ data: { email: newEmail } });
   });
   const allowAt = emailStatusResponse?.data?.emailChangeAllowedAt

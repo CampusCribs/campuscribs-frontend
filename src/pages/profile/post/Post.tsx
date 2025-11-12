@@ -156,7 +156,6 @@ const Post = () => {
     e.target.value = "";
   };
 
-  console.log(tags);
   useEffect(() => {
     if (postDraft && tags?.data) {
       reset({

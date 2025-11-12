@@ -100,14 +100,13 @@ const CribsPage = () => {
         : [...prevTags, tag]
     );
   };
-  console.log(curated);
-  console.log(curated_error);
+
   useEffect(() => {
     if (inView) {
       // call the generated function
     }
   }, [inView]);
-  console.log(params);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col w-full  ">

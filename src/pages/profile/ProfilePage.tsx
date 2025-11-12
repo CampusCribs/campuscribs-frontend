@@ -35,7 +35,7 @@ const ProfilePage = () => {
     data?.data.id || "",
     data?.data.thumbnailMediaId || ""
   );
-  console.log("profile draft", profile_draft);
+
   function formatPhoneNumber(phoneNumber: string | undefined): string {
     if (!phoneNumber) return "";
 

@@ -164,11 +164,6 @@ const TagSelector: React.FC<Props> = (props) => {
     if (props.setPriceRange) props.setPriceRange(null, null);
   };
 
-  useEffect(() => {
-    console.log(end);
-    console.log(start);
-  }, [end, start]);
-
   return (
     <>
       <div
